@@ -1,0 +1,24 @@
+main{
+    display: flex;
+    justify-content: space-between;
+    margin: 5px;
+    section{
+        border: 1px solid blue;
+        margin: 5px;
+        flex: 1;
+
+    }
+    li{
+        list-style: none;
+    }
+    .sheet{
+        background-color: red;
+        width: 70vw;
+        height: 85vh;
+        flex: 4;
+    }
+    .bloc{
+        display: flex;
+        flex-direction: column;
+    }
+}

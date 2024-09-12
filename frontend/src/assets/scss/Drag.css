@@ -1,0 +1,55 @@
+.app {
+  display: flex;
+}
+
+.sidebar {
+  width: 15vw;
+  height: 85vh;
+  background-color: #333;
+  padding: 10px;
+  color: #fff;
+  overflow-y: auto;
+}
+
+.sidebar-item {
+  padding: 10px;
+  cursor: move;
+  color: #fff;
+  border: 1px solid #fff;
+  margin-bottom: 5px;
+}
+
+.dropzone {
+  
+  position: relative;
+  background-color: #b6b6b6;
+  height: 85vh;
+  width: 68vw;
+  margin: 10px;
+  border: 1px dashed #888;
+}
+
+.draggable-element {
+  position: absolute;
+  cursor: move;
+  border: 1px solid #fff;
+}
+
+.properties-panel {
+  width: 15vw;
+  height: 85vh;
+  background-color: #222;
+  padding: 10px;
+  color: #fff;
+}
+
+.properties-panel label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.properties-panel input {
+  width: 100%;
+  padding: 5px;
+  margin-top: 5px;
+}

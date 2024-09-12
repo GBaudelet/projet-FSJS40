@@ -1,0 +1,91 @@
+/* RESET */
+*,
+::before,
+::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	font-size: 62.5%;
+}
+
+img {
+    display: block;
+	width: 300px;
+	height: 200px;
+    border-radius: 1rem;
+    margin: auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: "Playfair Display", serif;
+}
+
+body,
+p,
+a,
+li,
+span {
+	font-family: "Roboto", sans-serif;
+}
+
+:root {
+	--primary-color: #3498db;
+	--secondary-color: #2ecc71;
+	--text-color: #333;
+	--background-color: #f9f9f9;
+	--header-footer-background: #34495e;
+	--link-color: #e74c3c;
+}
+
+/* Global */
+body {
+	font-family: Arial, sans-serif;
+	background-color: var(--background-color);
+	color: var(--text-color);
+	line-height: 1.6;
+	margin: 0;
+	padding: 0;
+	font-size: 1.6rem;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+a {
+	color: #fff;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+p {
+	margin-bottom: 0.8rem;
+}
+header{
+    background-color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: space-between;
+    nav{
+        display: flex;
+        gap: 10px;
+    }
+}
+footer{
+    background-color: chartreuse;
+}
+form {
+	display: flex;
+	flex-direction: column;
+	margin: 1rem auto;
+	width: auto;
+}
