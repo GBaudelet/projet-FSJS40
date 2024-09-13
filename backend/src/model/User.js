@@ -8,20 +8,28 @@ class User {
 
   static async create(datas) {
     const INSERT =
-      "INSERT INTO user (username, email, password,role_id) VALUES (?, ?, ?,2)";
+      "INSERT INTO user (username, password,role_id) VALUES (?, ?,2)";
 
     return await pool.execute(INSERT, [...Object.values(datas)]);
   }
+  static async findOneByUsername(username) {
+    const SELECT =
+      "SELECT id, username, password FROM `user` WHERE username = ?";
+    return await pool.execute(SELECT, [username]);
+  }
 
-  static async update(username, email, password, id) {
+  static async findUserInfoById(id) {
+    const SELECT = "SELECT username WHERE user.id = ?";
+    return await pool.execute(SELECT, [id]);
+  }
+
+  static async update(username, password, id) {
     username = username !== undefined ? username : null;
-    email = email !== undefined ? email : null;
     password = password !== undefined ? password : null;
 
-    const UPDATE =
-      "UPDATE user SET username = ?, email = ?, password = ? WHERE id = ?";
+    const UPDATE = "UPDATE user SET username = ?,  password = ? WHERE id = ?";
 
-    return await pool.execute(UPDATE, [username, email, password, id]);
+    return await pool.execute(UPDATE, [username, password, id]);
   }
 
   static async remove(id) {

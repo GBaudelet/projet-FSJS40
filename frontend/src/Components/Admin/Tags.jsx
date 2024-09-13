@@ -91,7 +91,6 @@ const TagPage = () => {
         <button onClick={handleCreate}>Create Tag</button>
       </div>
 
-      {/* List of users */}
       <div className="tags-list">
         {tags.map((tag, index) => (
           <div key={tag.id || index} className="tag-item">
@@ -113,7 +112,6 @@ const TagPage = () => {
         ))}
       </div>
 
-      {/* Form for editing a tag */}
       {isEditing && (
         <div className="form-container">
           <h3>Edit Tag</h3>

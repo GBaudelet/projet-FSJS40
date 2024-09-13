@@ -7,6 +7,8 @@ import "../assets/scss/Drag.css";
 const Drag = () => {
   const [droppedItems, setDroppedItems] = useState([]);
   const [selectedElement, setSelectedElement] = useState(null);
+  const [dropZoneBackgroundColor, setDropZoneBackgroundColor] =
+    useState("#b6b6b6");
 
   const addItemToDropZone = (item) => {
     const newItem = {
@@ -42,7 +44,11 @@ const Drag = () => {
   };
 
   const handleSave = () => {
-    console.log("Drop zone saved:", droppedItems);
+    const saveData = {
+      backgroundColor: dropZoneBackgroundColor,
+      items: droppedItems,
+    };
+    console.log("Drop zone saved:", saveData);
   };
 
   return (
@@ -52,11 +58,14 @@ const Drag = () => {
         droppedItems={droppedItems}
         setDroppedItems={setDroppedItems}
         onSelectElement={handleElementSelect}
+        backgroundColor={dropZoneBackgroundColor} // Pass the background color as a prop
       />
       <PropertiesPanel
         selectedElement={selectedElement}
         onUpdate={handleElementUpdate}
         onDelete={handleElementDelete}
+        onBackgroundColorChange={setDropZoneBackgroundColor} // Pass the set function for background color
+        dropZoneBackgroundColor={dropZoneBackgroundColor} // Pass current background color
       />
     </div>
   );

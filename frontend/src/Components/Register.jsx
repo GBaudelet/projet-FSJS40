@@ -1,95 +1,82 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import { toggleMenu } from "../store/Slices/menu";
+import { setMsg, updateField } from "../store/Slices/user";
 
 function Register() {
-  // États pour gérer les valeurs du formulaire
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // État pour gérer les erreurs
-  const [success, setSuccess] = useState(""); // État pour gérer les messages de succès
+  const menu = useSelector((state) => state.menu);
+  const user = useSelector((state) => state.user);
 
-  // Fonction pour gérer la soumission du formulaire
-  async function onSubmitHandler(e) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (menu.isOpen) dispatch(toggleMenu());
+    return () => {
+      dispatch(updateField({ username: user.username, password: "" }));
+    };
+  }, []);
+
+  async function submitHandler(e) {
     e.preventDefault();
-
-    // Validation simple des champs
-    if (!username || !email || password.length <= 3) {
-      setError(
-        "Tous les champs sont requis et le mot de passe doit contenir plus de 3 caractères"
-      );
+    if (!user.username || !user.password) {
+      setMsg("Remplissez tous les champs");
       return;
     }
 
-    // Création de l'objet utilisateur
-    const user = {
-      username,
-      email,
-      password,
-    };
+    const response = await fetch("/api/v1/user/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
 
-    try {
-      // Envoi des données au serveur
-      const response = await fetch("http://localhost:9000/api/v1/user/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      });
-
-      // Vérification de la réponse du serveur
-      if (!response.ok) {
-        const errorDetails = await response.text();
-        throw new Error(`Erreur lors de l'envoi des données : ${errorDetails}`);
-      }
-
-      // Réinitialisation des champs du formulaire après la soumission
-      setUsername("");
-      setEmail("");
-      setPassword("");
-      setSuccess("Utilisateur enregistré avec succès");
-      setError(""); // Réinitialisation des erreurs
-    } catch (error) {
-      setError(error.message);
-      setSuccess(""); // Réinitialisation des messages de succès
+    const data = await response.json();
+    if (response.status === 201) {
+      navigate("/login");
+    } else {
+      dispatch(setMsg(data.msg));
     }
   }
 
   return (
     <main>
-      <Link to={"/"}>Back to home</Link>
-
-      <form onSubmit={onSubmitHandler}>
-        <legend>Register</legend>
-
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        {success && <p style={{ color: "green" }}>{success}</p>}
-
+      <form onSubmit={submitHandler}>
+        {user.msg && <p className="error user-msg">{user.msg}</p>}
         <label htmlFor="username">Username</label>
         <input
           type="text"
+          name="username"
           id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={user.username}
+          onChange={(e) =>
+            dispatch(
+              updateField({
+                ...user,
+                [e.target.name]: e.target.value,
+              })
+            )
+          }
           required
         />
 
         <label htmlFor="password">Password</label>
         <input
           type="password"
+          name="password"
           id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={user.password}
+          onChange={(e) =>
+            dispatch(
+              updateField({
+                ...user,
+                [e.target.name]: e.target.value,
+              })
+            )
+          }
           required
         />
 

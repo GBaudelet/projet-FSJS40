@@ -3,7 +3,7 @@ import express from "express";
 import bcrypt from "bcrypt";
 
 const app = express();
-const SALT_ROUNDS = 10;
+const SALT = 10;
 
 app.use(express.json());
 
@@ -18,38 +18,55 @@ const getAll = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, password } = req.body;
+    const [[user]] = await User.findOneByUsername(username);
 
-    if (!username || !email || !password) {
-      return res.status(400).json({ msg: "Tous les champs sont requis" });
+    if (!user) {
+      const hash = await bcrypt.hash(password, SALT);
+      const [response] = await User.create({ username, hash });
+
+      if (response.affectedRows === 1) {
+        res.status(201).json({ msg: "User created" });
+      } else {
+        res.status(500).json({ msg: "User not created" });
+      }
     }
+    if (user) {
+      res.status(400).json({ msg: "User already exists" });
+    }
+  } catch (error) {
+    res.status(500).json({ msg: error });
+  }
+};
 
-    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+const login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const [[user]] = await User.findOneByUsername(username);
 
-    const userData = {
-      username,
-      email,
-      password: hashedPassword,
-    };
-
-    const [userResponse] = await User.create(userData);
-    const userId = userResponse.insertId;
-
-    res.json({ msg: "User added", id: userId });
+    if (!user) {
+      res.status(400).json({ msg: "User not found" });
+    }
+    if (user) {
+      const match = await bcrypt.compare(password, user.password);
+      if (match) {
+        res.status(200).json({ msg: "User logged in" });
+      } else {
+        res.status(400).json({ msg: "mdp ou username invalide" });
+      }
+    }
   } catch (err) {
-    console.error("Erreur lors de la création de l'utilisateur:", err);
-    res.status(500).json({ msg: "Erreur serveur" });
+    res.status(500).json({ msg: err });
   }
 };
 
 const update = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, password } = req.body;
     const { id } = req.params;
 
     console.log("Données reçues pour mise à jour:", {
       username,
-      email,
       password,
     });
 
@@ -59,18 +76,16 @@ const update = async (req, res) => {
 
     let updateData = {
       username: username || null,
-      email: email || null,
     };
 
     if (password) {
-      updateData.password = await bcrypt.hash(password, SALT_ROUNDS);
+      updateData.password = await bcrypt.hash(password, SALT);
     } else {
       updateData.password = null;
     }
 
     const [response] = await User.update(
       updateData.username,
-      updateData.email,
       updateData.password,
       id
     );
@@ -99,4 +114,4 @@ const remove = async (req, res) => {
   }
 };
 
-export { getAll, create, update, remove };
+export { getAll, create, update, remove, login };

@@ -1,7 +1,12 @@
 import React, { useRef, useEffect } from "react";
 import DraggableElement from "./DraggableElement";
 
-const DropZone = ({ droppedItems, setDroppedItems, onSelectElement }) => {
+const DropZone = ({
+  droppedItems,
+  setDroppedItems,
+  onSelectElement,
+  backgroundColor,
+}) => {
   const dropZoneRef = useRef(null);
 
   const updatePosition = (id, x, y) => {
@@ -60,7 +65,7 @@ const DropZone = ({ droppedItems, setDroppedItems, onSelectElement }) => {
   }, [droppedItems]);
 
   return (
-    <div className="dropzone" ref={dropZoneRef}>
+    <div className="dropzone" ref={dropZoneRef} style={{ backgroundColor }}>
       {droppedItems.map((item) => (
         <DraggableElement
           key={item.id}

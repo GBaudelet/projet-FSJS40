@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "../assets/scss/admin.css";
-import UsersPage from "./Partial/User.jsx";
-import TagsPage from "./Partial/Tags.jsx";
-import SheetsPage from "./Partial/Sheet.jsx";
-import BlocksPage from "./Partial/Bloc.jsx";
+import UsersPage from "./Admin/User.jsx";
+import TagsPage from "./Admin/Tags.jsx";
+import SheetsPage from "./Admin/Sheet.jsx";
+import BlocksPage from "./Admin/Bloc.jsx";
 
 const Dashboard = () => {
   const [activePage, setActivePage] = useState("users");

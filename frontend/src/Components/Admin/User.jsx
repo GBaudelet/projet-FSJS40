@@ -7,7 +7,6 @@ const UsersPage = () => {
   const [editingUser, setEditingUser] = useState({
     id: "",
     username: "",
-    email: "",
     password: "",
   });
 
@@ -48,7 +47,7 @@ const UsersPage = () => {
       const data = await response.json();
       setUsers(users.map((user) => (user.id === data.id ? data : user)));
       setIsEditing(null);
-      setEditingUser({ id: "", username: "", email: "", password: "" });
+      setEditingUser({ id: "", username: "", password: "" });
     } catch (error) {
       console.error("Error updating user:", error);
     }
@@ -74,7 +73,6 @@ const UsersPage = () => {
           <div key={user.id || index} className="user-item">
             <div className="user-details">
               <p>Name: {user.username}</p>
-              <p>Email: {user.email}</p>
             </div>
             <div className="user-actions">
               <button
@@ -102,14 +100,7 @@ const UsersPage = () => {
               setEditingUser({ ...editingUser, username: e.target.value })
             }
           />
-          <input
-            type="email"
-            placeholder="Email"
-            value={editingUser.email}
-            onChange={(e) =>
-              setEditingUser({ ...editingUser, email: e.target.value })
-            }
-          />
+
           <input
             type="password"
             placeholder="New Password (leave blank if no change)"

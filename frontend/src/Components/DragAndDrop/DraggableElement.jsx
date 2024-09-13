@@ -42,7 +42,7 @@ const DraggableElement = ({ item, onSelect, updatePosition }) => {
             {item.text || " "}
           </p>
         ) : (
-          item.type
+          ""
         )}
       </div>
     </Draggable>

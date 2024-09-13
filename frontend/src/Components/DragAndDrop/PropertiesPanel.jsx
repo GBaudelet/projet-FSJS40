@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 
-const PropertiesPanel = ({ selectedElement, onUpdate, onDelete }) => {
+const PropertiesPanel = ({
+  selectedElement,
+  onUpdate,
+  onDelete,
+  onBackgroundColorChange,
+  dropZoneBackgroundColor,
+}) => {
   const [styles, setStyles] = useState({
     width: 100,
     height: 100,
@@ -44,67 +50,89 @@ const PropertiesPanel = ({ selectedElement, onUpdate, onDelete }) => {
       {selectedElement ? (
         <>
           <label>
-            Width:
-            <input
-              type="number"
-              name="width"
-              value={styles.width}
-              onChange={handleStyleChange}
-            />
-          </label>
-          <label>
-            Height:
-            <input
-              type="number"
-              name="height"
-              value={styles.height}
-              onChange={handleStyleChange}
-            />
-          </label>
-          <label>
-            Background Color:
+            Drop Zone Background:
             <input
               type="color"
-              name="backgroundColor"
-              value={styles.backgroundColor}
-              onChange={handleStyleChange}
+              value={dropZoneBackgroundColor}
+              onChange={(e) => onBackgroundColorChange(e.target.value)}
             />
           </label>
-          <label>
-            Border Style:
-            <select
-              name="borderStyle"
-              value={styles.borderStyle}
-              onChange={handleStyleChange}
-            >
-              <option value="solid">Solid</option>
-              <option value="dashed">Dashed</option>
-              <option value="dotted">Dotted</option>
-              <option value="double">Double</option>
-              <option value="none">None</option>
-            </select>
-          </label>
-          <label>
-            Border Color:
-            <input
-              type="color"
-              name="borderColor"
-              value={styles.borderColor}
-              onChange={handleStyleChange}
-            />
-          </label>
-          <label>
-            Border Radius:
-            <input
-              type="number"
-              name="borderRadius"
-              value={styles.borderRadius}
-              onChange={handleStyleChange}
-              placeholder="e.g., 10px"
-            />
-          </label>
+
+          <details>
+            <summary>Size</summary>
+            <label>
+              Width:
+              <input
+                type="number"
+                name="width"
+                value={styles.width}
+                onChange={handleStyleChange}
+              />
+            </label>
+            <label>
+              Height:
+              <input
+                type="number"
+                name="height"
+                value={styles.height}
+                onChange={handleStyleChange}
+              />
+            </label>
+          </details>
+
+          <details>
+            <summary>Background</summary>
+            <label>
+              Background Color:
+              <input
+                type="color"
+                name="backgroundColor"
+                value={styles.backgroundColor}
+                onChange={handleStyleChange}
+              />
+            </label>
+          </details>
+
+          <details>
+            <summary>Border</summary>
+            <label>
+              Border Style:
+              <select
+                name="borderStyle"
+                value={styles.borderStyle}
+                onChange={handleStyleChange}
+              >
+                <option value="solid">Solid</option>
+                <option value="dashed">Dashed</option>
+                <option value="dotted">Dotted</option>
+                <option value="double">Double</option>
+                <option value="none">None</option>
+              </select>
+            </label>
+            <label>
+              Border Color:
+              <input
+                type="color"
+                name="borderColor"
+                value={styles.borderColor}
+                onChange={handleStyleChange}
+              />
+            </label>
+            <label>
+              Border Radius:
+              <input
+                type="number"
+                name="borderRadius"
+                value={styles.borderRadius}
+                onChange={handleStyleChange}
+                placeholder="e.g., 10px"
+              />
+            </label>
+          </details>
+
           {selectedElement.type === "text" && (
-            <>
+            <details>
+              <summary>Text</summary>
               <label>
                 Text:
                 <input
@@ -146,8 +174,9 @@ const PropertiesPanel = ({ selectedElement, onUpdate, onDelete }) => {
                   onChange={handleStyleChange}
                 />
               </label>
-            </>
+            </details>
           )}
+
           <button onClick={() => onDelete(selectedElement)}>Delete</button>
         </>
       ) : (
