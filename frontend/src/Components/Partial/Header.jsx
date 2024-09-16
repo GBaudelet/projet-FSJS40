@@ -1,22 +1,48 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Make sure you have react-router-dom installed
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../../store/Slices/user";
 
-const Header = ({ isAdmin, isLoggedIn }) => {
+const Header = () => {
+  const { isLogged, role_id } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  function onClickLogout(e) {
+    e.preventDefault();
+    async function fetchLogout() {
+      const response = await fetch("/api/v1/authentication/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      console.log(response);
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log(data);
+        dispatch(logout());
+        navigate("/");
+      }
+    }
+    fetchLogout();
+  }
+
   return (
     <header>
       <nav>
         <Link to="/">Home</Link>
         <Link to="/bible">Bible</Link>
         <Link to="/drag">Sheet</Link>
-        {!isLoggedIn ? (
+        {role_id === 1 && <Link to="/admin">Admin</Link>}
+        {!isLogged ? (
           <>
             <Link to="/register">Register</Link>
             <Link to="/login">Login</Link>
           </>
         ) : (
-          <Link to="/logout">Logout</Link>
+          <Link to="/" onClick={onClickLogout}>
+            Logout
+          </Link>
         )}
-        {isAdmin && <Link to="/admin">Admin</Link>}
       </nav>
     </header>
   );

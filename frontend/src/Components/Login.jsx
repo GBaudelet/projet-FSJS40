@@ -1,45 +1,56 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
-import { toggleMenu } from "../store/Slices/menu";
-import { login, updateField, setMsg } from "../store/Slices/user";
+import { useEffect } from "react";
+import { login, updateField, setMsg, resetFields } from "../store/Slices/user";
 
 function Login() {
-  const menu = useSelector((state) => state.menu);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (menu.isOpen) dispatch(toggleMenu());
-
-    return () => {
-      dispatch(updateField({ username: user.username, password: "" }));
-    };
-  }, []);
-
   async function submitHandler(e) {
     e.preventDefault();
     if (!user.username || !user.password) {
-      setMsg("Remplissez tous les champs");
+      dispatch(setMsg("Remplissez tous les champs"));
       return;
     }
-    const response = await fetch("/api/v1/user/login", {
+
+    const response = await fetch("/api/v1/authentication/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(user),
+      body: JSON.stringify({
+        username: user.username,
+        password: user.password,
+      }),
     });
 
     const data = await response.json();
     if (response.status === 200) {
+      dispatch(login(data));
+      dispatch(resetFields()); // Réinitialiser les champs après une connexion réussie
       navigate("/");
     } else {
       dispatch(setMsg(data.msg));
     }
   }
+
+  function handleChange(e) {
+    dispatch(
+      updateField({
+        name: e.target.name,
+        value: e.target.value,
+      })
+    );
+  }
+
+  useEffect(() => {
+    return () => {
+      dispatch(setMsg("")); // Nettoyer le message d'erreur
+      dispatch(resetFields()); // Nettoyer les champs lorsque le composant se démonte
+    };
+  }, [dispatch]);
 
   return (
     <main>
@@ -52,14 +63,7 @@ function Login() {
           name="username"
           id="username"
           value={user.username}
-          onChange={(e) =>
-            dispatch(
-              updateField({
-                ...user,
-                [e.target.name]: e.target.value,
-              })
-            )
-          }
+          onChange={handleChange}
           required
         />
 
@@ -69,18 +73,11 @@ function Login() {
           name="password"
           id="password"
           value={user.password}
-          onChange={(e) =>
-            dispatch(
-              updateField({
-                ...user,
-                [e.target.name]: e.target.value,
-              })
-            )
-          }
+          onChange={handleChange}
           required
         />
 
-        <button type="submit">test</button>
+        <button type="submit">Login</button>
       </form>
     </main>
   );

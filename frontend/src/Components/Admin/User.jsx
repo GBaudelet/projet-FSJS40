@@ -8,6 +8,7 @@ const UsersPage = () => {
     id: "",
     username: "",
     password: "",
+    role_id: "",
   });
 
   useEffect(() => {
@@ -26,11 +27,10 @@ const UsersPage = () => {
 
   const handleUpdate = async () => {
     try {
-      const { password, ...userData } = editingUser;
-      if (password.trim() === "") {
-        userData.password = undefined;
-      } else {
-        userData.password = password;
+      const userData = { ...editingUser };
+
+      if (userData.password.trim() === "") {
+        delete userData.password;
       }
 
       const response = await fetch(
@@ -47,7 +47,7 @@ const UsersPage = () => {
       const data = await response.json();
       setUsers(users.map((user) => (user.id === data.id ? data : user)));
       setIsEditing(null);
-      setEditingUser({ id: "", username: "", password: "" });
+      setEditingUser({ id: "", username: "", password: "", role_id: "" });
     } catch (error) {
       console.error("Error updating user:", error);
     }
@@ -78,7 +78,12 @@ const UsersPage = () => {
               <button
                 onClick={() => {
                   setIsEditing(user.id);
-                  setEditingUser(user);
+                  setEditingUser({
+                    id: user.id,
+                    username: user.username,
+                    password: "", // Clear password field for editing
+                    role_id: user.role_id,
+                  });
                 }}
               >
                 Edit
@@ -92,7 +97,10 @@ const UsersPage = () => {
       {isEditing && (
         <div className="form-container">
           <h3>Edit User</h3>
+
+          <label htmlFor="username">Username:</label>
           <input
+            id="username"
             type="text"
             placeholder="Name"
             value={editingUser.username}
@@ -101,7 +109,11 @@ const UsersPage = () => {
             }
           />
 
+          <label htmlFor="password">
+            New Password (leave blank if no change):
+          </label>
           <input
+            id="password"
             type="password"
             placeholder="New Password (leave blank if no change)"
             value={editingUser.password}
@@ -109,6 +121,19 @@ const UsersPage = () => {
               setEditingUser({ ...editingUser, password: e.target.value })
             }
           />
+
+          <label htmlFor="role">Role:</label>
+          <select
+            id="role"
+            value={editingUser.role_id}
+            onChange={(e) =>
+              setEditingUser({ ...editingUser, role_id: e.target.value })
+            }
+          >
+            <option value="1">Admin</option>
+            <option value="2">User</option>
+          </select>
+
           <button onClick={handleUpdate}>Update User</button>
         </div>
       )}

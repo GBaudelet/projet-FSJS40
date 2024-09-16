@@ -16,50 +16,6 @@ const getAll = async (req, res) => {
   }
 };
 
-const create = async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const [[user]] = await User.findOneByUsername(username);
-
-    if (!user) {
-      const hash = await bcrypt.hash(password, SALT);
-      const [response] = await User.create({ username, hash });
-
-      if (response.affectedRows === 1) {
-        res.status(201).json({ msg: "User created" });
-      } else {
-        res.status(500).json({ msg: "User not created" });
-      }
-    }
-    if (user) {
-      res.status(400).json({ msg: "User already exists" });
-    }
-  } catch (error) {
-    res.status(500).json({ msg: error });
-  }
-};
-
-const login = async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const [[user]] = await User.findOneByUsername(username);
-
-    if (!user) {
-      res.status(400).json({ msg: "User not found" });
-    }
-    if (user) {
-      const match = await bcrypt.compare(password, user.password);
-      if (match) {
-        res.status(200).json({ msg: "User logged in" });
-      } else {
-        res.status(400).json({ msg: "mdp ou username invalide" });
-      }
-    }
-  } catch (err) {
-    res.status(500).json({ msg: err });
-  }
-};
-
 const update = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -114,4 +70,4 @@ const remove = async (req, res) => {
   }
 };
 
-export { getAll, create, update, remove, login };
+export { getAll, update, remove };

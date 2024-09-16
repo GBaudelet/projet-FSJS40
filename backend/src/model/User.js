@@ -6,12 +6,6 @@ class User {
     return await pool.query(SELECT_ALL);
   }
 
-  static async create(datas) {
-    const INSERT =
-      "INSERT INTO user (username, password,role_id) VALUES (?, ?,2)";
-
-    return await pool.execute(INSERT, [...Object.values(datas)]);
-  }
   static async findOneByUsername(username) {
     const SELECT =
       "SELECT id, username, password FROM `user` WHERE username = ?";
@@ -24,12 +18,27 @@ class User {
   }
 
   static async update(username, password, id) {
-    username = username !== undefined ? username : null;
-    password = password !== undefined ? password : null;
+    let fields = [];
+    let values = [];
 
-    const UPDATE = "UPDATE user SET username = ?,  password = ? WHERE id = ?";
+    if (username) {
+      fields.push("username = ?");
+      values.push(username);
+    }
 
-    return await pool.execute(UPDATE, [username, password, id]);
+    if (password) {
+      fields.push("password = ?");
+      values.push(password);
+    }
+
+    if (!fields.length) {
+      throw new Error("Nothing to update");
+    }
+
+    values.push(id); // Ajouter l'id à la fin pour la clause WHERE
+    const UPDATE = `UPDATE user SET ${fields.join(", ")} WHERE id = ?`;
+
+    return await pool.execute(UPDATE, values);
   }
 
   static async remove(id) {

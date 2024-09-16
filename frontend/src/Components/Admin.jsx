@@ -14,14 +14,6 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <header className="dashboard-header">
-        <h1>Admin Dashboard</h1>
-        <nav>
-          <a href="#profile">Profile</a>
-          <a href="#logout">Logout</a>
-        </nav>
-      </header>
-
       <div className="dashboard-body">
         <aside className="dashboard-sidebar">
           <ul>
