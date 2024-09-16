@@ -2,7 +2,11 @@ import pool from "../config/db.js";
 
 class User {
   static async findAll() {
-    const SELECT_ALL = "SELECT * FROM user";
+    const SELECT_ALL = `
+      SELECT user.id, user.username, user.role_id, roles.role_name AS role
+      FROM user
+      JOIN roles ON user.role_id = roles.id
+    `;
     return await pool.query(SELECT_ALL);
   }
 

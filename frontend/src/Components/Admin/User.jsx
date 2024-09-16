@@ -65,14 +65,15 @@ const UsersPage = () => {
   };
 
   return (
-    <div className="users-page">
+    <section className="users-page">
       <h2>Users</h2>
 
-      <div className="users-list">
+      <ul className="users-list">
         {users.map((user, index) => (
-          <div key={user.id || index} className="user-item">
+          <li key={user.id || index} className="user-item">
             <div className="user-details">
               <p>Name: {user.username}</p>
+              <p>Role: {user.role}</p>
             </div>
             <div className="user-actions">
               <button
@@ -81,7 +82,7 @@ const UsersPage = () => {
                   setEditingUser({
                     id: user.id,
                     username: user.username,
-                    password: "", // Clear password field for editing
+                    password: "",
                     role_id: user.role_id,
                   });
                 }}
@@ -90,9 +91,9 @@ const UsersPage = () => {
               </button>
               <button onClick={() => handleDelete(user.id)}>Delete</button>
             </div>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
 
       {isEditing && (
         <div className="form-container">
@@ -137,7 +138,7 @@ const UsersPage = () => {
           <button onClick={handleUpdate}>Update User</button>
         </div>
       )}
-    </div>
+    </section>
   );
 };
 
