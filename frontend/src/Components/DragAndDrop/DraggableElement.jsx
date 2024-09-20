@@ -1,51 +1,46 @@
 import React from "react";
-import Draggable from "react-draggable";
+import { Rnd } from "react-rnd";
 
-const DraggableElement = ({ item, onSelect, updatePosition }) => {
-  const handleStop = (e, data) => {
-    updatePosition(item.id, data.x, data.y);
-  };
-
+const DraggableElement = ({ item, onSelect }) => {
   return (
-    <Draggable
+    <Rnd
       bounds="parent"
-      defaultPosition={{ x: item.x, y: item.y }}
-      onStop={handleStop}
+      default={{
+        x: item.x,
+        y: item.y,
+        width: item.width || 100,
+        height: item.height || 100,
+      }}
+      onDragStop={(e, d) => {
+        onSelect(item.id, d.x, d.y);
+      }}
+      style={{
+        backgroundColor:
+          item.type === "text"
+            ? "transparent"
+            : item.backgroundColor || "#D3D3D3",
+        fontSize: `${item.fontSize || 16}px`,
+        fontFamily: item.fontFamily || "Arial",
+        color: item.color || "#000000",
+        borderStyle: item.borderStyle || "solid",
+        borderWidth: item.borderWidth || "1px",
+        borderColor: item.borderColor || "#000000",
+        borderRadius: item.type === "circle" ? "50%" : "0%",
+        boxSizing: "border-box",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        cursor: "move",
+        position: "absolute",
+        zIndex: item.zIndex || 1,
+      }}
     >
-      <div
-        className="draggable-element"
-        style={{
-          width: `${item.width || 100}px`,
-          height: `${item.height || 100}px`,
-          backgroundColor:
-            item.type === "text"
-              ? "transparent"
-              : item.backgroundColor || "#D3D3D3",
-          fontSize: `${item.fontSize || 16}px`,
-          fontFamily: item.fontFamily || "Arial",
-          color: item.color || "#000000",
-          borderStyle: item.borderStyle || "solid",
-          borderWidth: item.borderWidth || "1px",
-          borderColor: item.borderColor || "#000000",
-          borderRadius: `${item.borderRadius || 0}px`,
-          boxSizing: "border-box",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "move",
-          position: "absolute",
-        }}
-        onClick={() => onSelect(item)}
-      >
-        {item.type === "text" ? (
-          <p style={{ margin: 0, minWidth: "100%", minHeight: "100%" }}>
-            {item.text || " "}
-          </p>
-        ) : (
-          ""
-        )}
-      </div>
-    </Draggable>
+      {item.type === "text" ? (
+        <p style={{ margin: 0, minWidth: "100%", minHeight: "100%" }}>
+          {item.text || " "}
+        </p>
+      ) : null}
+    </Rnd>
   );
 };
 

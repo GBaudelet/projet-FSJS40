@@ -19,6 +19,8 @@ const PropertiesPanel = ({
     borderStyle: "solid",
     borderColor: "#000000",
     borderRadius: 0,
+    zIndex: 1,
+    isTransparent: false,
   });
 
   useEffect(() => {
@@ -35,6 +37,8 @@ const PropertiesPanel = ({
         borderStyle: selectedElement.borderStyle || "solid",
         borderColor: selectedElement.borderColor || "#000000",
         borderRadius: selectedElement.borderRadius || 0,
+        zIndex: selectedElement.zIndex || 1,
+        isTransparent: selectedElement.backgroundColor === "transparent",
       });
     }
   }, [selectedElement]);
@@ -45,10 +49,26 @@ const PropertiesPanel = ({
     onUpdate({ ...selectedElement, [name]: value });
   };
 
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setStyles((prevStyles) => ({ ...prevStyles, [name]: checked }));
+
+    if (name === "isTransparent" && checked) {
+      onUpdate({
+        ...selectedElement,
+        backgroundColor: "transparent",
+        backgroundImage: "",
+      });
+    } else if (name === "isTransparent" && !checked) {
+      onUpdate({ ...selectedElement, backgroundColor: styles.backgroundColor });
+    }
+  };
+
   return (
     <div className="properties-panel">
       {selectedElement ? (
         <>
+          {/* BACKGROUND DROP ZONE */}
           <label>
             Drop Zone Background:
             <input
@@ -57,29 +77,7 @@ const PropertiesPanel = ({
               onChange={(e) => onBackgroundColorChange(e.target.value)}
             />
           </label>
-
-          <details>
-            <summary>Size</summary>
-            <label>
-              Width:
-              <input
-                type="number"
-                name="width"
-                value={styles.width}
-                onChange={handleStyleChange}
-              />
-            </label>
-            <label>
-              Height:
-              <input
-                type="number"
-                name="height"
-                value={styles.height}
-                onChange={handleStyleChange}
-              />
-            </label>
-          </details>
-
+          {/* BACKGROUND ELEMENT */}
           <details>
             <summary>Background</summary>
             <label>
@@ -88,10 +86,40 @@ const PropertiesPanel = ({
                 type="color"
                 name="backgroundColor"
                 value={styles.backgroundColor}
+                onChange={(e) =>
+                  onUpdate({
+                    ...selectedElement,
+                    backgroundColor: e.target.value,
+                  })
+                }
+              />
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="isTransparent"
+                checked={styles.isTransparent}
+                onChange={handleCheckboxChange}
+              />
+              Transparent
+            </label>
+          </details>
+
+          {/* ZINDEX */}
+          <details>
+            <summary>Z-Index</summary>
+            <label>
+              Z-Index:
+              <input
+                type="number"
+                name="zIndex"
+                value={styles.zIndex}
                 onChange={handleStyleChange}
               />
             </label>
           </details>
+
+          {/* BORDER */}
 
           <details>
             <summary>Border</summary>
@@ -129,6 +157,8 @@ const PropertiesPanel = ({
               />
             </label>
           </details>
+
+          {/* TEXT */}
 
           {selectedElement.type === "text" && (
             <details>

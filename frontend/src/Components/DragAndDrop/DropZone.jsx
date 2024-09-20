@@ -4,8 +4,8 @@ import DraggableElement from "./DraggableElement";
 const DropZone = ({
   droppedItems,
   setDroppedItems,
-  onSelectElement,
   backgroundColor,
+  setSelectedElement,
 }) => {
   const dropZoneRef = useRef(null);
 
@@ -70,8 +70,10 @@ const DropZone = ({
         <DraggableElement
           key={item.id}
           item={item}
-          onSelect={onSelectElement}
-          updatePosition={updatePosition}
+          onSelect={(id, x, y) => {
+            updatePosition(id, x, y);
+            setSelectedElement(item); // Met à jour l'élément sélectionné
+          }}
         />
       ))}
     </div>

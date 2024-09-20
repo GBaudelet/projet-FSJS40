@@ -58,14 +58,16 @@ const Drag = () => {
         droppedItems={droppedItems}
         setDroppedItems={setDroppedItems}
         onSelectElement={handleElementSelect}
-        backgroundColor={dropZoneBackgroundColor} // Pass the background color as a prop
+        setSelectedElement={setSelectedElement}
+        backgroundColor={dropZoneBackgroundColor}
       />
       <PropertiesPanel
         selectedElement={selectedElement}
         onUpdate={handleElementUpdate}
         onDelete={handleElementDelete}
-        onBackgroundColorChange={setDropZoneBackgroundColor} // Pass the set function for background color
-        dropZoneBackgroundColor={dropZoneBackgroundColor} // Pass current background color
+        setSelectedElement={setSelectedElement}
+        onBackgroundColorChange={setDropZoneBackgroundColor}
+        dropZoneBackgroundColor={dropZoneBackgroundColor}
       />
     </div>
   );
