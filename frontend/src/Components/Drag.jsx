@@ -16,12 +16,20 @@ const Drag = () => {
       type: item.type,
       x: 0,
       y: 0,
-      width: item.type === "text" ? 200 : 100,
-      height: item.type === "text" ? 100 : 100,
+      width: item.width || 100,
+      height: item.height || 100,
       backgroundColor: item.type === "text" ? "transparent" : "#D3D3D3",
       text: item.type === "text" ? "Editable Text" : "",
-      rotation: item.rotation,
+      rotation: item.rotation || "0",
+      borderStyle: item.borderStyle || "solid",
+      borderWidth: item.borderWidth || "1px",
+      borderColor: item.borderColor || "#000000",
+      borderRadius: item.type === "circle" ? "50" : "0",
+      fontFamily: item.fontFamily || "Arial",
+      color: item.color || "#000000",
+      zIndex: item.zIndex || 1,
     };
+    console.log(newItem);
     setDroppedItems([...droppedItems, newItem]);
   };
 
