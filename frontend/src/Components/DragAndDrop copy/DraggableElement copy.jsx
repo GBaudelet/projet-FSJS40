@@ -2,10 +2,9 @@ import React from "react";
 import { Rnd } from "react-rnd";
 
 const DraggableElement = ({ item, onSelect }) => {
-  console.log("Rotation:", item.rotation);
   return (
     <Rnd
-      bounds=".dropzone"
+      bounds="parent"
       default={{
         x: item.x,
         y: item.y,

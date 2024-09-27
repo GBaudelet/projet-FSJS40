@@ -72,7 +72,7 @@ const DropZone = ({
           item={item}
           onSelect={(id, x, y) => {
             updatePosition(id, x, y);
-            setSelectedElement(item);
+            setSelectedElement(item); // Met à jour l'élément sélectionné
           }}
         />
       ))}

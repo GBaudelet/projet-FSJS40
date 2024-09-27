@@ -2,10 +2,9 @@ import React from "react";
 import { Rnd } from "react-rnd";
 
 const DraggableElement = ({ item, onSelect }) => {
-  console.log("Rotation:", item.rotation);
   return (
     <Rnd
-      bounds=".dropzone"
+      bounds="parent"
       default={{
         x: item.x,
         y: item.y,
@@ -34,6 +33,7 @@ const DraggableElement = ({ item, onSelect }) => {
         cursor: "move",
         position: "absolute",
         zIndex: item.zIndex || 1,
+        // transform: `rotate(${item.rotation || 0}deg)`,
       }}
     >
       {item.type === "text" ? (

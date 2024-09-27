@@ -34,6 +34,7 @@ const DraggableElement = ({ item, onSelect }) => {
         cursor: "move",
         position: "absolute",
         zIndex: item.zIndex || 1,
+        // transform: `rotate(${item.rotation || 0}deg)`,
       }}
     >
       {item.type === "text" ? (

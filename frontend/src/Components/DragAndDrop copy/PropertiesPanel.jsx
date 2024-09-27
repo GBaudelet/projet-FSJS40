@@ -20,13 +20,12 @@ const PropertiesPanel = ({
     borderColor: "#000000",
     borderRadius: 0,
     zIndex: 1,
-    rotation: 50,
+    // rotation: 0, // Ajoutez cette ligne
     isTransparent: false,
   });
 
   useEffect(() => {
     if (selectedElement) {
-      console.log(selectedElement.rotation);
       setStyles({
         width: selectedElement.width || 100,
         height: selectedElement.height || 100,
@@ -40,17 +39,15 @@ const PropertiesPanel = ({
         borderColor: selectedElement.borderColor || "#000000",
         borderRadius: selectedElement.borderRadius || 0,
         zIndex: selectedElement.zIndex || 1,
-        rotation: selectedElement.rotation || 0,
+        // rotation: selectedElement.rotation || 0,
         isTransparent: selectedElement.backgroundColor === "transparent",
       });
-      console.log(selectedElement.rotation);
     }
   }, [selectedElement]);
 
   const handleStyleChange = (e) => {
     const { name, value } = e.target;
     setStyles((prevStyles) => ({ ...prevStyles, [name]: value }));
-    console.log("Mise à jour de", name, ":", value);
     onUpdate({ ...selectedElement, [name]: value });
   };
 
@@ -210,21 +207,20 @@ const PropertiesPanel = ({
             </details>
           )}
 
-          {/* ROTATION */}
+          {/* ROTATION
           <details>
             <summary>Rotation</summary>
             <label>
               Rotation (degrees):
               <input
-                type="range"
+                type="number"
                 name="rotation"
                 value={styles.rotation}
-                min="0"
-                max="360"
                 onChange={handleStyleChange}
+                placeholder="e.g., 45"
               />
             </label>
-          </details>
+          </details> */}
 
           <button onClick={() => onDelete(selectedElement)}>Delete</button>
         </>

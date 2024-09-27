@@ -20,6 +20,7 @@ const Drag = () => {
       height: item.type === "text" ? 100 : 100,
       backgroundColor: item.type === "text" ? "transparent" : "#D3D3D3",
       text: item.type === "text" ? "Editable Text" : "",
+      rotation: item.rotation,
     };
     setDroppedItems([...droppedItems, newItem]);
   };
@@ -52,7 +53,7 @@ const Drag = () => {
   };
 
   return (
-    <div className="app">
+    <div className="drag">
       <Sidebar onAddItem={addItemToDropZone} onSave={handleSave} />
       <DropZone
         droppedItems={droppedItems}
