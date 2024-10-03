@@ -2,13 +2,12 @@ import React, { useRef, useEffect } from "react";
 import DraggableElement from "./DraggableElement";
 
 const DropZone = ({
+  dropZoneRef,
   droppedItems,
   setDroppedItems,
   backgroundColor,
   setSelectedElement,
 }) => {
-  const dropZoneRef = useRef(null);
-
   const updatePosition = (id, x, y) => {
     if (dropZoneRef.current) {
       const dropZoneBounds = dropZoneRef.current.getBoundingClientRect();

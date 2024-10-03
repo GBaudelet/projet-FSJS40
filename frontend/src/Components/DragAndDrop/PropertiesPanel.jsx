@@ -241,6 +241,20 @@ const PropertiesPanel = ({
               />
             </label>
           </details>
+          {/* height */}
+          <details>
+            <summary>height</summary>
+            <label>
+              <input
+                type="range"
+                name="height"
+                value={styles.height}
+                min="0"
+                max="1000"
+                onChange={handleStyleChange}
+              />
+            </label>
+          </details>
 
           <button onClick={() => onDelete(selectedElement)}>Delete</button>
         </>

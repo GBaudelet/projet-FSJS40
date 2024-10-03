@@ -19,13 +19,22 @@
   margin-bottom: 5px;
 }
 
-.dropzone {
+/* .dropzone {
   position: relative;
   background-color: #ffffff;
   height: 85vh;
   width: 68vw;
   margin: 10px;
   border: 1px dashed #888;
+} */
+.dropzone {
+  position: relative;
+  background-color: #b6b6b6;
+  width: 210mm; /* Largeur A4 */
+  height: 297mm; /* Hauteur A4 */
+  margin: 10px auto; /* Centré */
+  border: 1px dashed #888;
+  overflow: hidden; /* Empêche le débordement */
 }
 
 .draggable-element {

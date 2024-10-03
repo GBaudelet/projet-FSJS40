@@ -38,7 +38,7 @@ const DraggableElement = ({ item, onSelect }) => {
               ? "transparent"
               : item.backgroundColor || "#D3D3D3",
           width: "100%" || item.width,
-          height: "100%",
+          height: "100%" || item.height,
           transformOrigin: "center center",
           transform: `rotate(${item.rotation || "0"}deg)`,
         }}
