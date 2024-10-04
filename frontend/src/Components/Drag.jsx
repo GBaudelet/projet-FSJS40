@@ -18,8 +18,11 @@ const Drag = () => {
     const newItem = {
       id: Date.now(),
       type: item.type,
-      x: 0,
-      y: 0,
+
+      x: item.x || 0,
+      y: item.y || 0,
+      // transform: `translate(${item.x}px, ${item.y}px)`,
+
       width: item.width || 100,
       height: item.height || 100,
       backgroundColor: item.type === "text" ? "transparent" : "#D3D3D3",
@@ -34,6 +37,8 @@ const Drag = () => {
       zIndex: item.zIndex || 1,
     };
     console.log(newItem);
+    console.log(newItem.x);
+
     setDroppedItems([...droppedItems, newItem]);
   };
 
@@ -59,25 +64,42 @@ const Drag = () => {
   const handleSave = () => {
     // save des emplacements des éléments
     const saveData = {
-      userId: userId, // Ajoutez l'ID de l'utilisateur ici
+      userId: userId,
       backgroundColor: dropZoneBackgroundColor,
       items: droppedItems,
     };
     console.log("Drop zone saved:", saveData);
 
+    // Enregistrer les données dans le localStorage
+    localStorage.setItem("dropZoneData", JSON.stringify(saveData));
+
     // save de l'image qui sera utilisé pour la bibliothèque
-    if (dropZoneRef.current) {
-      html2canvas(dropZoneRef.current).then((canvas) => {
-        const link = document.createElement("a");
-        link.href = canvas.toDataURL("image/png");
-        link.download = "dropzone.png";
-        link.click();
-      });
+    // if (dropZoneRef.current) {
+    //   html2canvas(dropZoneRef.current).then((canvas) => {
+    //     const link = document.createElement("a");
+    //     link.href = canvas.toDataURL("image/png");
+    //     link.download = "dropzone.png";
+    //     link.click();
+    //   });
+    // }
+  };
+  const handleLoad = () => {
+    // Charger les données depuis le localStorage
+    const savedData = localStorage.getItem("dropZoneData");
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      setDroppedItems(parsedData.items || []);
+      setDropZoneBackgroundColor(parsedData.backgroundColor || "#b6b6b6");
     }
   };
+
   return (
     <div className="drag">
-      <Sidebar onAddItem={addItemToDropZone} onSave={handleSave} />
+      <Sidebar
+        onAddItem={addItemToDropZone}
+        onSave={handleSave}
+        onLoad={handleLoad}
+      />
       <DropZone
         dropZoneRef={dropZoneRef}
         droppedItems={droppedItems}

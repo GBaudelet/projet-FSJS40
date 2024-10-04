@@ -2,7 +2,8 @@ import React from "react";
 import { Rnd } from "react-rnd";
 // le item.width reçoit bien les données du PropertiesPanel mais n'est pas appliquer sur l'item
 const DraggableElement = ({ item, onSelect }) => {
-  console.log("Width:", item.width, "Height", item.height, item.rotation);
+  // console.log("Width:", item.width, "Height", item.height, item.rotation);
+  console.log(Rnd);
   return (
     <Rnd
       bounds=".dropzone"
@@ -16,6 +17,10 @@ const DraggableElement = ({ item, onSelect }) => {
       size={{ width: item.width, height: item.height || 100 }}
       onDragStop={(e, d) => {
         onSelect(item.id, d.x, d.y);
+      }}
+      style={{
+        zIndex: item.zIndex || 1,
+        // transform: `translate(${item.x}px, ${item.y}px)`,
       }}
     >
       <div
@@ -32,7 +37,8 @@ const DraggableElement = ({ item, onSelect }) => {
           justifyContent: "center",
           cursor: "move",
           position: "absolute",
-          zIndex: item.zIndex || 1,
+          // zIndex: item.zIndex || 1,
+          // transform: `translate(${item.x}px, ${item.y}px)`,
           backgroundColor:
             item.type === "text"
               ? "transparent"

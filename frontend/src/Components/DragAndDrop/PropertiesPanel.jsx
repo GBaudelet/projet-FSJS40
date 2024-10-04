@@ -26,7 +26,8 @@ const PropertiesPanel = ({
 
   useEffect(() => {
     if (selectedElement) {
-      console.log("width", selectedElement.width);
+      // console.log("translate:", selectedElement.translate);
+
       setStyles({
         width: selectedElement.width,
         height: selectedElement.height,

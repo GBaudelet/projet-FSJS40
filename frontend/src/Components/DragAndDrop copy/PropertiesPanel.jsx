@@ -8,8 +8,8 @@ const PropertiesPanel = ({
   dropZoneBackgroundColor,
 }) => {
   const [styles, setStyles] = useState({
-    width: 100,
-    height: 100,
+    width: 0,
+    height: 0,
     backgroundColor: "#D3D3D3",
     text: "",
     fontSize: 16,
@@ -20,15 +20,17 @@ const PropertiesPanel = ({
     borderColor: "#000000",
     borderRadius: 0,
     zIndex: 1,
-    // rotation: 0, // Ajoutez cette ligne
+    rotation: "0",
     isTransparent: false,
   });
 
   useEffect(() => {
     if (selectedElement) {
+      // console.log("translate:", selectedElement.translate);
+
       setStyles({
-        width: selectedElement.width || 100,
-        height: selectedElement.height || 100,
+        width: selectedElement.width,
+        height: selectedElement.height,
         backgroundColor: selectedElement.backgroundColor || "#D3D3D3",
         text: selectedElement.text || "",
         fontSize: selectedElement.fontSize || 16,
@@ -39,15 +41,18 @@ const PropertiesPanel = ({
         borderColor: selectedElement.borderColor || "#000000",
         borderRadius: selectedElement.borderRadius || 0,
         zIndex: selectedElement.zIndex || 1,
-        // rotation: selectedElement.rotation || 0,
+        rotation: selectedElement.rotation || "0",
         isTransparent: selectedElement.backgroundColor === "transparent",
       });
+      // console.log("rotation", selectedElement.rotation);
+      console.log("width", selectedElement);
     }
   }, [selectedElement]);
 
   const handleStyleChange = (e) => {
     const { name, value } = e.target;
     setStyles((prevStyles) => ({ ...prevStyles, [name]: value }));
+
     onUpdate({ ...selectedElement, [name]: value });
   };
 
@@ -207,20 +212,50 @@ const PropertiesPanel = ({
             </details>
           )}
 
-          {/* ROTATION
+          {/* ROTATION */}
           <details>
             <summary>Rotation</summary>
             <label>
               Rotation (degrees):
               <input
-                type="number"
+                type="range"
                 name="rotation"
                 value={styles.rotation}
+                min="0"
+                max="360"
+                placeholder="0"
                 onChange={handleStyleChange}
-                placeholder="e.g., 45"
               />
             </label>
-          </details> */}
+          </details>
+          {/* width */}
+          <details>
+            <summary>width</summary>
+            <label>
+              <input
+                type="range"
+                name="width"
+                value={styles.width}
+                min="0"
+                max="1000"
+                onChange={handleStyleChange}
+              />
+            </label>
+          </details>
+          {/* height */}
+          <details>
+            <summary>height</summary>
+            <label>
+              <input
+                type="range"
+                name="height"
+                value={styles.height}
+                min="0"
+                max="1000"
+                onChange={handleStyleChange}
+              />
+            </label>
+          </details>
 
           <button onClick={() => onDelete(selectedElement)}>Delete</button>
         </>
