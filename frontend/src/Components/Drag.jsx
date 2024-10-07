@@ -21,7 +21,6 @@ const Drag = () => {
 
       x: item.x || 0,
       y: item.y || 0,
-      // transform: `translate(${item.x}px, ${item.y}px)`,
 
       width: item.width || 100,
       height: item.height || 100,
@@ -66,7 +65,11 @@ const Drag = () => {
     const saveData = {
       userId: userId,
       backgroundColor: dropZoneBackgroundColor,
-      items: droppedItems,
+      items: droppedItems.map((item) => ({
+        ...item,
+        // x: item.x,
+        // y: item.y,
+      })),
     };
     console.log("Drop zone saved:", saveData);
 

@@ -3,8 +3,7 @@
 }
 
 .sidebar {
-  width: 15vw;
-  height: 85vh;
+  width: 15vw; 
   background-color: #333;
   padding: 10px;
   color: #fff;
@@ -19,33 +18,17 @@
   margin-bottom: 5px;
 }
 
-/* .dropzone {
-  position: relative;
-  background-color: #ffffff;
-  height: 85vh;
-  width: 68vw;
-  margin: 10px;
-  border: 1px dashed #888;
-} */
 .dropzone {
   position: relative;
   background-color: #b6b6b6;
-  width: 210mm; /* Largeur A4 */
-  height: 297mm; /* Hauteur A4 */
-  margin: 10px auto; /* Centré */
+  width: calc(100vw * (210 / 297)); /* Largeur A4 proportionnelle à la hauteur */
+  height: calc(100vh * (297 / 210)); /* Hauteur proportionnelle à la largeur A4 */  margin: 0px 10px; /* Ajustez la marge selon vos besoins */
   border: 1px dashed #888;
   overflow: hidden; /* Empêche le débordement */
 }
 
-.draggable-element {
-  position: absolute;
-  cursor: move;
-  border: 1px solid #fff;
-}
-
 .properties-panel {
-  width: 15vw;
-  height: 85vh;
+  width: 15vw; /* 15% de la largeur de la fenêtre */
   background-color: #222;
   padding: 10px;
   color: #fff;

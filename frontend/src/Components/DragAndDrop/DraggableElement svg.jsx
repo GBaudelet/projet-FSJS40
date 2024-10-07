@@ -2,15 +2,9 @@ import React from "react";
 import { Rnd } from "react-rnd";
 
 const DraggableElement = ({ item, onSelect }) => {
-  const translateX = item.x; // Position x
-  const translateY = item.y; // Position y
-
-  console.log(`Translate: X: ${translateX}, Y: ${translateY}`);
-
   return (
     <Rnd
       bounds=".dropzone"
-      // position={{ x: item.x, y: item.y }}
       default={{
         x: item.x,
         y: item.y,

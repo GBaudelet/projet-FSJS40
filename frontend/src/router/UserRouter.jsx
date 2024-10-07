@@ -9,6 +9,7 @@ import Footer from "../Components/Partial/Footer";
 import Drag from "../Components/Drag";
 import Bible from "../Components/Bible";
 import Dashboard from "../Components/Admin";
+import Flow from "../Components/Flow/Flow";
 
 function UserRouter() {
   return (
@@ -21,7 +22,7 @@ function UserRouter() {
 
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-
+        <Route path="flow" element={<Flow />} />
         <Route
           path="dashboard"
           element={<ProtectedRoute element={Dashboard} />}

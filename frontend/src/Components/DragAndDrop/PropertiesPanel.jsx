@@ -14,7 +14,7 @@ const PropertiesPanel = ({
     text: "",
     fontSize: 16,
     fontFamily: "Arial",
-    color: "#000000",
+    color: "#000000", // Couleur du texte par défaut
     borderWidth: "1px",
     borderStyle: "solid",
     borderColor: "#000000",
@@ -26,8 +26,6 @@ const PropertiesPanel = ({
 
   useEffect(() => {
     if (selectedElement) {
-      // console.log("translate:", selectedElement.translate);
-
       setStyles({
         width: selectedElement.width,
         height: selectedElement.height,
@@ -44,8 +42,6 @@ const PropertiesPanel = ({
         rotation: selectedElement.rotation || "0",
         isTransparent: selectedElement.backgroundColor === "transparent",
       });
-      // console.log("rotation", selectedElement.rotation);
-      console.log("width", selectedElement);
     }
   }, [selectedElement]);
 
@@ -84,6 +80,7 @@ const PropertiesPanel = ({
               onChange={(e) => onBackgroundColorChange(e.target.value)}
             />
           </label>
+
           {/* BACKGROUND ELEMENT */}
           <details>
             <summary>Background</summary>
@@ -164,6 +161,20 @@ const PropertiesPanel = ({
             </label>
           </details>
 
+          {/* COLOR FOR SHAPES */}
+          <details>
+            <summary>Shape Color</summary>
+            <label>
+              Shape Color:
+              <input
+                type="color"
+                name="color" // Couleur pour les formes
+                value={styles.color}
+                onChange={handleStyleChange}
+              />
+            </label>
+          </details>
+
           {/* TEXT */}
           {selectedElement.type === "text" && (
             <details>
@@ -228,9 +239,9 @@ const PropertiesPanel = ({
               />
             </label>
           </details>
-          {/* width */}
+          {/* Width */}
           <details>
-            <summary>width</summary>
+            <summary>Width</summary>
             <label>
               <input
                 type="range"
@@ -242,9 +253,9 @@ const PropertiesPanel = ({
               />
             </label>
           </details>
-          {/* height */}
+          {/* Height */}
           <details>
-            <summary>height</summary>
+            <summary>Height</summary>
             <label>
               <input
                 type="range"

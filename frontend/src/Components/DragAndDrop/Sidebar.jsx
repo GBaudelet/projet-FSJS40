@@ -17,6 +17,8 @@ const Sidebar = ({ onAddItem, onSave, onLoad }) => {
     { id: 3, type: "text", name: "Text" },
     { id: 4, type: "triangle", name: "Triangle" },
     { id: 5, type: "square", name: "Square" },
+    { id: 6, type: "diamond", name: "Diamond" },
+    { id: 7, type: "ellipse", name: "Ellipse" },
   ];
 
   return (
