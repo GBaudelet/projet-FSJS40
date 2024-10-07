@@ -2,27 +2,26 @@ import React from "react";
 import { Rnd } from "react-rnd";
 
 const DraggableElement = ({ item, onSelect }) => {
-  const translateX = item.x; // Position x
-  const translateY = item.y; // Position y
-
-  console.log(`Translate: X: ${translateX}, Y: ${translateY}`);
-
+  // console.log(item.newHeight, item.newWidth);
+  // console.log(item.height, item.width);
+  // console.log(item.x, item.y);
   return (
     <Rnd
       bounds=".dropzone"
-      // position={{ x: item.x, y: item.y }}
       default={{
         x: item.x,
         y: item.y,
-        width: item.width || "10%", // Par défaut, 10% de la dropzone
-        height: item.height || "10%", // Par défaut, 10% de la dropzone
+        width: item.width,
+        height: item.height,
       }}
       onDragStop={(e, d) => {
-        onSelect(item.id, d.x, d.y);
+        onSelect(item.id, d.x, d.y, item.width, item.height);
       }}
       onResizeStop={(e, direction, ref, delta, position) => {
         const newWidth = ref.offsetWidth;
         const newHeight = ref.offsetHeight;
+        // Log the new dimensions to see if they are being captured correctly
+        console.log("Resized to:", newWidth, newHeight);
         onSelect(item.id, position.x, position.y, newWidth, newHeight);
       }}
       style={{

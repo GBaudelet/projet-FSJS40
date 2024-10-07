@@ -18,10 +18,8 @@ const Drag = () => {
     const newItem = {
       id: Date.now(),
       type: item.type,
-
       x: item.x || 0,
       y: item.y || 0,
-
       width: item.width || 100,
       height: item.height || 100,
       backgroundColor: item.type === "text" ? "transparent" : "#D3D3D3",
@@ -36,7 +34,6 @@ const Drag = () => {
       zIndex: item.zIndex || 1,
     };
     console.log(newItem);
-    console.log(newItem.x);
 
     setDroppedItems([...droppedItems, newItem]);
   };
@@ -45,10 +42,13 @@ const Drag = () => {
     setSelectedElement(element);
   };
 
-  const handleElementUpdate = (updatedElement) => {
+  const handleElementUpdate = (id, x, y, width, height) => {
+    console.log(
+      `Updating element ${id}: x=${x}, y=${y}, width=${width}, height=${height}`
+    );
     setDroppedItems((prevItems) =>
       prevItems.map((item) =>
-        item.id === updatedElement.id ? updatedElement : item
+        item.id === id ? { ...item, x, y, width: width, height: height } : item
       )
     );
   };
@@ -94,6 +94,7 @@ const Drag = () => {
       setDroppedItems(parsedData.items || []);
       setDropZoneBackgroundColor(parsedData.backgroundColor || "#b6b6b6");
     }
+    // console.log(savedData);
   };
 
   return (
@@ -110,6 +111,7 @@ const Drag = () => {
         onSelectElement={handleElementSelect}
         setSelectedElement={setSelectedElement}
         backgroundColor={dropZoneBackgroundColor}
+        onUpdateElement={handleElementUpdate}
       />
       <PropertiesPanel
         selectedElement={selectedElement}
