@@ -157,7 +157,7 @@ const PropertiesPanel = ({
                   onChange={handleStyleChange}
                 />
               </label>
-              <label>
+              {/* <label>
                 Font Family:
                 <select
                   name="fontFamily"
@@ -170,7 +170,7 @@ const PropertiesPanel = ({
                   <option value="Times New Roman">Times New Roman</option>
                   <option value="Verdana">Verdana</option>
                 </select>
-              </label>
+              </label> */}
               <label>
                 Font Color:
                 <input

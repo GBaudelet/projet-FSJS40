@@ -42,30 +42,41 @@ const Drag = () => {
     setSelectedElement(item);
   };
 
+  const handleElementMove = (movedElement) => {
+    setDroppedItems((prevItems) => {
+      const updatedItems = prevItems.map((item) =>
+        item.id === movedElement.id ? { ...item, ...movedElement } : item
+      );
+      handleSave(updatedItems); // Enregistrez après déplacement
+      return updatedItems;
+    });
+  };
   const handleElementUpdate = (updatedElement) => {
-    setDroppedItems((prevItems) =>
-      prevItems.map((item) =>
+    setDroppedItems((prevItems) => {
+      const updatedItems = prevItems.map((item) =>
         item.id === updatedElement.id ? { ...item, ...updatedElement } : item
-      )
-    );
+      );
+      handleSave(updatedItems); // Enregistrez après mise à jour
+      return updatedItems;
+    });
   };
 
   const handleElementDelete = (element) => {
-    setDroppedItems((prevItems) =>
-      prevItems.filter((item) => item.id !== element.id)
-    );
+    setDroppedItems((prevItems) => {
+      const updatedItems = prevItems.filter((item) => item.id !== element.id);
+      handleSave(updatedItems); // Enregistrez après suppression
+      return updatedItems;
+    });
     setSelectedElement(null);
   };
 
-  const handleSave = () => {
-    // save des emplacements des éléments
+  const handleSave = (itemsToSave = droppedItems) => {
+    // Enregistrer les données dans le localStorage
     const saveData = {
       userId: userId,
       backgroundColor: dropZoneBackgroundColor,
-      items: droppedItems.map((item) => ({
+      items: itemsToSave.map((item) => ({
         ...item,
-        // x: item.x,
-        // y: item.y,
       })),
     };
     console.log("Drop zone saved:", saveData);
@@ -83,6 +94,7 @@ const Drag = () => {
     //   });
     // }
   };
+
   const handleLoad = () => {
     // Charger les données depuis le localStorage
     const savedData = localStorage.getItem("dropZoneData");
@@ -102,16 +114,6 @@ const Drag = () => {
       }
     }
   };
-  // const handleLoad = () => {
-  //   // Charger les données depuis le localStorage
-  //   const savedData = localStorage.getItem("dropZoneData");
-  //   if (savedData) {
-  //     const parsedData = JSON.parse(savedData);
-  //     setDroppedItems(parsedData.items || []);
-  //     setDropZoneBackgroundColor(parsedData.backgroundColor || "#b6b6b6");
-  //   }
-  //   // console.log(savedData);
-  // };
 
   return (
     <div className="drag">
@@ -128,6 +130,7 @@ const Drag = () => {
         setSelectedElement={setSelectedElement}
         backgroundColor={dropZoneBackgroundColor}
         onUpdateElement={handleElementUpdate}
+        onMoveElement={handleElementMove}
       />
       <PropertiesPanel
         selectedElement={selectedElement}

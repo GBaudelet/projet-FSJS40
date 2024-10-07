@@ -7,6 +7,7 @@ const DropZone = ({
   setDroppedItems,
   backgroundColor,
   setSelectedElement,
+  onMoveElement,
 }) => {
   const updatePosition = (id, x, y) => {
     // Math.min est utilisé pour s'assurer que les valeurs newX et newY ne dépassent pas la limite de la dropZone inférieure (0) ou la limite supérieure (100 - proportions des dimensions de l'élément).
@@ -28,6 +29,8 @@ const DropZone = ({
               100 - ((item.height || 100) / dropZoneBounds.height) * 100
             )
           );
+          // Appelez la fonction onMoveElement ici pour sauvegarder la position
+          onMoveElement({ id, x: newX, y: newY });
           return { ...item, x: newX, y: newY };
         }
         return item;
