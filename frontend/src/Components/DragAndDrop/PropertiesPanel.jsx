@@ -14,21 +14,19 @@ const PropertiesPanel = ({
     text: "",
     fontSize: 16,
     fontFamily: "Arial",
-    color: "#000000", // Couleur du texte par défaut
+    color: "#000000",
     borderWidth: "1px",
     borderStyle: "solid",
     borderColor: "#000000",
     borderRadius: 0,
     zIndex: 1,
-    rotation: "0",
-    isTransparent: false,
   });
 
   useEffect(() => {
     if (selectedElement) {
       setStyles({
-        width: selectedElement.width,
-        height: selectedElement.height,
+        width: selectedElement.width || 0,
+        height: selectedElement.height || 0,
         backgroundColor: selectedElement.backgroundColor || "#D3D3D3",
         text: selectedElement.text || "",
         fontSize: selectedElement.fontSize || 16,
@@ -39,32 +37,23 @@ const PropertiesPanel = ({
         borderColor: selectedElement.borderColor || "#000000",
         borderRadius: selectedElement.borderRadius || 0,
         zIndex: selectedElement.zIndex || 1,
-        rotation: selectedElement.rotation || "0",
-        isTransparent: selectedElement.backgroundColor === "transparent",
       });
     }
   }, [selectedElement]);
 
   const handleStyleChange = (e) => {
     const { name, value } = e.target;
-    setStyles((prevStyles) => ({ ...prevStyles, [name]: value }));
+    const updatedStyles = {
+      ...styles,
+      [name]: value,
+    };
+    setStyles(updatedStyles);
 
-    onUpdate({ ...selectedElement, [name]: value });
-  };
-
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
-    setStyles((prevStyles) => ({ ...prevStyles, [name]: checked }));
-
-    if (name === "isTransparent" && checked) {
-      onUpdate({
-        ...selectedElement,
-        backgroundColor: "transparent",
-        backgroundImage: "",
-      });
-    } else if (name === "isTransparent" && !checked) {
-      onUpdate({ ...selectedElement, backgroundColor: styles.backgroundColor });
-    }
+    const updatedElement = {
+      ...selectedElement,
+      ...updatedStyles,
+    };
+    onUpdate(updatedElement);
   };
 
   return (
@@ -90,22 +79,8 @@ const PropertiesPanel = ({
                 type="color"
                 name="backgroundColor"
                 value={styles.backgroundColor}
-                onChange={(e) =>
-                  onUpdate({
-                    ...selectedElement,
-                    backgroundColor: e.target.value,
-                  })
-                }
+                onChange={handleStyleChange}
               />
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="isTransparent"
-                checked={styles.isTransparent}
-                onChange={handleCheckboxChange}
-              />
-              Transparent
             </label>
           </details>
 
@@ -155,21 +130,6 @@ const PropertiesPanel = ({
                 type="number"
                 name="borderRadius"
                 value={styles.borderRadius}
-                onChange={handleStyleChange}
-                placeholder="e.g., 10px"
-              />
-            </label>
-          </details>
-
-          {/* COLOR FOR SHAPES */}
-          <details>
-            <summary>Shape Color</summary>
-            <label>
-              Shape Color:
-              <input
-                type="color"
-                name="color" // Couleur pour les formes
-                value={styles.color}
                 onChange={handleStyleChange}
               />
             </label>
@@ -223,46 +183,27 @@ const PropertiesPanel = ({
             </details>
           )}
 
-          {/* ROTATION */}
-          <details>
-            <summary>Rotation</summary>
-            <label>
-              Rotation (degrees):
-              <input
-                type="range"
-                name="rotation"
-                value={styles.rotation}
-                min="0"
-                max="360"
-                placeholder="0"
-                onChange={handleStyleChange}
-              />
-            </label>
-          </details>
           {/* Width */}
           <details>
             <summary>Width</summary>
             <label>
               <input
-                type="range"
+                type="number"
                 name="width"
                 value={styles.width}
-                min="0"
-                max="1000"
                 onChange={handleStyleChange}
               />
             </label>
           </details>
+
           {/* Height */}
           <details>
             <summary>Height</summary>
             <label>
               <input
-                type="range"
+                type="number"
                 name="height"
                 value={styles.height}
-                min="0"
-                max="1000"
                 onChange={handleStyleChange}
               />
             </label>

@@ -38,17 +38,14 @@ const Drag = () => {
     setDroppedItems([...droppedItems, newItem]);
   };
 
-  const handleElementSelect = (element) => {
-    setSelectedElement(element);
+  const handleElementSelect = (item) => {
+    setSelectedElement(item);
   };
 
-  const handleElementUpdate = (id, x, y, width, height) => {
-    console.log(
-      `Updating element ${id}: x=${x}, y=${y}, width=${width}, height=${height}`
-    );
+  const handleElementUpdate = (updatedElement) => {
     setDroppedItems((prevItems) =>
       prevItems.map((item) =>
-        item.id === id ? { ...item, x, y, width: width, height: height } : item
+        item.id === updatedElement.id ? { ...item, ...updatedElement } : item
       )
     );
   };
@@ -90,12 +87,31 @@ const Drag = () => {
     // Charger les données depuis le localStorage
     const savedData = localStorage.getItem("dropZoneData");
     if (savedData) {
-      const parsedData = JSON.parse(savedData);
-      setDroppedItems(parsedData.items || []);
-      setDropZoneBackgroundColor(parsedData.backgroundColor || "#b6b6b6");
+      const { items, backgroundColor } = JSON.parse(savedData);
+      setDropZoneBackgroundColor(backgroundColor);
+
+      if (dropZoneRef.current) {
+        const dropZoneBounds = dropZoneRef.current.getBoundingClientRect();
+        const updatedItems = items.map((item) => ({
+          ...item,
+          // Conversion des positions de pourcentage à pixels
+          x: (item.x / 100) * dropZoneBounds.width,
+          y: (item.y / 100) * dropZoneBounds.height,
+        }));
+        setDroppedItems(updatedItems);
+      }
     }
-    // console.log(savedData);
   };
+  // const handleLoad = () => {
+  //   // Charger les données depuis le localStorage
+  //   const savedData = localStorage.getItem("dropZoneData");
+  //   if (savedData) {
+  //     const parsedData = JSON.parse(savedData);
+  //     setDroppedItems(parsedData.items || []);
+  //     setDropZoneBackgroundColor(parsedData.backgroundColor || "#b6b6b6");
+  //   }
+  //   // console.log(savedData);
+  // };
 
   return (
     <div className="drag">

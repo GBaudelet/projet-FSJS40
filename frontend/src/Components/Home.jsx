@@ -2,7 +2,14 @@ const Home = () => {
   return (
     <main>
       <h1>Welcome to My Site</h1>
-      <p>This is the homepage. Explore the site using the navigation above.</p>
+      <div class="dsize">
+        <div class="diamond"></div>
+      </div>
+      <div class="star"></div>
+      <div class="heart">{/* <div class="heart-text">Mon texte</div> */}</div>
+
+      <div class="cloud"></div>
+      <div class="moon-right"></div>
     </main>
   );
 };

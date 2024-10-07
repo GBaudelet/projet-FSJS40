@@ -99,3 +99,141 @@ main{
 	display: flex;
 	flex-direction: column;
 }
+/*  */
+
+  
+  :root {
+	--diamond-size: 100px; /* Taille du losange */
+  }
+  
+  .diamond {
+	width: var(--diamond-size);
+	height: var(--diamond-size);
+	background-color: #e74c3c;
+	/* transform: skew(45deg, 45deg); */
+	margin: 50px auto;
+	overflow: hidden;
+  }
+  .dsize{
+	width: 250px;
+	border: 1px solid red;
+  }
+  
+  .star {
+	position: relative;
+	display: block;
+	color: #f39c12;
+	width: 100px;
+	height: 100px;
+	background-color: blue;
+	clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  }
+  .moon-right {
+	position: relative;
+	width: 250px;
+	height: 250px;
+	background-color: #f39c12; /* Couleur de la lune */
+	border-radius: 50%;
+	overflow: hidden;
+  }
+  
+  .moon-right::before {
+	content: "";
+	position: absolute;
+	width: 250px;
+	height: 250px;
+	background-color: var(--background-color); /* Couleur pour masquer */
+	border-radius: 50%;
+	right: -20px; /* Ajustez pour obtenir la forme de croissant désirée */
+	top: 0;
+  }
+  
+  :root {
+	--heart-size: 100px; /* Taille de base du cœur */
+  }
+  
+  .heart {
+	margin: auto;
+	position: relative;
+	width: var(--heart-size); /* Utilise la variable pour la largeur */
+	height: calc(var(--heart-size) * 0.9); /* Ajuste la hauteur en fonction de la largeur */
+	background-color: #e74c3c;
+	transform: rotate(-45deg); /* Enlève la rotation pour garder le texte horizontal */
+  }
+  
+  .heart::before,
+  .heart::after {
+	content: "";
+	position: absolute;
+	width: var(--heart-size);
+	height: var(--heart-size);
+	background-color: #e74c3c;
+	border-radius: 50%;
+  }
+  
+  .heart::before {
+	top: calc(-0.5 * var(--heart-size));
+	left: 0;
+  }
+  
+  .heart::after {
+	top: 0;
+	left: calc(0.5 * var(--heart-size));
+  }
+  
+  .heart-text {
+	position: absolute;
+	left: 50px;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%); /* Centrer le texte */
+	color: white;
+	font-size: calc(var(--heart-size) * 0.2); /* Ajuste la taille du texte */
+	font-weight: bold;
+	text-align: center;
+	transform: rotate(45deg); /* Enlève la rotation pour garder le texte horizontal */
+
+  }
+  
+  
+  
+  .cloud {
+	position: relative;
+	background: #ecf0f1;
+	width: 120px;
+	height: 60px;
+	border-radius: 50%;
+  }
+  
+  .cloud::before,
+  .cloud::after {
+	content: "";
+	position: absolute;
+	background: #ecf0f1;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+  }
+  
+  .cloud::before {
+	top: -40px;
+	left: 10px;
+  }
+  
+  .cloud::after {
+	top: -40px;
+	right: 10px;
+  }
+  :root {
+	--triangle-base: 100px; /* Longueur de la base du triangle */
+	--triangle-height: 150px; /* Hauteur du triangle */
+  }
+  
+  .triangle {
+	width: 0;
+	height: 0;
+	border-left: calc(var(--triangle-base) / 2) solid transparent;
+	border-right: calc(var(--triangle-base) / 2) solid transparent;
+	border-bottom: var(--triangle-height) solid #333;
+  }
+  

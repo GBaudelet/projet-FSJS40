@@ -1,5 +1,6 @@
 .drag {
   display: flex;
+  
 }
 
 .sidebar {
@@ -24,7 +25,8 @@
   width: calc(100vw * (210 / 297)); /* Largeur A4 proportionnelle à la hauteur */
   height: calc(100vh * (297 / 210)); /* Hauteur proportionnelle à la largeur A4 */  margin: 0px 10px; /* Ajustez la marge selon vos besoins */
   border: 1px dashed #888;
-  overflow: hidden; /* Empêche le débordement */
+  overflow: auto; 
+  
 }
 
 .properties-panel {
