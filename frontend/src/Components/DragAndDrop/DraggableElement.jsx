@@ -19,7 +19,7 @@ const DraggableElement = ({ item, onSelect }) => {
           borderStyle: item.borderStyle || "solid",
           borderWidth: item.borderWidth || "1px",
           borderColor: item.borderColor || "#000000",
-          borderRadius: item.type === "circle" ? "50%" : "0%",
+          borderRadius: item.type === "circle" ? 50 : 0,
           boxSizing: "border-box",
           display: "flex",
           alignItems: "center",
@@ -37,8 +37,6 @@ const DraggableElement = ({ item, onSelect }) => {
               fontSize: `${item.fontSize || 16}px`,
               minWidth: "100%",
               minHeight: "100%",
-              transform: `rotate(${item.rotation || "45"}deg)`,
-              transformOrigin: "center center",
             }}
           >
             {item.text || " "}
