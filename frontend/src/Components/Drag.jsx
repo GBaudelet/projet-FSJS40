@@ -27,7 +27,7 @@ const Drag = () => {
       borderStyle: item.borderStyle || "solid",
       borderWidth: item.borderWidth || "1px",
       borderColor: item.borderColor || "#000000",
-      borderRadius: item.type === "circle" ? 50 : 0,
+      borderRadius: item.type === "circle" ? "50%" : "0",
       fontFamily: item.fontFamily || "Arial",
       color: item.color || "#000000",
       zIndex: item.zIndex || 1,

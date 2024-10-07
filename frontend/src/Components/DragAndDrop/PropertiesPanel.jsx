@@ -127,7 +127,9 @@ const PropertiesPanel = ({
             <label>
               Border Radius:
               <input
-                type="number"
+                type="range"
+                min="0"
+                max="100"
                 name="borderRadius"
                 value={styles.borderRadius}
                 onChange={handleStyleChange}

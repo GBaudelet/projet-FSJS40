@@ -19,7 +19,8 @@ const DraggableElement = ({ item, onSelect }) => {
           borderStyle: item.borderStyle || "solid",
           borderWidth: item.borderWidth || "1px",
           borderColor: item.borderColor || "#000000",
-          borderRadius: item.type === "circle" ? 50 : 0,
+          borderRadius:
+            item.type === "circle" ? "50%" : `${item.borderRadius}px`,
           boxSizing: "border-box",
           display: "flex",
           alignItems: "center",
