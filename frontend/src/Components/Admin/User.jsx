@@ -19,6 +19,7 @@ const UsersPage = () => {
     try {
       const response = await fetch("http://localhost:9000/api/v1/user/all");
       const data = await response.json();
+
       setUsers(data);
     } catch (error) {
       console.error("Error fetching users:", error);

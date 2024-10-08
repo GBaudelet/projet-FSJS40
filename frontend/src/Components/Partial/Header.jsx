@@ -32,7 +32,7 @@ const Header = () => {
         <Link to="/">Home</Link>
         <Link to="/bible">Bible</Link>
         <Link to="/drag">Sheet</Link>
-        <Link to="/flow">Flowtest</Link>
+        <Link to="/sheet">add</Link>
         {role_id === 1 && <Link to="/admin">Admin</Link>}
         {!isLogged ? (
           <>

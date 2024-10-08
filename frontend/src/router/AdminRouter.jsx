@@ -5,6 +5,7 @@ import Footer from "../Components/Partial/Footer";
 import Home from "../Components/Home";
 import Drag from "../Components/Drag";
 import Bible from "../Components/Bible";
+import Sheet from "../Components/sheet/Sheet";
 
 function AdminRouter() {
   return (
@@ -15,6 +16,7 @@ function AdminRouter() {
         <Route path="/drag" element={<Drag />} />
         <Route path="/bible" element={<Bible />} />
         <Route path="/admin" element={<Dashboard />} />
+        <Route path="sheet" element={<Sheet />} />
 
         <Route path="*" element={<p>NOT FOUND</p>} />
       </Routes>

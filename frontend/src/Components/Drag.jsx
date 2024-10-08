@@ -22,14 +22,14 @@ const Drag = () => {
       y: item.y || 0,
       width: item.width || 100,
       height: item.height || 100,
-      backgroundColor: item.type === "text" ? "transparent" : "#D3D3D3",
+      backgroundColor: item.type === "text" ? "null" : "#D3D3D3",
       text: item.type === "text" ? "Editable Text" : "",
       borderStyle: item.borderStyle || "solid",
       borderWidth: item.borderWidth || "1px",
       borderColor: item.borderColor || "#000000",
       borderRadius: item.type === "circle" ? "50%" : "0",
-      fontFamily: item.fontFamily || "Arial",
       color: item.color || "#000000",
+      size: item.fontSize || "16px",
       zIndex: item.zIndex || 1,
     };
     console.log(newItem);

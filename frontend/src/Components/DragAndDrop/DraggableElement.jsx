@@ -14,8 +14,8 @@ const DraggableElement = ({ item, onSelect }) => {
         style={{
           width: item.width ? `${item.width}px` : "100px",
           height: item.height ? `${item.height}px` : "100px",
-          fontFamily: item.fontFamily || "Arial",
           color: item.color || "#000000",
+
           borderStyle: item.borderStyle || "solid",
           borderWidth: item.borderWidth || "1px",
           borderColor: item.borderColor || "#000000",

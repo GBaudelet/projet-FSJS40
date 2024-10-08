@@ -13,7 +13,6 @@ const PropertiesPanel = ({
     backgroundColor: "#D3D3D3",
     text: "",
     fontSize: 16,
-    fontFamily: "Arial",
     color: "#000000",
     borderWidth: "1px",
     borderStyle: "solid",
@@ -30,7 +29,6 @@ const PropertiesPanel = ({
         backgroundColor: selectedElement.backgroundColor || "#D3D3D3",
         text: selectedElement.text || "",
         fontSize: selectedElement.fontSize || 16,
-        fontFamily: selectedElement.fontFamily || "Arial",
         color: selectedElement.color || "#000000",
         borderWidth: selectedElement.borderWidth || "1px",
         borderStyle: selectedElement.borderStyle || "solid",
@@ -159,20 +157,7 @@ const PropertiesPanel = ({
                   onChange={handleStyleChange}
                 />
               </label>
-              {/* <label>
-                Font Family:
-                <select
-                  name="fontFamily"
-                  value={styles.fontFamily}
-                  onChange={handleStyleChange}
-                >
-                  <option value="Arial">Arial</option>
-                  <option value="Courier New">Courier New</option>
-                  <option value="Georgia">Georgia</option>
-                  <option value="Times New Roman">Times New Roman</option>
-                  <option value="Verdana">Verdana</option>
-                </select>
-              </label> */}
+
               <label>
                 Font Color:
                 <input
