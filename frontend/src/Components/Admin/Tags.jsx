@@ -21,7 +21,7 @@ const TagPage = () => {
       const data = await response.json();
       setTags(data);
     } catch (error) {
-      console.error("Error fetching tags:", error);
+      console.error("Error fetching tag:", error);
     }
   };
 
@@ -95,7 +95,7 @@ const TagPage = () => {
         {tags.map((tag, index) => (
           <div key={tag.id || index} className="tag-item">
             <div className="tag-details">
-              <p>Name: {tag.name}</p>
+              <p>Name: {tag.name_tag}</p>
             </div>
             <div className="tag-actions">
               <button
