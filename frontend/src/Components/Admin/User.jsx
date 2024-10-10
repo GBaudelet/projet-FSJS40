@@ -42,6 +42,7 @@ const UsersPage = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(userData),
+          credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
         }
       );
 
@@ -58,6 +59,7 @@ const UsersPage = () => {
     try {
       await fetch(`http://localhost:9000/api/v1/user/delete/${id}`, {
         method: "DELETE",
+        credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
       });
       setUsers(users.filter((user) => user.id !== id));
     } catch (error) {

@@ -35,6 +35,7 @@ const SheetPage = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(newSheet),
+          credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
         }
       );
       const data = await response.json();
@@ -55,6 +56,7 @@ const SheetPage = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(editingSheet),
+          credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
         }
       );
       const data = await response.json();
@@ -70,6 +72,7 @@ const SheetPage = () => {
     try {
       await fetch(`http://localhost:9000/api/v1/sheet/delete/${id}`, {
         method: "DELETE",
+        credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
       });
       setSheets(sheets.filter((sheet) => sheet.id !== id));
     } catch (error) {
@@ -98,7 +101,12 @@ const SheetPage = () => {
         {sheets.map((sheet, index) => (
           <div key={sheet.id || index} className="sheet-item">
             <div className="sheet-details">
-              <p>Name: {sheet.name}</p>
+              <p>Name: {sheet.title}</p>
+              <p>{sheet.description}</p>
+              <p>créé le : {sheet.created_at}</p>
+              <p>update le : {sheet.updated_at}</p>
+              <p>statues : {sheet.statues}</p>
+              <p>fait par l'utilisateur {sheet.user_id}</p>
             </div>
             <div className="sheet-actions">
               <button

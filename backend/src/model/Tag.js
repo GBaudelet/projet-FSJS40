@@ -7,13 +7,13 @@ class Tag {
   }
 
   static async create(datas) {
-    const INSERT = "INSERT INTO tag (name) VALUES (?)";
+    const INSERT = "INSERT INTO tag (name_tag) VALUES (?)";
 
     return await pool.execute(INSERT, [...Object.values(datas)]);
   }
 
   static async update(name, id) {
-    const UPDATE = "UPDATE tag SET name = ? WHERE id = ?";
+    const UPDATE = "UPDATE tag SET name_tag = ? WHERE id = ?";
     return await pool.execute(UPDATE, [name, id]);
   }
 

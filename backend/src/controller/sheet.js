@@ -13,37 +13,67 @@ const getAll = async (req, res) => {
   }
 };
 
+// const create = async (req, res) => {
+//   try {
+//     const { title, description } = req.body; // Récupérer le titre et la description
+
+//     // Vérification si les champs requis sont présents
+//     if (!title || !description) {
+//       return res.status(400).json({ msg: "Tous les champs sont requis" });
+//     }
+
+//     // Récupérer l'ID de l'utilisateur connecté
+//     const userId = req.session.userId || req.user.id; // À ajuster selon votre implémentation d'authentification
+
+//     // Préparer les données pour l'insertion
+//     const sheetData = {
+//       title,
+//       description,
+//       created_at: new Date(), // Utiliser la date actuelle pour created_at
+//       updated_at: new Date(), // Utiliser la date actuelle pour updated_at
+//       statues: 1, // Valeur par défaut pour statues
+//       user_id: userId, // Récupérer l'ID de l'utilisateur connecté
+//     };
+
+//     // Insérer les données dans la table
+//     const [sheetResponse] = await Sheet.create(sheetData);
+//     const sheetId = sheetResponse.insertId; // Récupérer l'ID de la nouvelle entrée
+
+//     // Réponse en cas de succès
+//     res.json({ msg: "Sheet added", id: sheetId });
+//   } catch (err) {
+//     console.error("Erreur lors de la création du sheet:", err);
+//     res.status(500).json({ msg: "Erreur serveur" });
+//   }
+// };
 const create = async (req, res) => {
   try {
-    const { title, description } = req.body; // Récupérer le titre et la description
+    const { title, description } = req.body;
 
-    // Vérification si les champs requis sont présents
+    // Vérifiez si les champs sont fournis
     if (!title || !description) {
       return res.status(400).json({ msg: "Tous les champs sont requis" });
     }
 
-    // Récupérer l'ID de l'utilisateur connecté
-    const userId = req.session.userId || req.user.id; // À ajuster selon votre implémentation d'authentification
+    // Récupérer l'ID de l'utilisateur depuis la session
+    const userId = req.session.user.id;
 
     // Préparer les données pour l'insertion
     const sheetData = {
       title,
       description,
-      created_at: new Date(), // Utiliser la date actuelle pour created_at
-      updated_at: new Date(), // Utiliser la date actuelle pour updated_at
-      statues: 1, // Valeur par défaut pour statues
-      user_id: userId, // Récupérer l'ID de l'utilisateur connecté
+      statues: 1,
+      user_id: userId,
     };
 
-    // Insérer les données dans la table
-    const [sheetResponse] = await Sheet.create(sheetData);
-    const sheetId = sheetResponse.insertId; // Récupérer l'ID de la nouvelle entrée
-
-    // Réponse en cas de succès
-    res.json({ msg: "Sheet added", id: sheetId });
-  } catch (err) {
-    console.error("Erreur lors de la création du sheet:", err);
-    res.status(500).json({ msg: "Erreur serveur" });
+    // Insérer la feuille dans la base de données
+    const result = await Sheet.create(sheetData);
+    res
+      .status(201)
+      .json({ msg: "Feuille créée avec succès", sheetId: result.insertId });
+  } catch (error) {
+    console.error("Erreur lors de la création de la feuille:", error);
+    res.status(500).json({ msg: "Erreur lors de la création de la feuille" });
   }
 };
 

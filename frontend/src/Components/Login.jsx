@@ -24,6 +24,7 @@ function Login() {
         username: user.username,
         password: user.password,
       }),
+      credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
     });
 
     const data = await response.json();

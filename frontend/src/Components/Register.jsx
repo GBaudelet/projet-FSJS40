@@ -10,8 +10,14 @@ function Register() {
 
   async function submitHandler(e) {
     e.preventDefault();
-    if (!user.username || !user.password) {
+    if (!user.username || !user.password || !user.email || !user.confirmEmail) {
       dispatch(setMsg("Remplissez tous les champs"));
+      return;
+    }
+
+    // Vérifiez que l'email et la confirmation de l'email correspondent
+    if (user.email !== user.confirmEmail) {
+      dispatch(setMsg("Les adresses email ne correspondent pas"));
       return;
     }
 
@@ -21,6 +27,7 @@ function Register() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(user),
+      credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
     });
 
     const data = await response.json();
@@ -52,12 +59,33 @@ function Register() {
     <main>
       <form onSubmit={submitHandler}>
         {user.msg && <p className="error user-msg">{user.msg}</p>}
+
         <label htmlFor="username">Username</label>
         <input
           type="text"
           name="username"
           id="username"
           value={user.username}
+          onChange={handleChange}
+          required
+        />
+
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          value={user.email}
+          onChange={handleChange}
+          required
+        />
+
+        <label htmlFor="confirmEmail">Confirm Email</label>
+        <input
+          type="email"
+          name="confirmEmail"
+          id="confirmEmail"
+          value={user.confirmEmail}
           onChange={handleChange}
           required
         />

@@ -4,6 +4,8 @@ const initialState = {
   id: null,
   username: "",
   password: "",
+  email: "", // Ajout de l'email
+  confirmEmail: "", // Ajout de la confirmation de l'email
   isLogged: false,
   msg: "",
   role_id: "",
@@ -27,6 +29,9 @@ const userSlice = createSlice({
     },
     logout(state) {
       state.username = "";
+      state.password = "";
+      state.email = "";
+      state.confirmEmail = "";
       state.isLogged = false;
       state.role_id = "";
     },
@@ -43,6 +48,8 @@ const userSlice = createSlice({
     resetFields(state) {
       state.username = "";
       state.password = "";
+      state.email = "";
+      state.confirmEmail = "";
     },
   },
 });

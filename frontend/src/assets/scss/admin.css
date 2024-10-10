@@ -1,7 +1,8 @@
 .dashboard {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 89.1vh;
+    overflow: auto;
   }
   
   .dashboard-header {
@@ -139,5 +140,9 @@
   
   .user-item .user-actions button:last-child:hover {
     background-color: #c82333;
+  }
+  
+  .sheet-item{
+    border: 1px solid red;
   }
   

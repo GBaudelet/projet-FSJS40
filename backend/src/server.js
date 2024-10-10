@@ -15,8 +15,14 @@ const app = express();
 const PORT = process.env.PORT || process.env.LOCAL_PORT;
 
 // ici on autorise à communiquer avec notre serveur uniquement l'origin http://localhost:5173
-app.use(cors({ origin: "http://localhost:5173" }));
-
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
 app.use(
   session({
     secret: process.env.SECRET_KEY_SESSION,
