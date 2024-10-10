@@ -4,6 +4,7 @@ const app = express();
 
 app.use(express.json());
 
+// pour l'admin et la bible
 const getAll = async (req, res) => {
   try {
     const [response] = await Sheet.findAll();
@@ -13,39 +14,39 @@ const getAll = async (req, res) => {
   }
 };
 
-// const create = async (req, res) => {
-//   try {
-//     const { title, description } = req.body; // Récupérer le titre et la description
+// pour l'user
+const getAllUser = async (req, res) => {
+  try {
+    const userId = req.session.user.id;
 
-//     // Vérification si les champs requis sont présents
-//     if (!title || !description) {
-//       return res.status(400).json({ msg: "Tous les champs sont requis" });
-//     }
+    if (!userId) {
+      return res.status(400).json({ msg: "Utilisateur non authentifié" });
+    }
 
-//     // Récupérer l'ID de l'utilisateur connecté
-//     const userId = req.session.userId || req.user.id; // À ajuster selon votre implémentation d'authentification
+    const [response] = await Sheet.findAllUser(userId);
+    res.json(response);
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+// recherche par tag
+const searchByTag = async (req, res) => {
+  try {
+    const { tags } = req.query;
 
-//     // Préparer les données pour l'insertion
-//     const sheetData = {
-//       title,
-//       description,
-//       created_at: new Date(), // Utiliser la date actuelle pour created_at
-//       updated_at: new Date(), // Utiliser la date actuelle pour updated_at
-//       statues: 1, // Valeur par défaut pour statues
-//       user_id: userId, // Récupérer l'ID de l'utilisateur connecté
-//     };
+    if (!tags || tags.length === 0) {
+      return res
+        .status(400)
+        .json({ msg: "Aucun tag fourni pour la recherche" });
+    }
 
-//     // Insérer les données dans la table
-//     const [sheetResponse] = await Sheet.create(sheetData);
-//     const sheetId = sheetResponse.insertId; // Récupérer l'ID de la nouvelle entrée
+    const [response] = await Sheet.findByTag(tags.split(","));
+    res.json(response);
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
 
-//     // Réponse en cas de succès
-//     res.json({ msg: "Sheet added", id: sheetId });
-//   } catch (err) {
-//     console.error("Erreur lors de la création du sheet:", err);
-//     res.status(500).json({ msg: "Erreur serveur" });
-//   }
-// };
 const create = async (req, res) => {
   try {
     const { title, description } = req.body;
@@ -107,4 +108,4 @@ const create = async (req, res) => {
 //   }
 // };
 
-export { getAll, create };
+export { getAll, create, getAllUser, searchByTag };

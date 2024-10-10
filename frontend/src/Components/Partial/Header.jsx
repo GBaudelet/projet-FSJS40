@@ -31,18 +31,21 @@ const Header = () => {
       <nav>
         <Link to="/">Home</Link>
         <Link to="/bible">Bible</Link>
-        <Link to="/drag">Sheet</Link>
-        <Link to="/sheet">add</Link>
-        {role_id === 1 && <Link to="/admin">Admin</Link>}
-        {!isLogged ? (
+        {isLogged ? (
+          <>
+            <Link to="/drag">Sheet</Link>
+            <Link to="/sheet">Add</Link>
+            {role_id === 2 && <Link to="/profil">Profil</Link>}
+            {role_id === 1 && <Link to="/admin">Admin</Link>}
+            <Link to="/" onClick={onClickLogout}>
+              Logout
+            </Link>
+          </>
+        ) : (
           <>
             <Link to="/register">Register</Link>
             <Link to="/login">Login</Link>
           </>
-        ) : (
-          <Link to="/" onClick={onClickLogout}>
-            Logout
-          </Link>
         )}
       </nav>
     </header>

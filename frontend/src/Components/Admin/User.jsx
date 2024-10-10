@@ -72,30 +72,34 @@ const UsersPage = () => {
       <h2>Users</h2>
 
       <ul className="users-list">
-        {users.map((user, index) => (
-          <li key={user.id || index} className="user-item">
-            <div className="user-details">
-              <p>Name: {user.username}</p>
-              <p>Role: {user.role}</p>
-            </div>
-            <div className="user-actions">
-              <button
-                onClick={() => {
-                  setIsEditing(user.id);
-                  setEditingUser({
-                    id: user.id,
-                    username: user.username,
-                    password: "",
-                    role_id: user.role_id,
-                  });
-                }}
-              >
-                Edit
-              </button>
-              <button onClick={() => handleDelete(user.id)}>Delete</button>
-            </div>
-          </li>
-        ))}
+        {Array.isArray(users) && users.length > 0 ? (
+          users.map((user, index) => (
+            <li key={user.id || index} className="user-item">
+              <div className="user-details">
+                <p>Name: {user.username}</p>
+                <p>Role: {user.role}</p>
+              </div>
+              <div className="user-actions">
+                <button
+                  onClick={() => {
+                    setIsEditing(user.id);
+                    setEditingUser({
+                      id: user.id,
+                      username: user.username,
+                      password: "",
+                      role_id: user.role_id,
+                    });
+                  }}
+                >
+                  Edit
+                </button>
+                <button onClick={() => handleDelete(user.id)}>Delete</button>
+              </div>
+            </li>
+          ))
+        ) : (
+          <p>No users found</p>
+        )}
       </ul>
 
       {isEditing && (

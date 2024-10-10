@@ -17,7 +17,18 @@ const SheetPage = () => {
 
   const fetchSheets = async () => {
     try {
-      const response = await fetch("http://localhost:9000/api/v1/sheet/all");
+      const response = await fetch("http://localhost:9000/api/v1/sheet/all", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
       setSheets(data);
     } catch (error) {

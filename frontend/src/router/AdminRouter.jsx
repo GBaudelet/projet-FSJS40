@@ -6,6 +6,7 @@ import Home from "../Components/Home";
 import Drag from "../Components/Drag";
 import Bible from "../Components/Bible";
 import Sheet from "../Components/sheet/Sheet";
+import ProtectedRoute from "../HOC/ProtectedRoute";
 
 function AdminRouter() {
   return (
@@ -13,12 +14,18 @@ function AdminRouter() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/drag" element={<Drag />} />
+        <Route path="/drag" element={<Drag />} allowedRoles={[1]} />
         <Route path="/bible" element={<Bible />} />
-        <Route path="/admin" element={<Dashboard />} />
-        <Route path="sheet" element={<Sheet />} />
 
-        <Route path="*" element={<p>NOT FOUND</p>} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute element={<Dashboard />} allowedRoles={[1]} />
+          }
+        />
+        <Route path="/sheet" element={<Sheet />} allowedRoles={[1]} />
+
+        <Route path="*" element={<h1>404 - Not Found</h1>} />
       </Routes>
       <Footer />
     </>

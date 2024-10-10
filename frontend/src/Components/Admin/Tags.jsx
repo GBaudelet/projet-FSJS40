@@ -98,7 +98,7 @@ const TagPage = () => {
         {tags.map((tag, index) => (
           <div key={tag.id || index} className="tag-item">
             <div className="tag-details">
-              <p>Name: {tag.name_tag}</p>
+              <p>Name: {tag.name}</p>
             </div>
             <div className="tag-actions">
               <button

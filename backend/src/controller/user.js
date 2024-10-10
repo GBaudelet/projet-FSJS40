@@ -10,7 +10,12 @@ app.use(express.json());
 const getAll = async (req, res) => {
   try {
     const [response] = await User.findAll();
-    res.json(response);
+    // S'assurer que response est un tableau
+    if (!Array.isArray(response)) {
+      res.json([]);
+    } else {
+      res.json(response);
+    }
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
