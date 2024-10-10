@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
-import Sidebar from "./DragAndDrop/Sidebar";
-import DropZone from "./DragAndDrop/DropZone";
-import PropertiesPanel from "./DragAndDrop/PropertiesPanel";
+import Sidebar from "../Components/DragAndDrop/Sidebar";
+import DropZone from "../Components/DragAndDrop/DropZone";
+import PropertiesPanel from "../Components/DragAndDrop/PropertiesPanel";
 import html2canvas from "html2canvas";
 import "../assets/scss/Drag.css";
 import { useSelector } from "react-redux";
@@ -86,6 +86,70 @@ const Drag = () => {
     // Enregistrer les données dans le localStorage
     localStorage.setItem("dropZoneData", JSON.stringify(saveData));
 
+    // const insertOrUpdateData = (saveData) => {
+    //   const backgroundColor = saveData.backgroundColor;
+    //   const items = JSON.stringify(saveData.items); // Convertir en chaîne JSON
+    //   const sheetId = saveData.userId; // Utiliser l'userId comme sheet_id
+
+    //   // Vérifier si une fiche existe déjà avec le même sheet_id
+    //   const selectQuery = `SELECT * FROM dropzone WHERE sheet_id = ?`;
+
+    //   connection.execute(selectQuery, [sheetId], (err, results) => {
+    //     if (err) {
+    //       console.error(
+    //         "Erreur lors de la vérification de l'existence des données:",
+    //         err
+    //       );
+    //       return;
+    //     }
+
+    //     if (results.length > 0) {
+    //       // La fiche existe déjà, effectuer une mise à jour
+    //       const updateQuery = `
+    //         UPDATE dropzone
+    //         SET backgroundcolor = ?, items = ?
+    //         WHERE sheet_id = ?
+    //       `;
+
+    //       connection.execute(
+    //         updateQuery,
+    //         [backgroundColor, items, sheetId],
+    //         (err, results) => {
+    //           if (err) {
+    //             console.error(
+    //               "Erreur lors de la mise à jour des données:",
+    //               err
+    //             );
+    //           } else {
+    //             console.log("Données mises à jour avec succès:", results);
+    //           }
+    //         }
+    //       );
+    //     } else {
+    //       // La fiche n'existe pas, effectuer une insertion
+    //       const insertQuery = `
+    //         INSERT INTO dropzone (backgroundcolor, items, sheet_id)
+    //         VALUES (?, ?, ?)
+    //       `;
+
+    //       connection.execute(
+    //         insertQuery,
+    //         [backgroundColor, items, sheetId],
+    //         (err, results) => {
+    //           if (err) {
+    //             console.error("Erreur lors de l'insertion des données:", err);
+    //           } else {
+    //             console.log("Données insérées avec succès:", results);
+    //           }
+    //         }
+    //       );
+    //     }
+    //   });
+    // };
+
+    // // Appel de la fonction pour insérer ou mettre à jour les données
+    // insertOrUpdateData(saveData);
+
     // save de l'image qui sera utilisé pour la bibliothèque
     // if (dropZoneRef.current) {
     //   html2canvas(dropZoneRef.current).then((canvas) => {
@@ -106,23 +170,12 @@ const Drag = () => {
 
       if (dropZoneRef.current) {
         const dropZoneBounds = dropZoneRef.current.getBoundingClientRect();
-
-        const updatedItems = items.map((item) => {
+        const updatedItems = items.map((item) => ({
+          ...item,
           // Conversion des positions de pourcentage à pixels
-          const xPos = (item.x / 100) * dropZoneBounds.width;
-          const yPos = (item.y / 100) * dropZoneBounds.height;
-
-          return {
-            ...item,
-
-            // Si x dépasse la largeur, remettre à 0 ou autre valeur
-            x: xPos > dropZoneBounds.width ? 0 : xPos,
-
-            // Si y dépasse la hauteur, remettre à 0 ou autre valeur
-            y: yPos > dropZoneBounds.height ? 0 : yPos,
-          };
-        });
-
+          x: (item.x / 100) * dropZoneBounds.width,
+          y: (item.y / 100) * dropZoneBounds.height,
+        }));
         setDroppedItems(updatedItems);
       }
     }

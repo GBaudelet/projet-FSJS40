@@ -11,10 +11,10 @@ export default (allowedRoles) => (req, res, next) => {
       return next(); // L'utilisateur a accès, passez au middleware suivant
     } else {
       // Redirection vers la page d'accueil pour les rôles non autorisés
-      return res.redirect("/"); // Remplacez '/' par la route de votre page d'accueil si nécessaire
+      return res.redirect("/");
     }
   } else {
     // Redirection vers la page d'accueil si non authentifié
-    return res.redirect("/"); // Remplacez '/' par la route de votre page d'accueil si nécessaire
+    return res.redirect("/");
   }
 };
