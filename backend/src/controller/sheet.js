@@ -95,17 +95,17 @@ const create = async (req, res) => {
 //   }
 // };
 
-// const remove = async (req, res) => {
-//   try {
-//     const [response] = await Sheet.remove(req.params.id);
-//     if (!response.affectedRows) {
-//       res.status(404).json({ msg: "sheet not deleted" });
-//       return;
-//     }
-//     res.json({ msg: "sheet deleted" });
-//   } catch (err) {
-//     res.status(500).json({ msg: err.message });
-//   }
-// };
+const remove = async (req, res) => {
+  try {
+    const [response] = await Sheet.remove(req.params.id);
+    if (!response.affectedRows) {
+      res.status(404).json({ msg: "sheet not deleted" });
+      return;
+    }
+    res.json({ msg: "sheet deleted" });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
 
-export { getAll, create, getAllUser, searchByTag };
+export { getAll, create, getAllUser, searchByTag, remove };

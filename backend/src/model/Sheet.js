@@ -50,10 +50,10 @@ class Sheet {
   //     return await pool.execute(UPDATE, [name, id]);
   //   }
 
-  //   static async remove(id) {
-  //     const DELETE = "DELETE FROM Sheet WHERE id = ?";
-  //     return await pool.execute(DELETE, [id]);
-  //   }
+  static async remove(id) {
+    const DELETE = "DELETE FROM sheet WHERE id = ?";
+    return await pool.execute(DELETE, [id]);
+  }
 }
 
 export default Sheet;

@@ -5,6 +5,7 @@ import {
   create,
   getAllUser,
   searchByTag,
+  remove,
 } from "../controller/sheet.js";
 
 const router = Router();
@@ -14,6 +15,6 @@ router.get("/allUser", getAllUser);
 router.get("/search", searchByTag);
 router.post("/create", create);
 // router.patch("/update/:id", update);
-// router.delete("/delete/:id", remove);
+router.delete("/delete/:id", remove);
 
 export default router;
