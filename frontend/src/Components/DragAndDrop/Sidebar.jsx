@@ -10,7 +10,7 @@ const SidebarItem = ({ item, onAddItem }) => (
   </div>
 );
 
-const Sidebar = ({ onAddItem, onSave, onLoad }) => {
+const Sidebar = ({ onAddItem, onSave, onLoad, onAddBDD }) => {
   const items = [
     { id: 1, type: "rectangle", name: "Rectangle" },
     { id: 2, type: "circle", name: "Circle" },
@@ -31,6 +31,9 @@ const Sidebar = ({ onAddItem, onSave, onLoad }) => {
       </button>
       <button onClick={onLoad} className="load-button">
         Load Drop Zone
+      </button>
+      <button onClick={onAddBDD} className="add-bdd-button">
+        Add BDD
       </button>
     </div>
   );

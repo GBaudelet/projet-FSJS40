@@ -24,27 +24,87 @@ class Sheet {
 
     return await pool.query(query, [tag]);
   }
-  // creation de la fiche
+  //
+  //
+  // création de la fiche
   static async create(datas) {
-    const INSERT = `
-      INSERT INTO sheet (title, description, created_at, updated_at, statues, user_id) 
-      VALUES (?, ?, NOW(), NOW(), ?, ?)
-    `;
+    const INSERT_SHEET = `
+    INSERT INTO sheet (title, description, created_at, updated_at, statues, user_id) 
+    VALUES (?, ?, NOW(), NOW(), ?, ?)
+  `;
+
+    const INSERT_BIBLE = `
+    INSERT INTO bible (img_emplacement, sheet_id) 
+    VALUES (?, ?)
+  `;
+
+    const INSERT_DROPZONE = `
+    INSERT INTO dropzone (backgroundColor, items, sheet_id) 
+    VALUES (?, ?, ?)
+  `;
+
+    // Vous pouvez avoir une liste de tags à insérer
+    const INSERT_SHEET_TAG = `
+    INSERT INTO sheet_tag (sheet_id, tag_id) 
+    VALUES (?, ?)
+  `;
 
     try {
-      // Exécutez la requête d'insertion
-      const [result] = await pool.execute(INSERT, [
-        datas.title,
-        datas.description,
-        datas.statues,
-        datas.user_id,
-      ]);
-      return result;
+      // Démarrer une transaction
+      await pool.getConnection(async (err, connection) => {
+        if (err) throw err;
+
+        await connection.beginTransaction();
+
+        // Exécutez la requête d'insertion pour la table sheet
+        const [sheetResult] = await connection.execute(INSERT_SHEET, [
+          datas.title,
+          datas.description,
+          datas.statues,
+          datas.user_id,
+        ]);
+
+        // Récupérer l'ID de la nouvelle fiche
+        const lastSheetId = sheetResult.insertId;
+
+        // Insérer dans la table bible
+        await connection.execute(INSERT_BIBLE, [
+          datas.img_emplacement, // Assurez-vous que cette valeur est fournie dans `datas`
+          lastSheetId,
+        ]);
+
+        // Insérer les tags dans la table intermédiaire sheet_tag
+        if (datas.tags && Array.isArray(datas.tags)) {
+          for (const tag of datas.tags) {
+            await connection.execute(INSERT_SHEET_TAG, [lastSheetId, tag]);
+          }
+        }
+
+        // Insérer dans la table dropzone
+        await connection.execute(INSERT_DROPZONE, [
+          datas.backgroundColor, // Assurez-vous que cette valeur est fournie dans `datas`
+          JSON.stringify(datas.items), // En supposant que `datas.items` est un objet ou un tableau
+          lastSheetId,
+        ]);
+
+        // Valider la transaction
+        await connection.commit();
+        connection.release();
+
+        return { id: lastSheetId }; // Retournez l'ID de la fiche créée
+      });
     } catch (error) {
+      // En cas d'erreur, faire un rollback
+      await pool.getConnection(async (err, connection) => {
+        if (err) throw err;
+        await connection.rollback();
+        connection.release();
+      });
       console.error("Erreur lors de l'insertion dans la table sheet:", error);
       throw error;
     }
   }
+
   //   static async update(name, id) {
   //     const UPDATE = "UPDATE Sheet SET name = ? WHERE id = ?";
   //     return await pool.execute(UPDATE, [name, id]);

@@ -10,7 +10,7 @@ const PropertiesPanel = ({
   const [styles, setStyles] = useState({
     width: 0,
     height: 0,
-    backgroundColor: "#D3D3D3",
+    backgroundColor: "rgba(211, 211, 211, 1)",
     text: "",
     fontSize: 16,
     color: "#000000",
@@ -19,14 +19,20 @@ const PropertiesPanel = ({
     borderColor: "#000000",
     borderRadius: 0,
     zIndex: 1,
+    alpha: 1,
   });
 
   useEffect(() => {
     if (selectedElement) {
+      const rgbaMatch = selectedElement.backgroundColor.match(
+        /rgba?\((\d+),\s*(\d+),\s*(\d+),?\s*([\d\.]+)?\)/
+      );
+      const alphaValue = rgbaMatch ? parseFloat(rgbaMatch[4]) : 1;
       setStyles({
         width: selectedElement.width || 0,
         height: selectedElement.height || 0,
-        backgroundColor: selectedElement.backgroundColor || "#D3D3D3",
+        backgroundColor:
+          selectedElement.backgroundColor || "rgba(211, 211, 211, 1)",
         text: selectedElement.text || "",
         fontSize: selectedElement.fontSize || 16,
         color: selectedElement.color || "#000000",
@@ -35,6 +41,7 @@ const PropertiesPanel = ({
         borderColor: selectedElement.borderColor || "#000000",
         borderRadius: selectedElement.borderRadius || 0,
         zIndex: selectedElement.zIndex || 1,
+        alpha: alphaValue,
       });
     }
   }, [selectedElement]);
@@ -45,6 +52,19 @@ const PropertiesPanel = ({
       ...styles,
       [name]: value,
     };
+
+    // Handle the update of RGBA
+    if (name === "alpha") {
+      const rgbaMatch = styles.backgroundColor.match(
+        /rgba?\((\d+),\s*(\d+),\s*(\d+),?\s*([\d\.]+)?\)/
+      );
+      if (rgbaMatch) {
+        const r = rgbaMatch[1];
+        const g = rgbaMatch[2];
+        const b = rgbaMatch[3];
+        updatedStyles.backgroundColor = `rgba(${r}, ${g}, ${b}, ${value})`;
+      }
+    }
     setStyles(updatedStyles);
 
     const updatedElement = {
@@ -76,12 +96,23 @@ const PropertiesPanel = ({
               <input
                 type="color"
                 name="backgroundColor"
-                value={styles.backgroundColor}
+                value={styles.backgroundColor.replace(/, [\d\.]+\)$/, ")")}
+                onChange={handleStyleChange}
+              />
+            </label>
+            <label>
+              Background Alpha (Transparency):
+              <input
+                type="range"
+                name="alpha"
+                min="0"
+                max="1"
+                step="0.01"
+                value={styles.alpha}
                 onChange={handleStyleChange}
               />
             </label>
           </details>
-
           {/* ZINDEX */}
           <details>
             <summary>Z-Index</summary>

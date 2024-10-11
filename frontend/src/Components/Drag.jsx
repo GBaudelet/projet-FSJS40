@@ -22,7 +22,8 @@ const Drag = () => {
       y: item.y || 0,
       width: item.width || 100,
       height: item.height || 100,
-      backgroundColor: item.type === "text" ? "null" : "#D3D3D3",
+      backgroundColor:
+        item.type === "text" ? "rgba(0, 0, 0, 0)" : "rgba(211, 211, 211, 1)",
       text: item.type === "text" ? "Editable Text" : "",
       borderStyle: item.borderStyle || "solid",
       borderWidth: item.borderWidth || "1px",
@@ -69,30 +70,74 @@ const Drag = () => {
     setSelectedElement(null);
   };
 
+  // const handleSave = (data = {}) => {
+  //   // Utilisation de droppedItems par défaut si data.items n'est pas défini
+  //   const itemsToSave = Array.isArray(data.items) ? data.items : droppedItems;
+
+  //   const saveData = {
+  //     userId: userId,
+  //     backgroundColor: dropZoneBackgroundColor,
+  //     items: itemsToSave.map((item) => ({
+  //       ...item,
+  //     })),
+  //   };
+
+  //   console.log("Drop zone saved:", saveData);
+
+  //   // Enregistrer les données dans le localStorage
+  //   localStorage.setItem("dropZoneData", JSON.stringify(saveData));
+
+  //   // save de l'image qui sera utilisé pour la bibliothèque
+  //   // if (dropZoneRef.current) {
+  //   //   html2canvas(dropZoneRef.current).then((canvas) => {
+  //   //     const link = document.createElement("a");
+  //   //     link.href = canvas.toDataURL("image/png");
+  //   //     link.download = "dropzone.png";
+  //   //     link.click();
+  //   //   });
+  //   // }
+  // };
   const handleSave = (data = {}) => {
-    // Utilisation de droppedItems par défaut si data.items n'est pas défini
     const itemsToSave = Array.isArray(data.items) ? data.items : droppedItems;
 
     const saveData = {
-      userId: userId,
+      userId: userId, // Assurez-vous que cela est défini dans votre composant
       backgroundColor: dropZoneBackgroundColor,
-      items: itemsToSave.map((item) => ({
-        ...item,
-      })),
+      items: itemsToSave.map((item) => ({ ...item })),
     };
 
     console.log("Drop zone saved:", saveData);
 
-    // Enregistrer les données dans le localStorage
     localStorage.setItem("dropZoneData", JSON.stringify(saveData));
 
-    // save de l'image qui sera utilisé pour la bibliothèque
     // if (dropZoneRef.current) {
     //   html2canvas(dropZoneRef.current).then((canvas) => {
-    //     const link = document.createElement("a");
-    //     link.href = canvas.toDataURL("image/png");
-    //     link.download = "dropzone.png";
-    //     link.click();
+    //     canvas.toBlob((blob) => {
+    //       const formData = new FormData();
+    //       formData.append("screenshot", blob, "dropzone.png");
+    //       formData.append("userId", saveData.userId);
+    //       formData.append("data", JSON.stringify(saveData));
+
+    //       fetch("http://localhost:9000/api/v1/screen/save", {
+    //         method: "POST",
+    //         body: formData,
+    //         credentials: "include",
+    //       })
+    //         .then((response) => {
+    //           if (!response.ok) {
+    //             throw new Error("Erreur lors de l'envoi du fichier");
+    //           }
+    //           return response.json();
+    //         })
+    //         .then((data) => {
+    //           console.log("Fichier envoyé avec succès :", data);
+    //         })
+    //         .catch((error) => {
+    //           console.log("catch error");
+
+    //           console.error("Erreur lors de l'envoi :", error);
+    //         });
+    //     });
     //   });
     // }
   };
@@ -127,6 +172,8 @@ const Drag = () => {
       }
     }
   };
+  //
+  //
 
   return (
     <div className="drag">
