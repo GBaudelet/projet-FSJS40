@@ -1,4 +1,10 @@
 import Sheet from "../model/Sheet.js";
+import SheetTag from "../model/SheetTag.js";
+import Dropzone from "../model/Dropzone.js";
+import BibleModel from "../model/Screen.js";
+import pool from "../config/db.js";
+import fs from "fs";
+import path from "path";
 import express from "express";
 const app = express();
 
@@ -29,6 +35,7 @@ const getAllUser = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
+
 // recherche par tag
 const searchByTag = async (req, res) => {
   try {
@@ -46,35 +53,124 @@ const searchByTag = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
-
-const create = async (req, res) => {
+// recherche par id et title
+const searchByTitleAndUserId = async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title } = req.body; // Assurez-vous que le titre est dans le corps de la requête
+    const userId = req.session.user.id; // Vérifiez que l'utilisateur est connecté
 
-    // Vérifiez si les champs sont fournis
-    if (!title || !description) {
-      return res.status(400).json({ msg: "Tous les champs sont requis" });
+    const existingSheet = await Sheet.findByTitleAndUserId(title, userId);
+    if (existingSheet) {
+      return res
+        .status(400)
+        .json({ msg: "Ce titre de feuille existe déjà pour cet utilisateur." });
+    }
+    // Continuez avec votre logique...
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+// Fonction pour créer une nouvelle feuille et ses tags associés
+const create = async (req, res) => {
+  const {
+    title,
+    description,
+    selectedTags,
+    userId,
+    droppedItems,
+    backgroundColor,
+  } = JSON.parse(req.body.data);
+
+  const connection = await pool.getConnection(); // Obtenez une connexion à partir du pool
+
+  try {
+    // Vérifiez si le titre existe déjà pour cet utilisateur
+    const existingSheet = await Sheet.findByTitleAndUserId(title, userId);
+    if (existingSheet) {
+      return res
+        .status(400)
+        .json({ msg: "Ce titre de feuille existe déjà pour cet utilisateur." });
     }
 
-    // Récupérer l'ID de l'utilisateur depuis la session
-    const userId = req.session.user.id;
+    await connection.beginTransaction(); // Commencez la transaction
 
-    // Préparer les données pour l'insertion
-    const sheetData = {
-      title,
-      description,
-      statues: 1,
-      user_id: userId,
-    };
+    // Créer une nouvelle entrée dans la table sheet
+    const sheetId = await Sheet.create(
+      {
+        title,
+        description,
+        userId,
+      },
+      connection // Passez la connexion à la méthode
+    );
 
-    // Insérer la feuille dans la base de données
-    const result = await Sheet.create(sheetData);
-    res
-      .status(201)
-      .json({ msg: "Feuille créée avec succès", sheetId: result.insertId });
+    // Associer les tags à la nouvelle feuille dans la table intermédiaire
+    if (selectedTags && selectedTags.length > 0) {
+      await SheetTag.addTagsToSheet(sheetId, selectedTags, connection); // Passez la connexion
+    }
+
+    // Créer la dropzone associée à la feuille
+    await Dropzone.createDropzone(
+      {
+        backgroundColor,
+        droppedItems,
+        sheetId,
+      },
+      connection // Passez la connexion
+    );
+
+    // Sauvegarder la capture d'écran si un fichier est présent
+    if (req.file) {
+      const screenshotBuffer = req.file.buffer;
+      const userDir = path.join(
+        process.cwd(),
+        "public",
+        "sheet",
+        String(userId)
+      );
+
+      if (!fs.existsSync(userDir)) {
+        fs.mkdirSync(userDir, { recursive: true });
+      }
+
+      const ext = path.extname(req.file.originalname);
+      const safeTitle = title.replace(/[<>:"/\\|?*\x00-\x1F]/g, "_");
+      const fileName = `${safeTitle}${ext}`;
+      const filePath = path.join(userDir, fileName);
+
+      let count = 1;
+      let uniqueFilePath = filePath;
+      while (fs.existsSync(uniqueFilePath)) {
+        uniqueFilePath = path.join(userDir, `${safeTitle}(${count})${ext}`);
+        count++;
+      }
+
+      await fs.promises.writeFile(uniqueFilePath, screenshotBuffer);
+
+      const imgEmplacement = `/public/sheet/${userId}/${path.basename(
+        uniqueFilePath
+      )}`;
+      const insertId = await BibleModel.insertImagePath(
+        imgEmplacement,
+        sheetId
+      );
+    }
+
+    await connection.commit(); // Validez la transaction
+
+    return res.status(201).json({
+      message: "Sheet and dropzone created successfully",
+      sheetId: sheetId,
+    });
   } catch (error) {
-    console.error("Erreur lors de la création de la feuille:", error);
-    res.status(500).json({ msg: "Erreur lors de la création de la feuille" });
+    await connection.rollback(); // Annulez la transaction en cas d'erreur
+    console.error(error);
+    return res.status(500).json({
+      message: "Error creating sheet",
+      error: error.message,
+    });
+  } finally {
+    connection.release(); // Libérez la connexion
   }
 };
 
@@ -108,4 +204,11 @@ const remove = async (req, res) => {
   }
 };
 
-export { getAll, create, getAllUser, searchByTag, remove };
+export {
+  getAll,
+  create,
+  getAllUser,
+  searchByTag,
+  remove,
+  searchByTitleAndUserId,
+};
