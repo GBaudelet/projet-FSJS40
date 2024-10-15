@@ -139,9 +139,7 @@ const create = async (req, res) => {
 
       await fs.promises.writeFile(uniqueFilePath, screenshotBuffer);
 
-      const imgEmplacement = `/public/sheet/${userId}/${path.basename(
-        uniqueFilePath
-      )}`;
+      const imgEmplacement = `/${userId}/${path.basename(uniqueFilePath)}`;
       const insertId = await BibleModel.insertImagePath(
         imgEmplacement,
         sheetId
