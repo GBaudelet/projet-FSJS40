@@ -25,12 +25,12 @@ class Sheet {
     return await pool.query(query, [tag]);
   }
   // verification si l'user n'a pas déjà ce nom de fiche
-  static async findByTitleAndUserId(title, userId) {
+  static async findByTitleAndUserId(userId) {
     const [rows] = await pool.query(
-      "SELECT * FROM sheet WHERE title = ? AND user_id = ?",
-      [title, userId]
+      "SELECT title FROM sheet WHERE user_id = ?",
+      [userId]
     );
-    return rows.length > 0 ? rows[0] : null; // Retourne la feuille si elle existe, sinon null
+    return rows; // Retourne les titres de l'utilisateur
   }
 
   //

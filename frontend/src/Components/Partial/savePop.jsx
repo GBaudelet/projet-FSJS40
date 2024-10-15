@@ -6,7 +6,7 @@ const SavePopup = ({ onClick, onSubmitForm }) => {
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [existingTitles, setExistingTitles] = useState([]); // État pour stocker les titres existants
-  const [titleError, setTitleError] = useState(""); // État pour gérer l'erreur de titre
+  const [apiMessage, setApiMessage] = useState(""); // État pour stocker le message de l'API
 
   useEffect(() => {
     // Récupérer les tags
@@ -16,12 +16,22 @@ const SavePopup = ({ onClick, onSubmitForm }) => {
       .catch((error) => console.error("Error fetching tags:", error));
 
     // Récupérer les titres existants de l'utilisateur
-    fetch("http://localhost:9000/api/v1/sheet/titleTag", {
+    fetch("http://localhost:9000/api/v1/sheet/titleUser", {
       method: "GET",
       credentials: "include",
-    }) // Assurez-vous que ce point de terminaison est correct
+    })
       .then((response) => response.json())
-      .then((data) => setExistingTitles(data.map((titleObj) => titleObj.title)))
+      .then((data) => {
+        // Vérifiez si 'data' est un tableau et mettez à jour 'existingTitles'
+        if (Array.isArray(data)) {
+          setExistingTitles(data.map((titleObj) => titleObj.title));
+        } else if (data.msg) {
+          // Si 'data' contient un message, mettez à jour 'apiMessage'
+          setApiMessage(data.msg);
+        } else {
+          setApiMessage("Erreur inconnue lors de la récupération des titres.");
+        }
+      })
       .catch((error) => console.error("Error fetching titles:", error));
   }, []);
 
@@ -33,28 +43,16 @@ const SavePopup = ({ onClick, onSubmitForm }) => {
     );
   };
 
-  // Vérifiez si le titre existe déjà
-  const checkTitleExists = (inputTitle) => {
-    if (existingTitles.includes(inputTitle)) {
-      setTitleError("Ce titre existe déjà. Veuillez en choisir un autre.");
-    } else {
-      setTitleError(""); // Réinitialiser l'erreur si le titre est valide
-    }
-  };
-
-  const handleTitleChange = (e) => {
-    const inputTitle = e.target.value;
-    setTitle(inputTitle);
-    checkTitleExists(inputTitle); // Vérifiez l'existence du titre à chaque modification
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (titleError) {
-      return; // Ne pas soumettre si une erreur est présente
+    // Vérification si le titre existe déjà
+    if (existingTitles.includes(title)) {
+      setApiMessage("Ce titre existe déjà. Veuillez en choisir un autre."); // Message d'erreur
+      return; // Empêche la soumission si le titre existe
     }
 
+    // Si le titre est unique, soumettez le formulaire
     const formData = { title, description, selectedTags };
     onSubmitForm(formData);
   };
@@ -70,10 +68,9 @@ const SavePopup = ({ onClick, onSubmitForm }) => {
               type="text"
               id="title"
               value={title}
-              onChange={handleTitleChange}
+              onChange={(e) => setTitle(e.target.value)}
               required
             />
-            {titleError && <p className="error">{titleError}</p>}
           </div>
           <div className="title-div">
             <label htmlFor="description">Description:</label>
@@ -101,19 +98,17 @@ const SavePopup = ({ onClick, onSubmitForm }) => {
               ))}
             </div>
           </div>
-          <button
-            type="submit"
-            disabled={existingTitles.includes(title)}
-            className={existingTitles.includes(title) ? "button-red" : ""}
-          >
+          <button type="submit" className="button-save">
             Save
           </button>
           <button type="button" onClick={onClick}>
             Close
           </button>
         </form>
+        {apiMessage && <p className="api-message">{apiMessage}</p>}{" "}
       </div>
     </div>
   );
 };
+
 export default SavePopup;

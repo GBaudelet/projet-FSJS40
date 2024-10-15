@@ -56,20 +56,18 @@ const searchByTag = async (req, res) => {
 // recherche par id et title
 const searchByTitleAndUserId = async (req, res) => {
   try {
-    const { title } = req.body; // Assurez-vous que le titre est dans le corps de la requête
     const userId = req.session.user.id; // Vérifiez que l'utilisateur est connecté
 
-    const existingSheet = await Sheet.findByTitleAndUserId(title, userId);
-    if (existingSheet) {
-      return res
-        .status(400)
-        .json({ msg: "Ce titre de feuille existe déjà pour cet utilisateur." });
+    const existingSheets = await Sheet.findByTitleAndUserId(userId);
+    if (existingSheets.length > 0) {
+      return res.json(existingSheets); // Retourne les titres existants
     }
-    // Continuez avec votre logique...
+    return res.json([]); // Si aucun titre n'existe, renvoie un tableau vide
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
 };
+
 // Fonction pour créer une nouvelle feuille et ses tags associés
 const create = async (req, res) => {
   const {
@@ -85,12 +83,6 @@ const create = async (req, res) => {
 
   try {
     // Vérifiez si le titre existe déjà pour cet utilisateur
-    const existingSheet = await Sheet.findByTitleAndUserId(title, userId);
-    if (existingSheet) {
-      return res
-        .status(400)
-        .json({ msg: "Ce titre de feuille existe déjà pour cet utilisateur." });
-    }
 
     await connection.beginTransaction(); // Commencez la transaction
 

@@ -119,17 +119,6 @@ const Drag = () => {
   };
   //
 
-  //   // save de l'image qui sera utilisé pour la bibliothèque
-  //   // if (dropZoneRef.current) {
-  //   //   html2canvas(dropZoneRef.current).then((canvas) => {
-  //   //     const link = document.createElement("a");
-  //   //     link.href = canvas.toDataURL("image/png");
-  //   //     link.download = "dropzone.png";
-  //   //     link.click();
-  //   //   });
-  //   // }
-  // };
-
   // POPUP
   const onOpen = () => {
     setShowPopup(true);
@@ -180,65 +169,8 @@ const Drag = () => {
             .catch((error) => console.error("Error saving data:", error));
         });
       });
-    } else {
-      // Si la drop zone n'est pas disponible, continuer sans image
-      const saveData = {
-        ...formData, // Données du formulaire
-        userId,
-        droppedItems, // Sauvegarde des éléments dans la drop zone
-        backgroundColor: dropZoneBackgroundColor,
-      };
-
-      console.log("Données soumises sans image :", saveData);
-
-      fetch("http://localhost:9000/api/v1/sheet/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(saveData),
-        credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Data saved successfully:", data);
-          setShowPopup(false); // Fermer la popup après sauvegarde
-        })
-        .catch((error) => console.error("Error saving data:", error));
     }
   };
-
-  // if (dropZoneRef.current) {
-  //   html2canvas(dropZoneRef.current).then((canvas) => {
-  //     canvas.toBlob((blob) => {
-  //       const formData = new FormData();
-  //       formData.append("screenshot", blob, "dropzone.png");
-  //       formData.append("userId", saveData.userId);
-  //       formData.append("data", JSON.stringify(saveData));
-
-  //       fetch("http://localhost:9000/api/v1/screen/save", {
-  //         method: "POST",
-  //         body: formData,
-  //         credentials: "include",
-  //       })
-  //         .then((response) => {
-  //           if (!response.ok) {
-  //             throw new Error("Erreur lors de l'envoi du fichier");
-  //           }
-  //           return response.json();
-  //         })
-  //         .then((data) => {
-  //           console.log("Fichier envoyé avec succès :", data);
-  //         })
-  //         .catch((error) => {
-  //           console.log("catch error");
-
-  //           console.error("Erreur lors de l'envoi :", error);
-  //         });
-  //     });
-  //   });
-  // }
-  //
 
   return (
     <div className="drag">

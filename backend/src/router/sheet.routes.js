@@ -18,7 +18,7 @@ router.get("/all", getAll);
 router.get("/allUser", getAllUser);
 router.get("/search", searchByTag);
 router.post("/create", upload.single("file"), create);
-router.get("/titleTag", searchByTitleAndUserId);
+router.get("/titleUser", searchByTitleAndUserId);
 // router.patch("/update/:id", update);
 router.delete("/delete/:id", remove);
 
