@@ -3,9 +3,7 @@ import React, { useState, useEffect } from "react";
 const SheetPage = () => {
   const [sheets, setSheets] = useState([]);
   const [isEditing, setIsEditing] = useState(null);
-  const [newSheet, setNewSheet] = useState({
-    name: "",
-  });
+
   const [editingSheet, setEditingSheet] = useState({
     id: "",
     name: "",
@@ -33,27 +31,6 @@ const SheetPage = () => {
       setSheets(data);
     } catch (error) {
       console.error("Error fetching sheets:", error);
-    }
-  };
-
-  const handleCreate = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:9000/api/v1/sheet/create",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newSheet),
-          credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
-        }
-      );
-      const data = await response.json();
-      setSheets([...sheets, data]);
-      setNewSheet({ name: "" });
-    } catch (error) {
-      console.error("Error creating sheet:", error);
     }
   };
 
@@ -94,19 +71,6 @@ const SheetPage = () => {
   return (
     <div className="sheets-page">
       <h2>Sheets</h2>
-
-      {/* Form for creating a new sheet */}
-      <div className="form-container">
-        <h3>Create New sheet</h3>
-        <input
-          type="text"
-          placeholder="Name"
-          value={newSheet.name || ""}
-          onChange={(e) => setNewSheet({ ...newSheet, name: e.target.value })}
-        />
-
-        <button onClick={handleCreate}>Create Sheet</button>
-      </div>
 
       <div className="sheets-list">
         {sheets.map((sheet, index) => (

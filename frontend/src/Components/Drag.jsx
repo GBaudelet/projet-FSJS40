@@ -2,10 +2,10 @@ import React, { useState, useRef } from "react";
 import Sidebar from "./DragAndDrop/Sidebar";
 import DropZone from "./DragAndDrop/DropZone";
 import PropertiesPanel from "./DragAndDrop/PropertiesPanel";
-import html2canvas from "html2canvas";
 import "../assets/scss/Drag.css";
 import { useSelector } from "react-redux";
 import SavePopup from "./Partial/savePop";
+import domtoimage from "dom-to-image";
 
 const Drag = () => {
   const [droppedItems, setDroppedItems] = useState([]);
@@ -36,7 +36,6 @@ const Drag = () => {
       zIndex: item.zIndex || 1,
     };
     console.log(newItem);
-
     setDroppedItems([...droppedItems, newItem]);
   };
 
@@ -53,6 +52,7 @@ const Drag = () => {
       return updatedItems;
     });
   };
+
   const handleElementUpdate = (updatedElement) => {
     setDroppedItems((prevItems) => {
       const updatedItems = prevItems.map((item) =>
@@ -83,7 +83,6 @@ const Drag = () => {
     };
 
     console.log("Drop zone saved:", saveData);
-
     localStorage.setItem("dropZoneData", JSON.stringify(saveData));
   };
 
@@ -104,10 +103,8 @@ const Drag = () => {
 
           return {
             ...item,
-
             // Si x dépasse la largeur, remettre à 0 ou autre valeur
             x: xPos > dropZoneBounds.width ? 0 : xPos,
-
             // Si y dépasse la hauteur, remettre à 0 ou autre valeur
             y: yPos > dropZoneBounds.height ? 0 : yPos,
           };
@@ -117,7 +114,6 @@ const Drag = () => {
       }
     }
   };
-  //
 
   // POPUP
   const onOpen = () => {
@@ -132,43 +128,60 @@ const Drag = () => {
   const handleFormSubmit = (formData) => {
     // Vérifier si la drop zone est disponible
     if (dropZoneRef.current) {
-      // Utiliser html2canvas pour capturer la drop zone
-      html2canvas(dropZoneRef.current).then((canvas) => {
-        // Convertir le canvas en blob
-        canvas.toBlob((blob) => {
-          // Créer un fichier à partir du blob
-          const file = new File([blob], "dropzone-image.png", {
-            type: "image/png",
-          });
+      // Utiliser dom-to-image pour capturer la drop zone
+      domtoimage
+        .toPng(dropZoneRef.current, {
+          style: {
+            margin: 0, // Assurez-vous qu'il n'y a pas de marge
+            padding: 0, // Assurez-vous qu'il n'y a pas de remplissage
+            border: "none", // Assurez-vous qu'il n'y a pas de bordure
+          },
+        })
+        .then((dataUrl) => {
+          // Créer une image à partir de l'URL de données
+          const img = new Image();
+          img.src = dataUrl;
 
-          // Créer un objet FormData pour envoyer l'image avec les données du formulaire
-          const formDataWithImage = new FormData();
-          formDataWithImage.append("file", file);
-          formDataWithImage.append(
-            "data",
-            JSON.stringify({
-              ...formData, // Données du formulaire
-              userId,
-              droppedItems, // Sauvegarde des éléments dans la drop zone
-              backgroundColor: dropZoneBackgroundColor,
-            })
-          );
+          // Convertir l'URL de données en blob
+          fetch(img.src)
+            .then((res) => res.blob())
+            .then((blob) => {
+              // Créer un fichier à partir du blob
+              const file = new File([blob], "dropzone-image.png", {
+                type: "image/png",
+              });
 
-          console.log("Données soumises :", formDataWithImage);
+              // Créer un objet FormData pour envoyer l'image avec les données du formulaire
+              const formDataWithImage = new FormData();
+              formDataWithImage.append("file", file);
+              formDataWithImage.append(
+                "data",
+                JSON.stringify({
+                  ...formData, // Données du formulaire
+                  userId,
+                  droppedItems, // Sauvegarde des éléments dans la drop zone
+                  backgroundColor: dropZoneBackgroundColor,
+                })
+              );
 
-          fetch("http://localhost:9000/api/v1/sheet/create", {
-            method: "POST",
-            body: formDataWithImage, // Utiliser FormData ici
-            credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log("Data saved successfully:", data);
-              setShowPopup(false); // Fermer la popup après sauvegarde
-            })
-            .catch((error) => console.error("Error saving data:", error));
+              console.log("Données soumises :", formDataWithImage);
+
+              fetch("http://localhost:9000/api/v1/sheet/create", {
+                method: "POST",
+                body: formDataWithImage, // Utiliser FormData ici
+                credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  console.log("Data saved successfully:", data);
+                  setShowPopup(false); // Fermer la popup après sauvegarde
+                })
+                .catch((error) => console.error("Error saving data:", error));
+            });
+        })
+        .catch((error) => {
+          console.error("Error capturing image:", error);
         });
-      });
     }
   };
 

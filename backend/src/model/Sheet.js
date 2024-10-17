@@ -50,14 +50,31 @@ class Sheet {
   }
   //
 
-  //   static async update(name, id) {
-  //     const UPDATE = "UPDATE Sheet SET name = ? WHERE id = ?";
-  //     return await pool.execute(UPDATE, [name, id]);
-  //   }
+  static async update(sheetData, id) {
+    const { title, description } = sheetData; // Vous pouvez ajouter d'autres champs à mettre à jour si nécessaire
+
+    const query = `
+      UPDATE sheet
+      SET title = ?, description = ?
+      WHERE id = ?
+    `;
+    const values = [title, description, id];
+
+    try {
+      const [result] = await pool.execute(query, values);
+      return result.affectedRows; // Retourne le nombre de lignes affectées
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 
   static async remove(id) {
     const DELETE = "DELETE FROM sheet WHERE id = ?";
     return await pool.execute(DELETE, [id]);
+  }
+  static async getFilePath(id) {
+    const GETFILE = "SELECT img_emplacement FROM bible WHERE sheet_id = ?";
+    return await pool.execute(GETFILE, [id]);
   }
 }
 

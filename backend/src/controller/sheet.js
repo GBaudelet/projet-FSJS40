@@ -183,12 +183,39 @@ const create = async (req, res) => {
 
 const remove = async (req, res) => {
   try {
-    const [response] = await Sheet.remove(req.params.id);
-    if (!response.affectedRows) {
-      res.status(404).json({ msg: "sheet not deleted" });
+    // Récupérer le chemin du fichier associé au sheet via la table `bible`
+    const [fileData] = await Sheet.getFilePath(req.params.id); // Assure-toi que cette méthode existe pour récupérer le chemin du fichier
+    if (!fileData || !fileData[0] || !fileData[0].img_emplacement) {
+      res.status(404).json({ msg: "Fichier introuvable dans la table bible" });
       return;
     }
-    res.json({ msg: "sheet deleted" });
+
+    const filePath = path.join(
+      process.cwd(),
+      "public/sheet",
+      fileData[0].img_emplacement
+    );
+    // Supprimer le fichier sur le serveur
+    fs.unlink(filePath, async (err) => {
+      if (err) {
+        console.error("Erreur lors de la suppression du fichier:", err);
+        res
+          .status(500)
+          .json({ msg: "Erreur lors de la suppression du fichier" });
+        return;
+      }
+      // Si le fichier est supprimé avec succès, supprimer ensuite l'enregistrement dans la base de données
+      try {
+        const [response] = await Sheet.remove(req.params.id);
+        if (!response.affectedRows) {
+          res.status(404).json({ msg: "sheet non supprimé" });
+          return;
+        }
+        res.json({ msg: "Sheet et fichier supprimés" });
+      } catch (err) {
+        res.status(500).json({ msg: err.message });
+      }
+    });
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }

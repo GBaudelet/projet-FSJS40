@@ -25,7 +25,6 @@
   width: 70.7070707071vw; /* Largeur A4 proportionnelle à la hauteur */
   height: 141.4285714286vh; /* Hauteur proportionnelle à la largeur A4 */
   margin: 0px 10px; /* Ajustez la marge selon vos besoins */
-  border: 1px dashed #888;
   overflow: auto;
 }
 
