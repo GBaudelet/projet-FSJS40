@@ -21,6 +21,11 @@ class User {
     return await pool.execute(SELECT, [id]);
   }
 
+  static async findById(userId) {
+    const SELECT_BY_ID = "SELECT * FROM user WHERE id = ?";
+    return await pool.query(SELECT_BY_ID, [userId]);
+  }
+
   static async update(username, password, id) {
     let fields = [];
     let values = [];

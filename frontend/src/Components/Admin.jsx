@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../assets/scss/admin.css";
+import "../assets/scss/admin.scss";
 import UsersPage from "./Admin/User.jsx";
 import TagsPage from "./Admin/Tags.jsx";
 import SheetsPage from "./Admin/Sheet.jsx";

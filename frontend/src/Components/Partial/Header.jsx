@@ -34,8 +34,9 @@ const Header = () => {
         {isLogged ? (
           <>
             <Link to="/drag">Sheet</Link>
-            <Link to="/sheet">Add</Link>
-            {role_id === 2 && <Link to="/profil">Profil</Link>}
+            {(role_id === 1 || role_id === 2) && (
+              <Link to="/profil">Profil</Link>
+            )}
             {role_id === 1 && <Link to="/admin">Admin</Link>}
             <Link to="/" onClick={onClickLogout}>
               Logout

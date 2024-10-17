@@ -1,4 +1,5 @@
 import User from "../model/User.js";
+import Sheet from "../model/Sheet.js";
 import express from "express";
 import bcrypt from "bcrypt";
 
@@ -62,6 +63,22 @@ const update = async (req, res) => {
   }
 };
 
+const getProfil = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [user] = await User.findById(id); // Supposons que tu aies une méthode findById dans ton modèle User
+
+    if (!user) {
+      return res.status(404).json({ msg: "Utilisateur non trouvé" });
+    }
+
+    const [sheets] = await Sheet.findAllUser(id); // Obtenir toutes les fiches de l'utilisateur
+    res.json({ user, sheets });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+
 const remove = async (req, res) => {
   try {
     const [response] = await User.remove(req.params.id);
@@ -75,4 +92,4 @@ const remove = async (req, res) => {
   }
 };
 
-export { getAll, update, remove };
+export { getAll, update, remove, getProfil };

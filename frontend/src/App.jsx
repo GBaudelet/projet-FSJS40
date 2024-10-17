@@ -1,7 +1,5 @@
 import useCheckAuth from "./Hook/useCheckAuth";
-import AdminRouter from "./router/AdminRouter";
-import UserRouter from "./router/userRouter";
-import "./assets/scss/app.css";
+import "./assets/scss/all.css";
 import Header from "./Components/Partial/Header";
 import { Route, Routes } from "react-router-dom";
 import Home from "./Components/Home";
@@ -9,13 +7,12 @@ import Bible from "./Components/Bible";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Footer from "./Components/Partial/Footer";
+import UserRouter from "./router/UserRouter";
+
 function App() {
   const [user] = useCheckAuth();
 
-  if (user.role_id === 1) {
-    return <AdminRouter />;
-  }
-  if (user.role_id === 2) {
+  if (user.role_id === 1 || user.role_id === 2) {
     return <UserRouter />;
   } else {
     return (

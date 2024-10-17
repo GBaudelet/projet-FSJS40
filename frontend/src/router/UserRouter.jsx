@@ -7,9 +7,9 @@ import Register from "../Components/Register";
 import Footer from "../Components/Partial/Footer";
 import Drag from "../Components/Drag";
 import Bible from "../Components/Bible";
-import Sheet from "../Components/sheet/Sheet";
 import Profil from "../Components/Profil";
 import ProtectedRoute from "../HOC/ProtectedRoute";
+import Dashboard from "../Components/Admin";
 
 function UserRouter() {
   return (
@@ -17,17 +17,23 @@ function UserRouter() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/drag" element={<Drag />} />
+        <Route path="/drag" element={<Drag />} allowedRoles={[1, 2]} />
         <Route path="/bible" element={<Bible />} />
 
         <Route
           path="/profil"
-          element={<ProtectedRoute element={<Profil />} allowedRoles={[2]} />}
+          element={
+            <ProtectedRoute element={<Profil />} allowedRoles={[1, 2]} />
+          }
         />
-
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute element={<Dashboard />} allowedRoles={[1]} />
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/sheet" element={<Sheet />} allowedRoles={[2]} />
 
         <Route path="*" element={<h1>404 - Not Found</h1>} />
       </Routes>
