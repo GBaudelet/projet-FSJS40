@@ -9,7 +9,7 @@ import Drag from "../Components/Drag";
 import Bible from "../Components/Bible";
 import Profil from "../Components/Profil";
 import ProtectedRoute from "../HOC/ProtectedRoute";
-import Dashboard from "../Components/Admin";
+import Dashboard from "../Components/Dashboard";
 
 function UserRouter() {
   return (

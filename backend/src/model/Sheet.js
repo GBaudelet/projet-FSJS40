@@ -3,27 +3,30 @@ import pool from "../config/db.js";
 class Sheet {
   // admin and bible
   static async findAll() {
-    const SELECT_ALL = "SELECT * FROM sheet";
+    const SELECT_ALL =
+      "SELECT title, description, statut, user_id FROM sheet WHERE statut = 1";
     return await pool.query(SELECT_ALL);
   }
   // user
   static async findAllUser(userId) {
-    const SELECT_BY_USER_ID = "SELECT * FROM sheet WHERE user_id = ?";
+    const SELECT_BY_USER_ID =
+      "SELECT * FROM sheet WHERE user_id = ? AND statut = 1";
     return await pool.query(SELECT_BY_USER_ID, [userId]);
   }
   // recherche par tag
   static async findByTag(tag) {
     const query = `
-    SELECT bible.*
-    FROM bible
-    JOIN bible_tag ON bible.id = bible_tag.bible_id
-    JOIN tag ON bible_tag.tag_id = tag.id
-    WHERE tag.name IN (?)
-    GROUP BY bible.id
+    SELECT sheet.*
+    FROM sheet
+    JOIN sheet_tag ON sheet.id = sheet_tag.sheet_id
+    JOIN tag ON sheet_tag.tag_id = tag.id
+    JOIN sheet ON sheet.user_id = sheet.user_id 
+    WHERE tag.name IN (?) AND sheet.statut = 1
+    GROUP BY sheet.id
   `;
-
     return await pool.query(query, [tag]);
   }
+
   // verification si l'user n'a pas déjà ce nom de fiche
   static async findByTitleAndUserId(userId) {
     const [rows] = await pool.query(
@@ -50,22 +53,15 @@ class Sheet {
   }
   //
 
-  static async update(sheetData, id) {
-    const { title, description } = sheetData; // Vous pouvez ajouter d'autres champs à mettre à jour si nécessaire
-
+  static async update(data, sheetId, connection) {
     const query = `
-      UPDATE sheet
-      SET title = ?, description = ?
-      WHERE id = ?
-    `;
-    const values = [title, description, id];
+      UPDATE sheets SET 
+        title = ?, 
+        description = ? 
+      WHERE id = ?`;
 
-    try {
-      const [result] = await pool.execute(query, values);
-      return result.affectedRows; // Retourne le nombre de lignes affectées
-    } catch (error) {
-      throw new Error(error.message);
-    }
+    const values = [data.title, data.description, sheetId];
+    await connection.query(query, values);
   }
 
   static async remove(id) {

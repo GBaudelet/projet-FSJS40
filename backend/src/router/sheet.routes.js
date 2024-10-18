@@ -7,6 +7,7 @@ import {
   searchByTag,
   remove,
   searchByTitleAndUserId,
+  update,
 } from "../controller/sheet.js";
 
 // Configurer multer pour stocker les fichiers
@@ -19,7 +20,7 @@ router.get("/allUser", getAllUser);
 router.get("/search", searchByTag);
 router.post("/create", upload.single("file"), create);
 router.get("/titleUser", searchByTitleAndUserId);
-// router.patch("/update/:id", update);
+router.patch("/update/:id", update);
 router.delete("/delete/:id", remove);
 
 export default router;

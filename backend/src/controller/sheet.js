@@ -1,7 +1,7 @@
 import Sheet from "../model/Sheet.js";
 import SheetTag from "../model/SheetTag.js";
 import Dropzone from "../model/Dropzone.js";
-import BibleModel from "../model/Screen.js";
+import Bible from "../model/Bible.js";
 import pool from "../config/db.js";
 import fs from "fs";
 import path from "path";
@@ -140,10 +140,7 @@ const create = async (req, res) => {
       await fs.promises.writeFile(uniqueFilePath, screenshotBuffer);
 
       const imgEmplacement = `/${userId}/${path.basename(uniqueFilePath)}`;
-      const insertId = await BibleModel.insertImagePath(
-        imgEmplacement,
-        sheetId
-      );
+      const insertId = await Bible.insertImagePath(imgEmplacement, sheetId);
     }
 
     await connection.commit(); // Validez la transaction
@@ -163,23 +160,111 @@ const create = async (req, res) => {
     connection.release(); // Libérez la connexion
   }
 };
+// Fonction pour update feuille et ses tags associés
 
-// const update = async (req, res) => {
-//   try {
-//     const [response] = await Sheet.update(
-//       req.body.name,
+const update = async (req, res) => {
+  const {
+    title,
+    description,
+    selectedTags,
+    userId,
+    droppedItems,
+    backgroundColor,
+  } = JSON.parse(req.body.data);
+  const { sheetId } = req.params;
 
-//       req.params.id
-//     );
-//     if (!response.affectedRows) {
-//       res.status(404).json({ msg: "sheet not updated" });
-//       return;
-//     }
-//     res.json({ msg: "sheet updated" });
-//   } catch (err) {
-//     res.status(500).json({ msg: err.message });
-//   }
-// };
+  const connection = await pool.getConnection();
+
+  try {
+    // Récupérer l'ancienne feuille pour comparer le titre
+    const [oldSheet] = await connection.query(
+      "SELECT title FROM sheets WHERE id = ?",
+      [sheetId]
+    );
+    const oldTitle = oldSheet[0]?.title;
+
+    await connection.beginTransaction();
+
+    // Mettre à jour les informations de la feuille
+    await Sheet.update(
+      {
+        title,
+        description,
+      },
+      sheetId,
+      connection
+    );
+
+    // Mettre à jour les tags associés à la feuille
+    if (selectedTags && selectedTags.length > 0) {
+      await SheetTag.updateTagsForSheet(sheetId, selectedTags, connection);
+    }
+
+    // Mettre à jour la dropzone associée à la feuille
+    await Dropzone.updateDropzone(
+      {
+        backgroundColor,
+        droppedItems,
+      },
+      sheetId,
+      connection
+    );
+
+    // Sauvegarder la capture d'écran si un nouveau fichier est présent
+    if (req.file) {
+      const screenshotBuffer = req.file.buffer;
+      const userDir = path.join(
+        process.cwd(),
+        "public",
+        "sheet",
+        String(userId)
+      );
+
+      if (!fs.existsSync(userDir)) {
+        fs.mkdirSync(userDir, { recursive: true });
+      }
+
+      const ext = path.extname(req.file.originalname);
+      const safeTitle = title.replace(/[<>:"/\\|?*\x00-\x1F]/g, "_");
+
+      let fileName = `${safeTitle}${ext}`;
+      let oldFileName = `${oldTitle.replace(
+        /[<>:"/\\|?*\x00-\x1F]/g,
+        "_"
+      )}${ext}`;
+      const oldFilePath = path.join(userDir, oldFileName);
+      const newFilePath = path.join(userDir, fileName);
+
+      if (fs.existsSync(oldFilePath)) {
+        // Renommez le fichier s'il existe déjà
+        await fs.promises.rename(oldFilePath, newFilePath);
+      } else {
+        // Si le fichier n'existe pas, écrivez un nouveau fichier
+        await fs.promises.writeFile(newFilePath, screenshotBuffer);
+      }
+
+      const imgEmplacement = `/${userId}/${path.basename(newFilePath)}`;
+      await Bible.updateImagePath(imgEmplacement, sheetId);
+    }
+
+    await connection.commit();
+
+    return res.status(200).json({
+      message: "Sheet and dropzone updated successfully",
+      sheetId: sheetId,
+    });
+  } catch (error) {
+    await connection.rollback();
+    console.error(error);
+    return res.status(500).json({
+      message: "Error updating sheet",
+      error: error.message,
+    });
+  } finally {
+    connection.release();
+  }
+};
+// Fonction pour delete feuille et ses tags associés
 
 const remove = async (req, res) => {
   try {
@@ -228,4 +313,5 @@ export {
   searchByTag,
   remove,
   searchByTitleAndUserId,
+  update,
 };

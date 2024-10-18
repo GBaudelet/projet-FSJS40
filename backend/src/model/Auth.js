@@ -23,6 +23,10 @@ class Auth {
       "SELECT username, role_id, email FROM `user` WHERE user.id = ?";
     return await pool.execute(SELECT, [id]);
   }
+  static async updateLastConnection(id) {
+    const UPDATE = "UPDATE user SET last_connection = NOW() WHERE id = ?";
+    return await pool.execute(UPDATE, [id]);
+  }
 }
 
 export default Auth;

@@ -19,7 +19,6 @@ const Profile = () => {
           throw new Error("Erreur lors de la récupération des données");
         }
         const data = await response.json();
-        console.log(data); // Vérifier la réponse de l'API
         setUser(data.user[0]); // Récupérer le premier utilisateur
       } catch (error) {
         console.error("Erreur : ", error);
@@ -32,7 +31,7 @@ const Profile = () => {
   if (!user) return <div>Chargement...</div>;
 
   return (
-    <div className="profile">
+    <div className="profil">
       <LeftBar />
       <div className="profile-content">
         <UserInfo user={user} />

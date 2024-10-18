@@ -54,7 +54,7 @@ function Login() {
   }, [dispatch]);
 
   return (
-    <main>
+    <main className="login">
       <form onSubmit={submitHandler}>
         {user.msg && <p className="error user-msg">{user.msg}</p>}
 

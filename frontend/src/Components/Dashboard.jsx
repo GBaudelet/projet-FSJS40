@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import "../assets/scss/admin.scss";
-import UsersPage from "./Admin/User.jsx";
-import TagsPage from "./Admin/Tags.jsx";
-import SheetsPage from "./Admin/Sheet.jsx";
-import BlocksPage from "./Admin/Bloc.jsx";
+import UsersPage from "./Dashboard/User.jsx";
+import TagsPage from "./Dashboard/Tags.jsx";
+import SheetsPage from "./Dashboard/Sheet.jsx";
 
 const Dashboard = () => {
   const [activePage, setActivePage] = useState("users");
@@ -35,12 +33,6 @@ const Dashboard = () => {
             >
               Sheets
             </li>
-            <li
-              onClick={() => handleNavigation("blocks")}
-              className={activePage === "blocks" ? "active" : ""}
-            >
-              Blocks
-            </li>
           </ul>
         </aside>
 
@@ -48,7 +40,6 @@ const Dashboard = () => {
           {activePage === "users" && <UsersPage />}
           {activePage === "tags" && <TagsPage />}
           {activePage === "sheets" && <SheetsPage />}
-          {activePage === "blocks" && <BlocksPage />}
         </main>
       </div>
     </div>

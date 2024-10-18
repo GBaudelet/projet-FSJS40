@@ -12,6 +12,7 @@ const UserInfo = ({ user }) => {
         Adresse email : {user.email}
         <button>Modifier</button>
       </p>
+
       <button>Modifier le mot de passe</button>
       <p>Nombre de fiches créées : </p>
       <h3>Dernières fiches créées :</h3>
@@ -20,7 +21,6 @@ const UserInfo = ({ user }) => {
           <img key={sheet.id} src={sheet.imageUrl} alt={sheet.name} />
         ))}
       </div> */}
-      <button>Modifier le mot de passe</button>
     </div>
   );
 };

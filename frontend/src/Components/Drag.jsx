@@ -163,8 +163,6 @@ const Drag = () => {
                 })
               );
 
-              console.log("Données soumises :", formDataWithImage);
-
               fetch("http://localhost:9000/api/v1/sheet/create", {
                 method: "POST",
                 body: formDataWithImage, // Utiliser FormData ici

@@ -56,7 +56,7 @@ function Register() {
   }, [dispatch]);
 
   return (
-    <main>
+    <main className="register">
       <form onSubmit={submitHandler}>
         {user.msg && <p className="error user-msg">{user.msg}</p>}
 

@@ -80,27 +80,29 @@ const login = async (req, res) => {
     const [[user]] = await Auth.findOneByUsername(username);
 
     if (!user) {
-      res.status(400).json({ msg: "User not found" });
+      return res.status(400).json({ msg: "User not found" });
     }
-    if (user) {
-      const match = await bcrypt.compare(password, user.password);
-      console.log(match);
-      if (match) {
-        const userSessionData = {
-          id: user.id,
-          username: user.username,
-          role_id: user.role_id,
-        };
 
-        req.session.user = userSessionData;
-        res.status(200).json({
-          msg: "User logged in",
-          isLogged: true,
-          user: userSessionData,
-        });
-      } else {
-        res.status(400).json({ msg: "Username or Password invalid" });
-      }
+    const match = await bcrypt.compare(password, user.password);
+    console.log(match);
+    if (match) {
+      // Mettre à jour le champ last_connection
+      await Auth.updateLastConnection(user.id);
+
+      const userSessionData = {
+        id: user.id,
+        username: user.username,
+        role_id: user.role_id,
+      };
+
+      req.session.user = userSessionData;
+      res.status(200).json({
+        msg: "User logged in",
+        isLogged: true,
+        user: userSessionData,
+      });
+    } else {
+      res.status(400).json({ msg: "Username or Password invalid" });
     }
   } catch (err) {
     res.status(500).json({ msg: err.msg });

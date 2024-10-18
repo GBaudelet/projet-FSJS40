@@ -7,29 +7,45 @@ const app = express();
 const SALT = 10;
 
 app.use(express.json());
-
+// profil de tous les user
 const getAll = async (req, res) => {
   try {
-    const [response] = await User.findAll();
-    // S'assurer que response est un tableau
-    if (!Array.isArray(response)) {
-      res.json([]);
-    } else {
-      res.json(response);
+    const response = await User.findAll();
+    // Assurez-vous que response est un tableau
+    res.json(response);
+  } catch (err) {
+    console.error("Error in getAll:", err); // Log des erreurs ici
+    res.status(500).json({ msg: err.message });
+  }
+};
+// profil de l'user
+const getProfil = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [user] = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ msg: "Utilisateur non trouvé" });
     }
+
+    const [sheets] = await Sheet.findAllUser(id);
+    res.json({ user, sheets });
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
 };
 
+// update user
 const update = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, email, statut } = req.body; // Ajoutez le statut ici
     const { id } = req.params;
 
     console.log("Données reçues pour mise à jour:", {
       username,
       password,
+      email,
+      statut, // Incluez le statut dans le log
     });
 
     if (!id) {
@@ -38,6 +54,8 @@ const update = async (req, res) => {
 
     let updateData = {
       username: username || null,
+      email: email || null,
+      statut: statut || null, // Ajoutez le statut ici
     };
 
     if (password) {
@@ -49,6 +67,8 @@ const update = async (req, res) => {
     const [response] = await User.update(
       updateData.username,
       updateData.password,
+      updateData.email,
+      updateData.statut, // Ajoutez le statut ici
       id
     );
 
@@ -63,22 +83,7 @@ const update = async (req, res) => {
   }
 };
 
-const getProfil = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const [user] = await User.findById(id); // Supposons que tu aies une méthode findById dans ton modèle User
-
-    if (!user) {
-      return res.status(404).json({ msg: "Utilisateur non trouvé" });
-    }
-
-    const [sheets] = await Sheet.findAllUser(id); // Obtenir toutes les fiches de l'utilisateur
-    res.json({ user, sheets });
-  } catch (err) {
-    res.status(500).json({ msg: err.message });
-  }
-};
-
+// delete user
 const remove = async (req, res) => {
   try {
     const [response] = await User.remove(req.params.id);
