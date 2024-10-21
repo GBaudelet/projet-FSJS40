@@ -3,7 +3,7 @@ import pool from "../config/db.js";
 class Tag {
   // tous les tag
   static async findAll() {
-    const SELECT_ALL = "SELECT * FROM tag";
+    const SELECT_ALL = "SELECT id,name FROM tag";
     return await pool.query(SELECT_ALL);
   }
   // create tag

@@ -13,20 +13,25 @@ class SheetTag {
       throw new Error(error.message);
     }
   }
+
   static async updateTagsForSheet(sheetId, selectedTags, connection) {
-    // Récupérer les tags actuels associés à la feuille
-    const [currentTags] = await connection.query(
-      "SELECT tag_id FROM sheet_tag WHERE sheet_id = ?",
-      [sheetId]
+    // Créez un tableau pour les IDs des tags correspondants
+    const tagIds = await Promise.all(
+      selectedTags.map(async (tagName) => {
+        const [result] = await connection.query(
+          "SELECT id FROM tag WHERE name = ?",
+          [tagName]
+        );
+        return result[0]?.id; // Obtenez l'ID du tag ou undefined
+      })
     );
 
-    // Créer un tableau d'ID de tags actuels
-    const currentTagIds = currentTags.map((tag) => tag.tag_id);
+    // Filtrer les IDs nuls
+    const validTagIds = tagIds.filter((id) => id !== undefined);
 
-    // Comparer les tags actuels avec les nouveaux tags
-    if (JSON.stringify(currentTagIds) === JSON.stringify(selectedTags)) {
-      // Si les tags ne changent pas, ne rien faire
-      return;
+    // Vérifier si tous les tags ont des IDs valides
+    if (validTagIds.length === 0) {
+      throw new Error(`Aucun des tags fournis n'existe dans la table 'tag'.`);
     }
 
     // Supprimer les anciens tags associés à la feuille
@@ -35,7 +40,7 @@ class SheetTag {
     ]);
 
     // Réinsérer les nouveaux tags
-    const tagPromises = selectedTags.map((tagId) => {
+    const tagPromises = validTagIds.map((tagId) => {
       return connection.query(
         "INSERT INTO sheet_tag (sheet_id, tag_id) VALUES (?, ?)",
         [sheetId, tagId]

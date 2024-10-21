@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import LeftBar from "./Profile/LeftBar.jsx";
 import UserInfo from "./Profile/UserInfo.jsx";
 import UserSheets from "./Profile/UserSheets.jsx";
 import { useSelector } from "react-redux";
@@ -32,7 +31,6 @@ const Profile = () => {
 
   return (
     <div className="profil">
-      <LeftBar />
       <div className="profile-content">
         <UserInfo user={user} />
         {role === 1 && <UserSheets userId={userId} />}

@@ -77,6 +77,31 @@ class Bible {
       throw error; // Lance l'erreur pour gestion ultérieure
     }
   }
+  // update du chemin
+  static async updateImagePath(imgEmplacement, sheetId, connection) {
+    // Vérifiez si la connexion est fournie, sinon obtenez une nouvelle connexion
+    const conn = connection || (await pool.getConnection());
+
+    try {
+      // Exécutez la requête de mise à jour
+      const result = await conn.query(
+        "UPDATE bible SET img_emplacement = ? WHERE sheet_id = ?",
+        [imgEmplacement, sheetId]
+      );
+
+      return result; // Retourne le résultat de la requête
+    } catch (error) {
+      console.error(
+        "Erreur lors de la mise à jour du chemin de l'image :",
+        error
+      );
+      throw new Error("Erreur de mise à jour du chemin de l'image");
+    } finally {
+      if (!connection) {
+        conn.release(); // Libérez la connexion si elle n'a pas été fournie
+      }
+    }
+  }
 }
 
 export default Bible;

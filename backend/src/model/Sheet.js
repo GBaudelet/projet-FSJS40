@@ -9,18 +9,21 @@ class Sheet {
   }
   // user
   static async findAllUser(userId) {
-    const SELECT_BY_USER_ID =
-      "SELECT * FROM sheet WHERE user_id = ? AND statut = 1";
+    const SELECT_BY_USER_ID = `SELECT sheet.id,sheet.title,sheet.description,GROUP_CONCAT(tag.name) AS tags,bible.img_emplacement 
+    FROM sheet LEFT JOIN sheet_tag ON sheet.id = sheet_tag.sheet_id 
+    LEFT JOIN tag ON sheet_tag.tag_id = tag.id 
+    LEFT JOIN bible ON sheet.id = bible.sheet_id 
+    WHERE sheet.user_id = 1 AND sheet.statut = 1 
+    GROUP BY sheet.id, bible.img_emplacement;`;
     return await pool.query(SELECT_BY_USER_ID, [userId]);
   }
   // recherche par tag
   static async findByTag(tag) {
     const query = `
-    SELECT sheet.*
+    SELECT sheet.id
     FROM sheet
     JOIN sheet_tag ON sheet.id = sheet_tag.sheet_id
     JOIN tag ON sheet_tag.tag_id = tag.id
-    JOIN sheet ON sheet.user_id = sheet.user_id 
     WHERE tag.name IN (?) AND sheet.statut = 1
     GROUP BY sheet.id
   `;
@@ -55,9 +58,10 @@ class Sheet {
 
   static async update(data, sheetId, connection) {
     const query = `
-      UPDATE sheets SET 
+      UPDATE sheet SET 
         title = ?, 
-        description = ? 
+        description = ? ,
+        updated_at = NOW() 
       WHERE id = ?`;
 
     const values = [data.title, data.description, sheetId];
