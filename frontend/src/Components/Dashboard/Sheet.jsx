@@ -20,7 +20,7 @@ const SheetPage = ({ userId }) => {
         }
 
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setSheets(data);
       } catch (error) {
         console.error("Erreur: ", error);

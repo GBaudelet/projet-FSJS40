@@ -20,8 +20,8 @@ const router = Router();
 router.get("/all", getAll);
 router.get("/allUser", getAllUser);
 router.get("/allAdmin", getAllAdmin);
-
 router.get("/search", searchByTag);
+
 router.post("/create", upload.single("file"), create);
 router.get("/titleUser", searchByTitleAndUserId);
 router.patch("/update/:id", update);
