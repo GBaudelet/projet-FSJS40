@@ -15,9 +15,9 @@ const Sidebar = ({ onAddItem, onSave, onLoad, onOpen }) => {
     { id: 1, type: "rectangle", name: "Rectangle" },
     { id: 2, type: "circle", name: "Circle" },
     { id: 3, type: "text", name: "Text" },
-    // { id: 4, type: "triangle", name: "Triangle" },
+    { id: 4, type: "triangle-up", name: "Triangle-up" },
+    { id: 6, type: "triangle-down", name: "Triangle-down" },
     // { id: 5, type: "square", name: "Square" },
-    // { id: 6, type: "diamond", name: "Diamond" },
     // { id: 7, type: "ellipse", name: "Ellipse" },
   ];
 

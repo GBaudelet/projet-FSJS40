@@ -20,6 +20,9 @@ const PropertiesPanel = ({
     borderRadius: 0,
     zIndex: 1,
     alpha: 1,
+    baseSize: 0,
+    baseHeight: 0,
+    baseColor: "#000000",
   });
 
   useEffect(() => {
@@ -42,6 +45,17 @@ const PropertiesPanel = ({
         borderRadius: selectedElement.borderRadius || 0,
         zIndex: selectedElement.zIndex || 1,
         alpha: alphaValue,
+        baseSize:
+          selectedElement.borderLeftWidth + selectedElement.borderRightWidth ||
+          100,
+        baseHeight:
+          selectedElement.type === "triangle-up"
+            ? selectedElement.borderTopWidth
+            : selectedElement.borderBottomWidth || 100,
+        baseColor:
+          selectedElement.type === "triangle-up"
+            ? selectedElement.borderColor
+            : selectedElement.borderColor || "#000000",
       });
     }
   }, [selectedElement]);
@@ -87,7 +101,6 @@ const PropertiesPanel = ({
               onChange={(e) => onBackgroundColorChange(e.target.value)}
             />
           </label>
-
           {/* BACKGROUND ELEMENT */}
           <details>
             <summary>Background</summary>
@@ -126,7 +139,6 @@ const PropertiesPanel = ({
               />
             </label>
           </details>
-
           {/* BORDER */}
           <details>
             <summary>Border</summary>
@@ -166,6 +178,74 @@ const PropertiesPanel = ({
             </label>
           </details>
 
+          {/* TRIANGLE UP */}
+          {selectedElement.type === "triangle-up" && (
+            <details>
+              <summary>Triangle Up</summary>
+              <label>
+                Base Size:
+                <input
+                  type="number"
+                  name="baseSize"
+                  value={styles.baseSize}
+                  onChange={handleStyleChange}
+                />
+              </label>
+              <label>
+                Base Height:
+                <input
+                  type="number"
+                  name="baseHeight"
+                  value={styles.baseHeight}
+                  onChange={handleStyleChange}
+                />
+              </label>
+              <label>
+                Base Color:
+                <input
+                  type="color"
+                  name="baseColor"
+                  value={styles.baseColor}
+                  onChange={handleStyleChange}
+                />
+              </label>
+            </details>
+          )}
+
+          {/* TRIANGLE DOWN */}
+          {selectedElement.type === "triangle-down" && (
+            <details>
+              <summary>Triangle Down</summary>
+              <label>
+                Base Size:
+                <input
+                  type="number"
+                  name="baseSize"
+                  value={styles.baseSize}
+                  onChange={handleStyleChange}
+                />
+              </label>
+              <label>
+                Base Height:
+                <input
+                  type="number"
+                  name="baseHeight"
+                  value={styles.baseHeight}
+                  onChange={handleStyleChange}
+                />
+              </label>
+              <label>
+                Base Color:
+                <input
+                  type="color"
+                  name="baseColor"
+                  value={styles.baseColor}
+                  onChange={handleStyleChange}
+                />
+              </label>
+            </details>
+          )}
+
           {/* TEXT */}
           {selectedElement.type === "text" && (
             <details>
@@ -200,7 +280,6 @@ const PropertiesPanel = ({
               </label>
             </details>
           )}
-
           {/* Width */}
           <details>
             <summary>Width</summary>
@@ -213,7 +292,6 @@ const PropertiesPanel = ({
               />
             </label>
           </details>
-
           {/* Height */}
           <details>
             <summary>Height</summary>
@@ -226,7 +304,6 @@ const PropertiesPanel = ({
               />
             </label>
           </details>
-
           <button onClick={() => onDelete(selectedElement)}>Delete</button>
         </>
       ) : (

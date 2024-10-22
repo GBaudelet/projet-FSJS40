@@ -2,6 +2,12 @@ import React from "react";
 import Draggable from "react-draggable";
 
 const DraggableElement = ({ item, onSelect }) => {
+  const isTriangleUp = item.type === "triangle-up";
+  const isTriangleDown = item.type === "triangle-down";
+
+  const triangleHeight = item.baseHeight || 100; // Default height if not provided
+  const triangleBaseSize = item.baseSize || 100; // Default base size if not provided
+
   return (
     <Draggable
       bounds=".dropzone"
@@ -12,10 +18,28 @@ const DraggableElement = ({ item, onSelect }) => {
     >
       <div
         style={{
-          width: item.width ? `${item.width}px` : "100px",
-          height: item.height ? `${item.height}px` : "100px",
+          width:
+            isTriangleUp || isTriangleDown ? "0" : `${item.width || 100}px`,
+          height:
+            isTriangleUp || isTriangleDown ? "0" : `${item.height || 100}px`,
+          borderLeft:
+            isTriangleUp || isTriangleDown
+              ? `${item.borderWidth}px solid transparent`
+              : undefined,
+          borderRight:
+            isTriangleUp || isTriangleDown
+              ? `${item.borderWidth}px solid transparent`
+              : undefined,
+          borderTop: isTriangleDown
+            ? `${triangleHeight}px solid ${item.baseColor || "#000000"}`
+            : undefined,
+          borderBottom: isTriangleUp
+            ? `${triangleHeight}px solid ${item.baseColor || "#000000"}`
+            : undefined,
+          borderBottomWidth: isTriangleDown
+            ? `${triangleBaseSize}px`
+            : undefined,
           color: item.color || "#000000",
-
           borderStyle: item.borderStyle || "solid",
           borderWidth: item.borderWidth || "1px",
           borderColor: item.borderColor || "#000000",

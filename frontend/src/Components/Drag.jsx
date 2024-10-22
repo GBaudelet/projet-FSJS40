@@ -21,21 +21,50 @@ const Drag = () => {
       type: item.type,
       x: item.x || 0,
       y: item.y || 0,
-      width: item.width || 100,
-      height: item.height || 100,
+      width:
+        item.type === "triangle-up" || item.type === "triangle-down"
+          ? 0
+          : item.width || 100,
+      height:
+        item.type === "triangle-up" || item.type === "triangle-down"
+          ? 0
+          : item.height || 100,
       backgroundColor:
-        item.type === "text" ? "rgba(0, 0, 0, 0)" : "rgba(211, 211, 211, 1)",
+        item.type === "text" ||
+        item.type === "triangle-up" ||
+        item.type === "triangle-down"
+          ? "rgba(0, 0, 0, 0)"
+          : "rgba(211, 211, 211, 1)",
       text: item.type === "text" ? "Editable Text" : "",
       borderStyle: item.borderStyle || "solid",
-      borderWidth: item.borderWidth || "1px",
-      borderColor: item.borderColor || "#000000",
+      borderWidth: item.borderWidth || getBorderWidth(item),
+      borderColor: item.borderColor || getBorderColor(item),
       borderRadius: item.type === "circle" ? "50%" : "0",
       color: item.color || "#000000",
       size: item.fontSize || "16px",
       zIndex: item.zIndex || 1,
+      baseHeight: item.baseHeight || 100,
+      baseColor: item.baseColor || "#000000",
+      baseSize: item.baseSize || 100,
     };
     console.log(newItem);
     setDroppedItems([...droppedItems, newItem]);
+  };
+
+  const getBorderWidth = (item) => {
+    return item.type === "triangle-up"
+      ? "0px 100px 100px 100px"
+      : item.type === "triangle-down"
+      ? "100px 100px 0px 100px"
+      : "1px";
+  };
+
+  const getBorderColor = (item) => {
+    return item.type === "triangle-up"
+      ? "rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 1) rgba(0, 0, 0, 0)"
+      : item.type === "triangle-down"
+      ? "rgba(0, 0, 0, 1) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0)"
+      : "#000000";
   };
 
   const handleElementSelect = (item) => {
@@ -47,7 +76,7 @@ const Drag = () => {
       const updatedItems = prevItems.map((item) =>
         item.id === movedElement.id ? { ...item, ...movedElement } : item
       );
-      handleSave(updatedItems); // Enregistrez après déplacement
+      handleSave(updatedItems);
       return updatedItems;
     });
   };
@@ -57,7 +86,7 @@ const Drag = () => {
       const updatedItems = prevItems.map((item) =>
         item.id === updatedElement.id ? { ...item, ...updatedElement } : item
       );
-      handleSave(updatedItems); // Enregistrez après mise à jour
+      handleSave(updatedItems);
       return updatedItems;
     });
   };
@@ -65,13 +94,12 @@ const Drag = () => {
   const handleElementDelete = (element) => {
     setDroppedItems((prevItems) => {
       const updatedItems = prevItems.filter((item) => item.id !== element.id);
-      handleSave(updatedItems); // Enregistrez après suppression
+      handleSave(updatedItems);
       return updatedItems;
     });
     setSelectedElement(null);
   };
 
-  // save local storage
   const handleSave = (data = {}) => {
     const itemsToSave = Array.isArray(data.items) ? data.items : droppedItems;
 
@@ -85,7 +113,6 @@ const Drag = () => {
     localStorage.setItem("dropZoneData", JSON.stringify(saveData));
   };
 
-  // Charger les données depuis le localStorage
   const handleLoad = () => {
     const savedData = localStorage.getItem("dropZoneData");
     if (savedData) {
@@ -96,15 +123,12 @@ const Drag = () => {
         const dropZoneBounds = dropZoneRef.current.getBoundingClientRect();
 
         const updatedItems = items.map((item) => {
-          // Conversion des positions de pourcentage à pixels
           const xPos = (item.x / 100) * dropZoneBounds.width;
           const yPos = (item.y / 100) * dropZoneBounds.height;
 
           return {
             ...item,
-            // Si x dépasse la largeur, remettre à 0 ou autre valeur
             x: xPos > dropZoneBounds.width ? 0 : xPos,
-            // Si y dépasse la hauteur, remettre à 0 ou autre valeur
             y: yPos > dropZoneBounds.height ? 0 : yPos,
           };
         });
@@ -114,7 +138,6 @@ const Drag = () => {
     }
   };
 
-  // POPUP
   const onOpen = () => {
     setShowPopup(true);
   };
@@ -123,55 +146,43 @@ const Drag = () => {
     setShowPopup(false);
   };
 
-  // Fonction pour soumettre le formulaire
   const handleFormSubmit = (formData) => {
-    // Vérifier si la drop zone est disponible
     if (dropZoneRef.current) {
-      // Utiliser dom-to-image pour capturer la drop zone
       domtoimage
         .toPng(dropZoneRef.current, {
-          style: {
-            margin: 0, // Assurez-vous qu'il n'y a pas de marge
-            padding: 0, // Assurez-vous qu'il n'y a pas de remplissage
-            border: "none", // Assurez-vous qu'il n'y a pas de bordure
-          },
+          style: { margin: 0, padding: 0, border: "none" },
         })
         .then((dataUrl) => {
-          // Créer une image à partir de l'URL de données
           const img = new Image();
           img.src = dataUrl;
 
-          // Convertir l'URL de données en blob
           fetch(img.src)
             .then((res) => res.blob())
             .then((blob) => {
-              // Créer un fichier à partir du blob
               const file = new File([blob], "dropzone-image.png", {
                 type: "image/png",
               });
-
-              // Créer un objet FormData pour envoyer l'image avec les données du formulaire
               const formDataWithImage = new FormData();
               formDataWithImage.append("file", file);
               formDataWithImage.append(
                 "data",
                 JSON.stringify({
-                  ...formData, // Données du formulaire
+                  ...formData,
                   userId,
-                  droppedItems, // Sauvegarde des éléments dans la drop zone
+                  droppedItems,
                   backgroundColor: dropZoneBackgroundColor,
                 })
               );
 
               fetch("http://localhost:9000/api/v1/sheet/create", {
                 method: "POST",
-                body: formDataWithImage, // Utiliser FormData ici
-                credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
+                body: formDataWithImage,
+                credentials: "include",
               })
                 .then((response) => response.json())
                 .then((data) => {
                   console.log("Data saved successfully:", data);
-                  setShowPopup(false); // Fermer la popup après sauvegarde
+                  setShowPopup(false);
                 })
                 .catch((error) => console.error("Error saving data:", error));
             });
@@ -208,7 +219,7 @@ const Drag = () => {
         onBackgroundColorChange={setDropZoneBackgroundColor}
         dropZoneBackgroundColor={dropZoneBackgroundColor}
       />
-      {/* Popup */}
+
       {showPopup && (
         <SavePopup onClick={onClose} onSubmitForm={handleFormSubmit} />
       )}
