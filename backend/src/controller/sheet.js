@@ -10,10 +10,20 @@ const app = express();
 
 app.use(express.json());
 
-// pour l'admin et la bible
+// pour la bible
 const getAll = async (req, res) => {
   try {
     const [response] = await Sheet.findAll();
+    res.json(response);
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+
+// pour l'admin
+const getAllAdmin = async (req, res) => {
+  try {
+    const [response] = await Sheet.findAllAdmin();
     res.json(response);
   } catch (err) {
     res.status(500).json({ msg: err.message });
@@ -160,6 +170,26 @@ const create = async (req, res) => {
     connection.release(); // Libérez la connexion
   }
 };
+
+const updateStatus = async (req, res) => {
+  try {
+    const { id: sheetId } = req.params; // Récupère l'ID de la fiche depuis les paramètres de l'URL
+    const { statut } = req.body; // Récupère le nouveau statut depuis le corps de la requête
+
+    if (statut !== "0" && statut !== "1") {
+      return res.status(400).json({
+        msg: "Statut invalide. Utilisez '0' pour masqué ou '1' pour visible.",
+      });
+    }
+
+    await Sheet.updateStatus(sheetId, statut);
+
+    res.status(200).json({ msg: "Statut mis à jour avec succès" });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+
 // Fonction pour update feuille et ses tags associés
 
 const update = async (req, res) => {
@@ -282,10 +312,12 @@ const remove = async (req, res) => {
 
 export {
   getAll,
+  getAllAdmin,
   create,
   getAllUser,
   searchByTag,
   remove,
   searchByTitleAndUserId,
   update,
+  updateStatus,
 };

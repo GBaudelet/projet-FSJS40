@@ -2,81 +2,70 @@ import React, { useState, useEffect } from "react";
 
 const SheetPage = ({ userId }) => {
   const [sheets, setSheets] = useState([]);
-  const [editingSheetId, setEditingSheetId] = useState(null);
-  const [formData, setFormData] = useState({
-    id: "",
-    name: "",
-    statut: "1",
-    userId: userId,
-  });
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const fetchSheets = async () => {
       try {
-        const response = await fetch("http://localhost:9000/api/v1/sheet/all", {
-          method: "GET",
-          credentials: "include",
-        });
+        const response = await fetch(
+          "http://localhost:9000/api/v1/sheet/allAdmin",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération des fiches");
         }
 
         const data = await response.json();
+        console.log(data);
         setSheets(data);
       } catch (error) {
         console.error("Erreur: ", error);
+        setErrorMessage(error.message); // Afficher l'erreur à l'utilisateur
       }
     };
 
     fetchSheets();
   }, [userId]);
 
-  const handleEditClick = (sheet) => {
-    setEditingSheetId(sheet.id);
-    setFormData({
-      id: sheet.id,
-      name: sheet.name,
-      statut: sheet.statut.toString(),
-      userId: sheet.user_id,
-    });
-  };
-
-  const handleFormChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSaveChanges = async () => {
+  const handleStatusChange = async (sheetId, newStatus) => {
     try {
       const response = await fetch(
-        `http://localhost:9000/api/v1/sheet/update/${formData.id}`,
+        `http://localhost:9000/api/v1/sheet/update/statut/${sheetId}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({ statut: newStatus }),
           credentials: "include",
         }
       );
 
       if (!response.ok) {
-        throw new Error("Erreur lors de la mise à jour de la fiche");
+        const errorData = await response.json(); // Récupérer les données d'erreur si disponibles
+        throw new Error(
+          errorData.msg || "Erreur lors de la mise à jour du statut de la fiche"
+        );
       }
 
       const updatedSheet = await response.json();
+      console.log(updatedSheet); // Vérifiez la structure de la réponse
+
+      // Mettre à jour localement le statut de la fiche modifiée
       setSheets((prevSheets) =>
         prevSheets.map((sheet) =>
-          sheet.id === updatedSheet.id ? updatedSheet : sheet
+          sheet.id === updatedSheet.id
+            ? { ...sheet, statut: updatedSheet.statut }
+            : sheet
         )
       );
-      setEditingSheetId(null);
     } catch (error) {
       console.error("Erreur: ", error);
+      setErrorMessage(error.message);
     }
   };
 
@@ -103,6 +92,7 @@ const SheetPage = ({ userId }) => {
         );
       } catch (error) {
         console.error("Erreur: ", error);
+        setErrorMessage(error.message);
       }
     }
   };
@@ -110,51 +100,35 @@ const SheetPage = ({ userId }) => {
   return (
     <div className="sheet-page">
       <h2>Sheets</h2>
-      {sheets.map((sheet) => (
-        <div key={sheet.id} className="sheet-item">
-          <h3>{sheet.name}</h3>
-          <p>créé le : {sheet.created_at}</p>
-          <p>update le : {sheet.updated_at}</p>
-          <p>statut : {sheet.statut === 1 ? "Visible" : "Masqué"}</p>
-          <p>fait par l'utilisateur {sheet.user_id}</p>
-          <button onClick={() => handleEditClick(sheet)}>Modifier</button>
-          <button onClick={() => handleDeleteClick(sheet.id)}>Supprimer</button>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {sheets.map((sheet) => {
+        // Chemin complet pour l'image
+        const fullPath = `http://localhost:9000/sheet${sheet.img_emplacement}`;
 
-          {editingSheetId === sheet.id && (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSaveChanges();
-              }}
-            >
-              <div>
-                <label>Nom:</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleFormChange}
-                />
-              </div>
-              <div>
-                <label>Statut:</label>
-                <select
-                  name="statut"
-                  value={formData.statut}
-                  onChange={handleFormChange}
-                >
-                  <option value="1">Visible</option>
-                  <option value="0">Masqué</option>
-                </select>
-              </div>
-              <button type="submit">Enregistrer les modifications</button>
-              <button type="button" onClick={() => setEditingSheetId(null)}>
-                Annuler
-              </button>
-            </form>
-          )}
-        </div>
-      ))}
+        return (
+          <div key={sheet.id} className="sheet-item">
+            <h3>{sheet.title}</h3>
+            <p>créé le : {sheet.created_at}</p>
+            <p>update le : {sheet.updated_at}</p>
+            <img src={fullPath} alt={sheet.title} />
+            <div>
+              <label>Statut:</label>
+              <select
+                value={sheet.statut.toString()}
+                onChange={(e) => handleStatusChange(sheet.id, e.target.value)}
+              >
+                <option value="1">Visible</option>
+                <option value="0">Masqué</option>
+              </select>
+            </div>
+
+            <p>fait par l'utilisateur {sheet.user_id}</p>
+            <button onClick={() => handleDeleteClick(sheet.id)}>
+              Supprimer
+            </button>
+          </div>
+        );
+      })}
     </div>
   );
 };

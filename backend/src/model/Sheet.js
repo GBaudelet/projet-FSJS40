@@ -1,16 +1,26 @@
 import pool from "../config/db.js";
 
 class Sheet {
-  // admin and bible
+  // bible
   static async findAll() {
-    const SELECT_ALL =
-      "SELECT id,title, description, statut, user_id,created_at,updated_at FROM sheet WHERE statut = 1";
+    const SELECT_ALL = `SELECT id,title, description, statut, user_id,created_at,updated_at 
+    FROM sheet 
+    WHERE statut = 1`;
+    return await pool.query(SELECT_ALL);
+  }
+  // admin
+  static async findAllAdmin() {
+    const SELECT_ALL = `SELECT sheet.id, sheet.title, sheet.description, sheet.statut, sheet.user_id, sheet.created_at, sheet.updated_at, bible.img_emplacement
+    FROM sheet
+    LEFT JOIN bible ON sheet.id = bible.sheet_id;
+`;
     return await pool.query(SELECT_ALL);
   }
   // user
   static async findAllUser(userId) {
     const SELECT_BY_USER_ID = `SELECT sheet.id,sheet.title,sheet.description,GROUP_CONCAT(tag.name) AS tags,bible.img_emplacement 
-    FROM sheet LEFT JOIN sheet_tag ON sheet.id = sheet_tag.sheet_id 
+    FROM sheet 
+    LEFT JOIN sheet_tag ON sheet.id = sheet_tag.sheet_id 
     LEFT JOIN tag ON sheet_tag.tag_id = tag.id 
     LEFT JOIN bible ON sheet.id = bible.sheet_id 
     WHERE sheet.user_id = (?) AND sheet.statut = 1 
@@ -67,6 +77,19 @@ class Sheet {
 
     const values = [data.title, data.description, sheetId];
     await connection.query(query, values);
+  }
+
+  static async updateStatus(sheetId, statut) {
+    const query = `
+      UPDATE sheet SET 
+        statut = ?, 
+        updated_at = NOW() 
+      WHERE id = ?`;
+
+    const values = [statut, sheetId];
+
+    const [result] = await pool.query(query, values);
+    return result;
   }
 
   static async remove(id) {
