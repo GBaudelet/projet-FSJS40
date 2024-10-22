@@ -1,118 +1,160 @@
 import React, { useState, useEffect } from "react";
 
-const SheetPage = () => {
+const SheetPage = ({ userId }) => {
   const [sheets, setSheets] = useState([]);
-  const [isEditing, setIsEditing] = useState(null);
-
-  const [editingSheet, setEditingSheet] = useState({
+  const [editingSheetId, setEditingSheetId] = useState(null);
+  const [formData, setFormData] = useState({
     id: "",
     name: "",
+    statut: "1",
+    userId: userId,
   });
 
   useEffect(() => {
-    fetchSheets();
-  }, []);
+    const fetchSheets = async () => {
+      try {
+        const response = await fetch("http://localhost:9000/api/v1/sheet/all", {
+          method: "GET",
+          credentials: "include",
+        });
 
-  const fetchSheets = async () => {
-    try {
-      const response = await fetch("http://localhost:9000/api/v1/sheet/all", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
+        if (!response.ok) {
+          throw new Error("Erreur lors de la récupération des fiches");
+        }
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        setSheets(data);
+      } catch (error) {
+        console.error("Erreur: ", error);
       }
+    };
 
-      const data = await response.json();
-      setSheets(data);
-    } catch (error) {
-      console.error("Error fetching sheets:", error);
-    }
+    fetchSheets();
+  }, [userId]);
+
+  const handleEditClick = (sheet) => {
+    setEditingSheetId(sheet.id);
+    setFormData({
+      id: sheet.id,
+      name: sheet.name,
+      statut: sheet.statut.toString(),
+      userId: sheet.user_id,
+    });
   };
 
-  const handleUpdate = async () => {
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSaveChanges = async () => {
     try {
       const response = await fetch(
-        `http://localhost:9000/api/v1/sheet/update/${editingSheet.id}`,
+        `http://localhost:9000/api/v1/sheet/update/${formData.id}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(editingSheet),
-          credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
+          body: JSON.stringify(formData),
+          credentials: "include",
         }
       );
-      const data = await response.json();
-      setSheets(sheets.map((sheet) => (sheet.id === data.id ? data : sheet)));
-      setIsEditing(null);
-      setEditingSheet({ id: "", name: "" });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la mise à jour de la fiche");
+      }
+
+      const updatedSheet = await response.json();
+      setSheets((prevSheets) =>
+        prevSheets.map((sheet) =>
+          sheet.id === updatedSheet.id ? updatedSheet : sheet
+        )
+      );
+      setEditingSheetId(null);
     } catch (error) {
-      console.error("Error updating sheet:", error);
+      console.error("Erreur: ", error);
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await fetch(`http://localhost:9000/api/v1/sheet/delete/${id}`, {
-        method: "DELETE",
-        credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
-      });
-      setSheets(sheets.filter((sheet) => sheet.id !== id));
-    } catch (error) {
-      console.error("Error deleting sheet:", error);
+  const handleDeleteClick = async (sheetId) => {
+    const confirmDelete = window.confirm(
+      "Êtes-vous sûr de vouloir supprimer cette fiche ?"
+    );
+    if (confirmDelete) {
+      try {
+        const response = await fetch(
+          `http://localhost:9000/api/v1/sheet/delete/${sheetId}`,
+          {
+            method: "DELETE",
+            credentials: "include",
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Erreur lors de la suppression de la fiche");
+        }
+
+        setSheets((prevSheets) =>
+          prevSheets.filter((sheet) => sheet.id !== sheetId)
+        );
+      } catch (error) {
+        console.error("Erreur: ", error);
+      }
     }
   };
 
   return (
-    <div className="sheets-page">
+    <div className="sheet-page">
       <h2>Sheets</h2>
+      {sheets.map((sheet) => (
+        <div key={sheet.id} className="sheet-item">
+          <h3>{sheet.name}</h3>
+          <p>créé le : {sheet.created_at}</p>
+          <p>update le : {sheet.updated_at}</p>
+          <p>statut : {sheet.statut === 1 ? "Visible" : "Masqué"}</p>
+          <p>fait par l'utilisateur {sheet.user_id}</p>
+          <button onClick={() => handleEditClick(sheet)}>Modifier</button>
+          <button onClick={() => handleDeleteClick(sheet.id)}>Supprimer</button>
 
-      <div className="sheets-list">
-        {sheets.map((sheet, index) => (
-          <div key={sheet.id || index} className="sheet-item">
-            <div className="sheet-details">
-              <p>Name: {sheet.title}</p>
-              <p>{sheet.description}</p>
-              <p>créé le : {sheet.created_at}</p>
-              <p>update le : {sheet.updated_at}</p>
-              <p>statues : {sheet.statues}</p>
-              <p>fait par l'utilisateur {sheet.user_id}</p>
-            </div>
-            <div className="sheet-actions">
-              <button
-                onClick={() => {
-                  setIsEditing(sheet.id);
-                  setEditingSheet(sheet);
-                }}
-              >
-                Edit
+          {editingSheetId === sheet.id && (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSaveChanges();
+              }}
+            >
+              <div>
+                <label>Nom:</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleFormChange}
+                />
+              </div>
+              <div>
+                <label>Statut:</label>
+                <select
+                  name="statut"
+                  value={formData.statut}
+                  onChange={handleFormChange}
+                >
+                  <option value="1">Visible</option>
+                  <option value="0">Masqué</option>
+                </select>
+              </div>
+              <button type="submit">Enregistrer les modifications</button>
+              <button type="button" onClick={() => setEditingSheetId(null)}>
+                Annuler
               </button>
-              <button onClick={() => handleDelete(sheet.id)}>Delete</button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {isEditing && (
-        <div className="form-container">
-          <h3>Edit Sheet</h3>
-          <input
-            type="text"
-            placeholder="Name"
-            value={editingSheet.name}
-            onChange={(e) =>
-              setEditingSheet({ ...editingSheet, name: e.target.value })
-            }
-          />
-
-          <button onClick={handleUpdate}>Update Sheet</button>
+            </form>
+          )}
         </div>
-      )}
+      ))}
     </div>
   );
 };

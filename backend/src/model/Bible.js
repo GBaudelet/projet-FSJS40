@@ -15,7 +15,7 @@ class Bible {
       LEFT JOIN Sheet_Tag ON sheet.id = Sheet_Tag.sheet_id
       LEFT JOIN tag ON Sheet_Tag.tag_id = tag.id
       LEFT JOIN bible ON sheet.id = bible.sheet_id
-      WHERE sheet.statut = 1  -- Ajout de la condition sur le statut
+      WHERE sheet.statut = 1  
       GROUP BY sheet.id
     `;
     try {
@@ -71,10 +71,10 @@ class Bible {
         "INSERT INTO bible (img_emplacement, sheet_id) VALUES (?, ?)",
         [img_emplacement, sheet_id]
       );
-      return result.insertId; // Retourne l'ID de l'enregistrement inséré
+      return result.insertId;
     } catch (error) {
       console.error("Erreur lors de l'insertion dans la table bible:", error);
-      throw error; // Lance l'erreur pour gestion ultérieure
+      throw error;
     }
   }
   // update du chemin
@@ -89,7 +89,7 @@ class Bible {
         [imgEmplacement, sheetId]
       );
 
-      return result; // Retourne le résultat de la requête
+      return result;
     } catch (error) {
       console.error(
         "Erreur lors de la mise à jour du chemin de l'image :",
@@ -98,7 +98,7 @@ class Bible {
       throw new Error("Erreur de mise à jour du chemin de l'image");
     } finally {
       if (!connection) {
-        conn.release(); // Libérez la connexion si elle n'a pas été fournie
+        conn.release();
       }
     }
   }

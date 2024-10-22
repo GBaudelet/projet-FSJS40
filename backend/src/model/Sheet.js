@@ -4,7 +4,7 @@ class Sheet {
   // admin and bible
   static async findAll() {
     const SELECT_ALL =
-      "SELECT title, description, statut, user_id FROM sheet WHERE statut = 1";
+      "SELECT id,title, description, statut, user_id,created_at,updated_at FROM sheet WHERE statut = 1";
     return await pool.query(SELECT_ALL);
   }
   // user
@@ -13,7 +13,7 @@ class Sheet {
     FROM sheet LEFT JOIN sheet_tag ON sheet.id = sheet_tag.sheet_id 
     LEFT JOIN tag ON sheet_tag.tag_id = tag.id 
     LEFT JOIN bible ON sheet.id = bible.sheet_id 
-    WHERE sheet.user_id = 1 AND sheet.statut = 1 
+    WHERE sheet.user_id = (?) AND sheet.statut = 1 
     GROUP BY sheet.id, bible.img_emplacement;`;
     return await pool.query(SELECT_BY_USER_ID, [userId]);
   }
@@ -62,6 +62,7 @@ class Sheet {
         title = ?, 
         description = ? ,
         updated_at = NOW() 
+        
       WHERE id = ?`;
 
     const values = [data.title, data.description, sheetId];

@@ -233,9 +233,19 @@ const remove = async (req, res) => {
   try {
     // Récupérer le chemin du fichier associé au sheet via la table `bible`
     const [fileData] = await Sheet.getFilePath(req.params.id);
-    if (!fileData || !fileData[0] || !fileData[0].img_emplacement) {
-      res.status(404).json({ msg: "Fichier introuvable dans la table bible" });
-      return;
+
+    // Vérifier si le fichier existe et si l'enregistrement a un userId
+    if (!fileData || !fileData[0]) {
+      return res
+        .status(404)
+        .json({ msg: "Fichier introuvable dans la table bible" });
+    }
+
+    // Vérifier si userId est null (utilisateur supprimé)
+    if (fileData[0].user_id === null) {
+      console.log(
+        "Utilisateur supprimé, mais suppression du fichier et du sheet continue."
+      );
     }
 
     const filePath = path.join(
@@ -243,22 +253,23 @@ const remove = async (req, res) => {
       "public/sheet",
       fileData[0].img_emplacement
     );
+
     // Supprimer le fichier sur le serveur
     fs.unlink(filePath, async (err) => {
       if (err) {
         console.error("Erreur lors de la suppression du fichier:", err);
-        res
+        return res
           .status(500)
           .json({ msg: "Erreur lors de la suppression du fichier" });
-        return;
       }
+
       // Si le fichier est supprimé avec succès, supprimer ensuite l'enregistrement dans la base de données
       try {
         const [response] = await Sheet.remove(req.params.id);
         if (!response.affectedRows) {
-          res.status(404).json({ msg: "sheet non supprimé" });
-          return;
+          return res.status(404).json({ msg: "Sheet non supprimé" });
         }
+
         res.json({ msg: "Sheet et fichier supprimés" });
       } catch (err) {
         res.status(500).json({ msg: err.message });

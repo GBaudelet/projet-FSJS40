@@ -14,12 +14,6 @@ const UserInfo = ({ user }) => {
       </p>
 
       <button>Modifier le mot de passe</button>
-      <h3>Dernières fiches créées :</h3>
-      {/* <div className="last-sheets">
-        {user.lastSheets.map((sheet) => (
-          <img key={sheet.id} src={sheet.imageUrl} alt={sheet.name} />
-        ))}
-      </div> */}
     </div>
   );
 };

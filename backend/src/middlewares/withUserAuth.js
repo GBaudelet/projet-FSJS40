@@ -5,7 +5,7 @@ export default (allowedRoles) => (req, res, next) => {
     return res.status(401).json({ message: "Utilisateur non authentifié" });
   }
 
-  const { role_id } = req.session.user; // Déclaration de role_id ici
+  const { role_id } = req.session.user;
 
   // Vérifiez si le rôle de l'utilisateur est dans la liste des rôles autorisés
   if (!allowedRoles.includes(role_id)) {

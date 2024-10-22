@@ -33,7 +33,7 @@ const Profile = () => {
     <div className="profil">
       <div className="profile-content">
         <UserInfo user={user} />
-        {role === 1 && <UserSheets userId={userId} />}
+        <UserSheets userId={userId} />
       </div>
     </div>
   );
