@@ -128,7 +128,7 @@ const Bible = () => {
   };
 
   return (
-    <div className="bible">
+    <div id="bible">
       <h1>c'est la bible</h1>
       {error && <p>{error}</p>}
 

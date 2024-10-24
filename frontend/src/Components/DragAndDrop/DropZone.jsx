@@ -29,7 +29,6 @@ const DropZone = ({
               100 - ((item.height || 100) / dropZoneBounds.height) * 100
             )
           );
-          // Appelez la fonction onMoveElement ici pour sauvegarder la position
           onMoveElement({ id, x: newX, y: newY });
           return { ...item, x: newX, y: newY };
         }

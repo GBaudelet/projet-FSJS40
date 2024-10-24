@@ -11,21 +11,13 @@ html {
   font-size: 62.5%;
 }
 
-img {
-  display: block;
-  width: 300px;
-  height: 200px;
-  border-radius: 1rem;
-  margin: auto;
-}
-
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-family: "Playfair Display", serif;
+  font-family: "Roboto", sans-serif;
 }
 
 body,
@@ -34,15 +26,6 @@ a,
 li,
 span {
   font-family: "Roboto", sans-serif;
-}
-
-:root {
-  --primary-color: #db9834;
-  --secondary-color: #2ecc71;
-  --text-color: #333;
-  --background-color: #f9f9f9;
-  --header-footer-background: #ad801f;
-  --link-color: #e74c3c;
 }
 
 /* Global */
@@ -58,7 +41,13 @@ body {
   flex-direction: column;
   width: 100%;
 }
-
+img {
+  display: block;
+  width: 300px;
+  height: 200px;
+  border-radius: 1rem;
+  margin: auto;
+}
 a {
   color: #ffffff;
   text-decoration: none;

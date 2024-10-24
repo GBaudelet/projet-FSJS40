@@ -11,7 +11,7 @@ const all = async (req, res) => {
 
 const getAll = async (req, res) => {
   try {
-    const response = await Bible.findAll(); // On ne déstructure pas la réponse ici
+    const response = await Bible.findAll();
     res.json(response);
   } catch (err) {
     res.status(500).json({ msg: err.message });
@@ -43,7 +43,7 @@ const getByTag = async (req, res) => {
   }
 
   try {
-    const tagArray = tag.split(",").map((id) => parseInt(id)); // Assurez-vous que ce sont des nombres
+    const tagArray = tag.split(",").map((id) => parseInt(id));
     const response = await Bible.findByTag(tagArray);
     res.json(response);
   } catch (err) {

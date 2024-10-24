@@ -11,7 +11,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard">
+    <div id="dashboard">
       <div className="dashboard-body">
         <aside className="dashboard-sidebar">
           <ul>

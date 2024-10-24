@@ -4,8 +4,8 @@ const initialState = {
   id: null,
   username: "",
   password: "",
-  email: "", // Ajout de l'email
-  confirmEmail: "", // Ajout de la confirmation de l'email
+  email: "",
+  confirmEmail: "",
   isLogged: false,
   msg: "",
   role_id: "",

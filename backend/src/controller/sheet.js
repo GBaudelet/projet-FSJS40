@@ -66,13 +66,13 @@ const searchByTag = async (req, res) => {
 // recherche par id et title
 const searchByTitleAndUserId = async (req, res) => {
   try {
-    const userId = req.session.user.id; // Vérifiez que l'utilisateur est connecté
+    const userId = req.session.user.id;
 
     const existingSheets = await Sheet.findByTitleAndUserId(userId);
     if (existingSheets.length > 0) {
-      return res.json(existingSheets); // Retourne les titres existants
+      return res.json(existingSheets);
     }
-    return res.json([]); // Si aucun titre n'existe, renvoie un tableau vide
+    return res.json([]);
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
