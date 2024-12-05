@@ -1,4 +1,12 @@
-@charset "UTF-8";
+:root {
+  --primary-color: #0f0a0a;
+  --secondary-color: #f5efed;
+  --tertiary-color: #2292a4;
+  --link-color: #e74c3c;
+  --primary-font: "Arial", sans-serif;
+  --secondary-font: "Times New Roman", serif;
+}
+
 /* RESET */
 *,
 ::before,
@@ -17,23 +25,20 @@ h2,
 h3,
 h4,
 h5,
-h6 {
-  font-family: "Roboto", sans-serif;
-}
-
+h6,
 body,
 p,
 a,
 li,
 span {
-  font-family: "Roboto", sans-serif;
+  font-family: var(--primary-font);
 }
 
 /* Global */
 body {
-  font-family: Arial, sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
+  font-family: var(--secondary-font);
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
   line-height: 1.6;
   margin: 0;
   padding: 0;
@@ -52,12 +57,12 @@ img {
 }
 
 a {
-  color: #ffffff;
+  color: var(--secondary-color);
   text-decoration: none;
 }
 
 a:hover {
-  text-decoration: underline;
+  color: var(--tertiary-color);
 }
 
 p {
@@ -65,7 +70,9 @@ p {
 }
 
 header {
-  background-color: var(--header-footer-background);
+  width: 100vw;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
   padding: 1rem;
   display: flex;
   justify-content: space-between;
@@ -85,10 +92,10 @@ form {
 }
 
 footer {
-  background-color: var(--header-footer-background);
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
   padding: 1rem;
   text-align: center;
-  color: #fff;
 }
 
 main {
@@ -96,21 +103,45 @@ main {
   flex-direction: column;
 }
 
-#header {
-  color: black;
-}
-
-#footer {
-  color: black;
-}
-
 #home {
   color: black;
 }
 
 #bible {
-  max-width: 100vw;
+  width: 100vw;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#bible section {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+#bible form {
+  gap: 10px;
+}
+#bible button {
+  justify-self: center;
+  margin-top: 10px;
+  padding: 5px 10px;
+}
+#bible form:nth-of-type(2) {
+  margin: 10px;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  max-height: 200px;
+  grid-auto-rows: minmax(40px, auto);
+}
+#bible form:nth-of-type(2) div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#bible form:nth-of-type(2) button {
+  grid-column: 1/-1;
 }
 #bible .image-gallery {
   display: flex;
@@ -125,8 +156,10 @@ main {
   border-radius: 0;
 }
 
-#profil {
-  color: black;
+#profil img {
+  width: 210px;
+  height: 297px;
+  border-radius: 0;
 }
 
 #login {
@@ -287,14 +320,14 @@ main {
 .dropzone {
   position: relative;
   background-color: #b6b6b6;
-  width: 70.7070707071vw; /* Largeur A4 proportionnelle à la hauteur */
-  height: 141.4285714286vh; /* Hauteur proportionnelle à la largeur A4 */
-  margin: 0px 10px; /* Ajustez la marge selon vos besoins */
+  width: 70.7070707071vw;
+  height: 141.4285714286vh;
+  margin: 0px 10px;
   overflow: auto;
 }
 
 .properties-panel {
-  width: 15vw; /* 15% de la largeur de la fenêtre */
+  width: 15vw;
   background-color: #222;
   padding: 10px;
   color: #fff;
@@ -378,6 +411,8 @@ main {
   padding: 0 5px;
 }
 
-#profil {
-  color: black;
+#profil img {
+  width: 210px;
+  height: 297px;
+  border-radius: 0;
 }

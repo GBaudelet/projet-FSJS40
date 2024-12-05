@@ -129,41 +129,41 @@ const Bible = () => {
 
   return (
     <div id="bible">
-      <h1>c'est la bible</h1>
+      <h1>Bibliothèque</h1>
       {error && <p>{error}</p>}
-
-      <form onSubmit={handleSearchByTitle}>
-        <input
-          type="text"
-          value={searchTitle}
-          onChange={(e) => setSearchTitle(e.target.value)}
-          placeholder="Rechercher par titre"
-        />
-        <button type="submit">Rechercher</button>
-      </form>
-
-      <form onSubmit={handleSearchByTags}>
+      <section>
+        <h2>Rechercher par titre</h2>
+        <form onSubmit={handleSearchByTitle}>
+          <input
+            type="text"
+            value={searchTitle}
+            onChange={(e) => setSearchTitle(e.target.value)}
+            placeholder="Rechercher par titre"
+          />
+          <button type="submit">Rechercher</button>
+        </form>
         <h2>Rechercher par tags</h2>
-        {tags.map((tag) => (
-          <div key={tag.id}>
-            <input
-              type="checkbox"
-              checked={selectedTags.includes(tag.id)}
-              onChange={() => handleTagChange(tag.id)}
-            />
-            <label>{tag.name}</label>
-          </div>
-        ))}
-        <button type="submit">Rechercher</button>
-      </form>
-
-      <div className="sheet-gallery">
+        <form onSubmit={handleSearchByTags}>
+          {tags.map((tag) => (
+            <div key={tag.id}>
+              <input
+                type="checkbox"
+                checked={selectedTags.includes(tag.id)}
+                onChange={() => handleTagChange(tag.id)}
+              />
+              <label>{tag.name}</label>
+            </div>
+          ))}
+          <button type="submit">Rechercher</button>
+        </form>
+      </section>
+      <div className="image-gallery">
         {filteredSheets.map((sheet, index) => {
           const { title, description, img_emplacement } = sheet;
           const fullPath = `http://localhost:9000/sheet${img_emplacement}`; // Chemin complet
 
           return (
-            <div key={index} className="sheet-item">
+            <div key={index} className="image-item">
               <h2>{title}</h2>
               <p>{description}</p>
               {img_emplacement && (

@@ -28,7 +28,7 @@ const Profile = () => {
   if (!user) return <div>Chargement...</div>;
 
   return (
-    <div className="profil">
+    <div id="profil">
       <div className="profile-content">
         <div className="user-info">
           <h2>Informations personnelles</h2>
