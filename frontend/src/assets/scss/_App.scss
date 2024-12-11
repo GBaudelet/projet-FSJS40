@@ -53,19 +53,6 @@ a:hover {
 p {
   margin-bottom: 0.8rem;
 }
-header {
-  width: 100vw;
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  nav {
-    display: flex;
-    gap: 10px;
-    justify-content: space-between;
-  }
-}
 
 form {
   display: flex;

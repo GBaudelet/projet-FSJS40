@@ -112,7 +112,7 @@ const Bible = () => {
       }
 
       const data = await response.json();
-      setFilteredSheets(data); // Mettre à jour les sheets filtrées
+      setFilteredSheets(data);
     } catch (err) {
       setError(err.message);
     }
@@ -144,23 +144,25 @@ const Bible = () => {
         </form>
         <h2>Rechercher par tags</h2>
         <form onSubmit={handleSearchByTags}>
-          {tags.map((tag) => (
-            <div key={tag.id}>
-              <input
-                type="checkbox"
-                checked={selectedTags.includes(tag.id)}
-                onChange={() => handleTagChange(tag.id)}
-              />
-              <label>{tag.name}</label>
-            </div>
-          ))}
+          <div className="tags-container">
+            {tags.map((tag) => (
+              <div key={tag.id}>
+                <input
+                  type="checkbox"
+                  checked={selectedTags.includes(tag.id)}
+                  onChange={() => handleTagChange(tag.id)}
+                />
+                <label>{tag.name}</label>
+              </div>
+            ))}
+          </div>
           <button type="submit">Rechercher</button>
         </form>
       </section>
       <div className="image-gallery">
         {filteredSheets.map((sheet, index) => {
           const { title, description, img_emplacement } = sheet;
-          const fullPath = `http://localhost:9000/sheet${img_emplacement}`; // Chemin complet
+          const fullPath = `http://localhost:9000/sheet${img_emplacement}`;
 
           return (
             <div key={index} className="image-item">

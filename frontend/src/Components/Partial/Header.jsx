@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../store/Slices/user";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const Header = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
   const { isLogged, role_id } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,9 +26,17 @@ const Header = () => {
     fetchLogout();
   }
 
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
     <header>
-      <nav>
+      <h1 className="logo">Reroll</h1>
+      <button className="burger-icon" onClick={toggleMenu}>
+        {menuOpen ? <FaTimes /> : <FaBars />}
+      </button>
+      <nav className={menuOpen ? "nav-open" : ""}>
         <Link to="/">Home</Link>
         <Link to="/bible">Bible</Link>
         {isLogged ? (
