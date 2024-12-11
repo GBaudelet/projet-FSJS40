@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mer. 11 déc. 2024 à 01:16
+-- Généré le : mer. 11 déc. 2024 à 23:30
 -- Version du serveur : 8.3.0
 -- Version de PHP : 8.2.18
 
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 --
 
 INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
-('hDq-IbiMDaiDCxMDNTLYdg2s-SN6d86E', 1733966202, '{\"cookie\":{\"originalMaxAge\":86400000,\"expires\":\"2024-12-12T01:16:10.340Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\"},\"user\":{\"id\":32,\"username\":\"user\",\"role_id\":2}}');
+('S4yRlKNlTD4cikcELtCkXM12Xh2HgJAF', 1734046173, '{\"cookie\":{\"originalMaxAge\":86400000,\"expires\":\"2024-12-12T20:39:00.251Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\"},\"user\":{\"id\":1,\"username\":\"admin\",\"role_id\":1}}');
 
 -- --------------------------------------------------------
 
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `sheet` (
 INSERT INTO `sheet` (`id`, `title`, `description`, `created_at`, `updated_at`, `statut`, `user_id`) VALUES
 (99, 'test', 'test', '2024-10-21 15:58:55', '2024-10-23 16:21:44', 1, NULL),
 (100, 'tes', 'aze', '2024-10-21 17:16:44', '2024-10-21 17:17:20', 1, NULL),
-(102, 'voila', 'azeazeaz', '2024-12-05 19:39:04', NULL, 1, 1),
+(102, 'voila', 'c\'est un test', '2024-12-05 19:39:04', '2024-12-12 00:22:01', 1, 1),
 (103, 'test encore', 'azze', '2024-12-11 01:29:00', NULL, 1, 1),
 (104, 'azeaze', 'azeaze', '2024-12-11 01:29:37', NULL, 1, 1),
 (105, 'azeazeazqsd', 'azeaz', '2024-12-11 02:16:33', NULL, 1, 32);
@@ -197,15 +197,14 @@ INSERT INTO `tag` (`id`, `name`) VALUES
 (3, 'Shadowrun'),
 (5, 'Warhammer'),
 (13, 'roll20'),
-(14, 'test1'),
-(15, 'test2'),
-(16, 'test3'),
-(17, 'tezqtzet'),
-(18, 'zerzer'),
-(19, 'zerzer'),
-(20, 'zerzer'),
-(21, 'xsdv'),
-(22, 'qsd');
+(14, 'Cthulu'),
+(15, 'Starfinder'),
+(16, 'Pathfinder'),
+(17, 'Alien'),
+(18, 'Aria'),
+(19, 'Bitume'),
+(20, 'Fallout'),
+(21, 'Custom');
 
 -- --------------------------------------------------------
 
@@ -232,7 +231,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `email`, `statut`, `created_at`, `last_connection`, `role_id`) VALUES
-(1, 'admin', '$2b$10$lP8Su6kCem2HDXK8UU368OL.fzehGcEJ0h7wAnvJHqAf0Pyxj1RsS', 'test@test.free', 1, '0000-00-00 00:00:00', '2024-12-11 00:58:02', 1),
+(1, 'admin', '$2b$10$lP8Su6kCem2HDXK8UU368OL.fzehGcEJ0h7wAnvJHqAf0Pyxj1RsS', 'test@test.free', 1, '0000-00-00 00:00:00', '2024-12-11 21:39:00', 1),
 (32, 'user', '$2b$10$fNSfpixYq2DKbxC1i5DpHuhxx/Rfe90XmoCdxN257IKJypyeREj5G', 'user@user.com', 1, '2024-12-11 00:25:23', '2024-12-11 02:16:10', 2);
 
 --
