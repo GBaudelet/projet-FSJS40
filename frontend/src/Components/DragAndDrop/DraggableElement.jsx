@@ -5,8 +5,8 @@ const DraggableElement = ({ item, onSelect }) => {
   const isTriangleUp = item.type === "triangle-up";
   const isTriangleDown = item.type === "triangle-down";
 
-  const triangleHeight = item.baseHeight || 100; // Default height if not provided
-  const triangleBaseSize = item.baseSize || 100; // Default base size if not provided
+  const triangleHeight = item.baseHeight || 100;
+  const triangleBaseSize = item.baseSize || 100;
 
   return (
     <Draggable
@@ -51,7 +51,7 @@ const DraggableElement = ({ item, onSelect }) => {
           justifyContent: "center",
           cursor: "move",
           position: "absolute",
-          backgroundColor: item.backgroundColor || "#D3D3D3",
+          backgroundColor: item.backgroundColor || "#f5efed",
           zIndex: item.zIndex || 1,
         }}
       >

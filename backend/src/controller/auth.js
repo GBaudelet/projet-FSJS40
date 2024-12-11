@@ -35,11 +35,11 @@ const create = async (req, res) => {
       return res.status(400).json({ msg: "Format d'email invalide." });
     }
 
-    // Vérification que les mots de passe respectent une longueur minimale (par exemple, 6 caractères)
-    if (password.length < 6) {
+    // Vérification que les mots de passe respectent une longueur minimale
+    if (password.length < 8) {
       return res
         .status(400)
-        .json({ msg: "Le mot de passe doit comporter au moins 6 caractères." });
+        .json({ msg: "Le mot de passe doit comporter au moins 8 caractères." });
     }
 
     // Vérification que l'email et la confirmation correspondent
@@ -61,7 +61,7 @@ const create = async (req, res) => {
 
     // Hachage du mot de passe
     const hash = await bcrypt.hash(password, SALT);
-    const [response] = await Auth.create({ username, hash, email }); // Ajout de l'email
+    const [response] = await Auth.create({ username, hash, email }); // Ajout de l'email si l'utilisateur n'existe pas
 
     if (response.affectedRows === 1) {
       res.status(201).json({ msg: "Utilisateur créé" });
@@ -86,7 +86,6 @@ const login = async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     console.log(match);
     if (match) {
-      // Mettre à jour le champ last_connection
       await Auth.updateLastConnection(user.id);
 
       const userSessionData = {
@@ -111,9 +110,7 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
-    // destruction de la session en BDD (store sql)
     req.session.destroy();
-    // suppression du cookie de session
     res.clearCookie("connect.sid");
     res.status(200).json({ msg: "User logged out", isLogged: false });
   } catch (err) {
@@ -123,7 +120,6 @@ const logout = async (req, res) => {
 
 const check_auth = async (req, res) => {
   const { user } = req.session;
-  // console.log("check-auth", user)
   if (user) {
     res.json({ isLogged: true, user });
   } else {

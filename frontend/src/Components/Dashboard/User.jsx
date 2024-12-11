@@ -7,7 +7,6 @@ const UsersPage = () => {
   const [editingUser, setEditingUser] = useState({
     id: "",
     username: "",
-    password: "",
     role_id: "",
   });
 
@@ -29,10 +28,6 @@ const UsersPage = () => {
     try {
       const userData = { ...editingUser };
 
-      if (userData.password.trim() === "") {
-        delete userData.password;
-      }
-
       const response = await fetch(
         `http://localhost:9000/api/v1/user/update/${editingUser.id}`,
         {
@@ -41,14 +36,14 @@ const UsersPage = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(userData),
-          credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
+          credentials: "include",
         }
       );
 
       const data = await response.json();
       setUsers(users.map((user) => (user.id === data.id ? data : user)));
       setIsEditing(null);
-      setEditingUser({ id: "", username: "", password: "", role_id: "" });
+      setEditingUser({ id: "", username: "", role_id: "" });
     } catch (error) {
       console.error("Error updating user:", error);
     }
@@ -58,7 +53,7 @@ const UsersPage = () => {
     try {
       await fetch(`http://localhost:9000/api/v1/user/delete/${id}`, {
         method: "DELETE",
-        credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
+        credentials: "include",
       });
       setUsers(users.filter((user) => user.id !== id));
     } catch (error) {
@@ -85,7 +80,6 @@ const UsersPage = () => {
                     setEditingUser({
                       id: user.id,
                       username: user.username,
-                      password: "",
                       role_id: user.role_id,
                     });
                   }}
@@ -113,19 +107,6 @@ const UsersPage = () => {
             value={editingUser.username}
             onChange={(e) =>
               setEditingUser({ ...editingUser, username: e.target.value })
-            }
-          />
-
-          <label htmlFor="password">
-            New Password (leave blank if no change):
-          </label>
-          <input
-            id="password"
-            type="password"
-            placeholder="New Password (leave blank if no change)"
-            value={editingUser.password}
-            onChange={(e) =>
-              setEditingUser({ ...editingUser, password: e.target.value })
             }
           />
 

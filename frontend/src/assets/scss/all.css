@@ -49,11 +49,9 @@ body {
 }
 
 img {
-  display: block;
-  width: 300px;
-  height: 200px;
-  border-radius: 1rem;
-  margin: auto;
+  width: 210px;
+  height: 297px;
+  border-radius: 0;
 }
 
 a {
@@ -103,10 +101,6 @@ main {
   flex-direction: column;
 }
 
-#home {
-  color: black;
-}
-
 #bible {
   width: 100vw;
   overflow: hidden;
@@ -149,25 +143,6 @@ main {
 }
 #bible .image-item {
   margin: 10px;
-}
-#bible .image-item img {
-  width: 210px;
-  height: 297px;
-  border-radius: 0;
-}
-
-#profil img {
-  width: 210px;
-  height: 297px;
-  border-radius: 0;
-}
-
-#login {
-  color: black;
-}
-
-#register {
-  color: black;
 }
 
 #dashboard {
@@ -289,13 +264,6 @@ main {
 #dashboard .user-item .user-actions button:last-child:hover {
   background-color: #c82333;
 }
-#dashboard .sheet-item {
-  border: 1px solid red;
-}
-
-#drag {
-  color: black;
-}
 
 .drag {
   display: flex;
@@ -305,24 +273,24 @@ main {
   width: 15vw;
   background-color: #333;
   padding: 10px;
-  color: #fff;
+  color: var(--secondary-color);
   overflow-y: auto;
 }
 
 .sidebar-item {
   padding: 10px;
   cursor: move;
-  color: #fff;
-  border: 1px solid #fff;
+  color: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
   margin-bottom: 5px;
 }
 
 .dropzone {
   position: relative;
-  background-color: #b6b6b6;
+  background-color: var(--secondary-color);
   width: 70.7070707071vw;
   height: 141.4285714286vh;
-  margin: 0px 10px;
+  margin: 0px 0px;
   overflow: auto;
 }
 
@@ -330,7 +298,7 @@ main {
   width: 15vw;
   background-color: #222;
   padding: 10px;
-  color: #fff;
+  color: var(--secondary-color);
   overflow-y: auto;
 }
 
@@ -373,7 +341,7 @@ main {
 }
 
 .popup {
-  background-color: white;
+  background-color: var(--secondary-color);
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
@@ -409,10 +377,4 @@ main {
   align-items: center;
   border: 1px solid black;
   padding: 0 5px;
-}
-
-#profil img {
-  width: 210px;
-  height: 297px;
-  border-radius: 0;
 }

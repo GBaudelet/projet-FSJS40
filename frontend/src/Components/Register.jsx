@@ -10,14 +10,53 @@ function Register() {
 
   async function submitHandler(e) {
     e.preventDefault();
-    if (!user.username || !user.password || !user.email || !user.confirmEmail) {
+
+    // Vérification des champs vides
+    if (
+      !user.username ||
+      !user.email ||
+      !user.confirmEmail ||
+      !user.password ||
+      !user.confirmPassword
+    ) {
       dispatch(setMsg("Remplissez tous les champs"));
       return;
     }
 
-    // Vérifiez que l'email et la confirmation de l'email correspondent
+    // Vérification de l'email valide
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(user.email)) {
+      dispatch(setMsg("L'adresse email n'est pas valide"));
+      return;
+    }
+
+    // Vérification des adresses email correspondantes
     if (user.email !== user.confirmEmail) {
       dispatch(setMsg("Les adresses email ne correspondent pas"));
+      return;
+    }
+
+    // Vérification des mots de passe
+    if (user.password !== user.confirmPassword) {
+      dispatch(setMsg("Les mots de passe ne correspondent pas"));
+      return;
+    }
+
+    // Vérification de la longueur minimale du mot de passe
+    if (user.password.length < 8) {
+      dispatch(setMsg("Le mot de passe doit contenir au moins 8 caractères"));
+      return;
+    }
+
+    // Vérification de la complexité du mot de passe
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(user.password)) {
+      dispatch(
+        setMsg(
+          "Le mot de passe doit contenir une majuscule, une minuscule, un chiffre et un caractère spécial"
+        )
+      );
       return;
     }
 
@@ -26,13 +65,17 @@ function Register() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(user),
-      credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
+      body: JSON.stringify({
+        username: user.username,
+        email: user.email,
+        password: user.password,
+      }),
+      credentials: "include",
     });
 
     const data = await response.json();
     if (response.status === 201) {
-      dispatch(resetFields()); // Réinitialiser les champs après une inscription réussie
+      dispatch(resetFields());
       navigate("/login");
     } else {
       dispatch(setMsg(data.msg));
@@ -50,8 +93,8 @@ function Register() {
 
   useEffect(() => {
     return () => {
-      dispatch(setMsg("")); // Nettoyer le message d'erreur
-      dispatch(resetFields()); // Nettoyer les champs lorsque le composant se démonte
+      dispatch(setMsg(""));
+      dispatch(resetFields());
     };
   }, [dispatch]);
 
@@ -60,13 +103,14 @@ function Register() {
       <form onSubmit={submitHandler}>
         {user.msg && <p className="error user-msg">{user.msg}</p>}
 
-        <label htmlFor="username">Username</label>
+        <label htmlFor="username">Nom d'utilisateur</label>
         <input
           type="text"
           name="username"
           id="username"
           value={user.username}
           onChange={handleChange}
+          placeholder="Username"
           required
         />
 
@@ -77,30 +121,44 @@ function Register() {
           id="email"
           value={user.email}
           onChange={handleChange}
+          placeholder="Email"
           required
         />
 
-        <label htmlFor="confirmEmail">Confirm Email</label>
+        <label htmlFor="confirmEmail">Confirmez l'email</label>
         <input
           type="email"
           name="confirmEmail"
           id="confirmEmail"
           value={user.confirmEmail}
           onChange={handleChange}
+          placeholder="Email"
           required
         />
 
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">Mot de passe</label>
         <input
           type="password"
           name="password"
           id="password"
           value={user.password}
           onChange={handleChange}
+          placeholder="Mot de passe"
           required
         />
 
-        <button type="submit">Register</button>
+        <label htmlFor="confirmPassword">Confirmez le mot de passe</label>
+        <input
+          type="password"
+          name="confirmPassword"
+          id="confirmPassword"
+          value={user.confirmPassword}
+          onChange={handleChange}
+          placeholder="Mot de passe"
+          required
+        />
+
+        <button type="submit">S'inscrire</button>
       </form>
     </main>
   );

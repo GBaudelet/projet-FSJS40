@@ -20,11 +20,10 @@ const SheetPage = ({ userId }) => {
         }
 
         const data = await response.json();
-        // console.log(data);
         setSheets(data);
       } catch (error) {
         console.error("Erreur: ", error);
-        setErrorMessage(error.message); // Afficher l'erreur à l'utilisateur
+        setErrorMessage(error.message);
       }
     };
 
@@ -46,16 +45,13 @@ const SheetPage = ({ userId }) => {
       );
 
       if (!response.ok) {
-        const errorData = await response.json(); // Récupérer les données d'erreur si disponibles
+        const errorData = await response.json();
         throw new Error(
           errorData.msg || "Erreur lors de la mise à jour du statut de la fiche"
         );
       }
 
       const updatedSheet = await response.json();
-      console.log(updatedSheet); // Vérifiez la structure de la réponse
-
-      // Mettre à jour localement le statut de la fiche modifiée
       setSheets((prevSheets) =>
         prevSheets.map((sheet) =>
           sheet.id === updatedSheet.id
@@ -102,7 +98,6 @@ const SheetPage = ({ userId }) => {
       <h2>Sheets</h2>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       {sheets.map((sheet) => {
-        // Chemin complet pour l'image
         const fullPath = `http://localhost:9000/sheet${sheet.img_emplacement}`;
 
         return (

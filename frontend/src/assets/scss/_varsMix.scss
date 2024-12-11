@@ -6,3 +6,8 @@
   --primary-font: "Arial", sans-serif;
   --secondary-font: "Times New Roman", serif;
 }
+@mixin image {
+  width: 210px;
+  height: 297px;
+  border-radius: 0;
+}

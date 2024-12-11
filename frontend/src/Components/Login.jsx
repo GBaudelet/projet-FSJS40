@@ -10,8 +10,9 @@ function Login() {
 
   async function submitHandler(e) {
     e.preventDefault();
+
     if (!user.username || !user.password) {
-      dispatch(setMsg("Remplissez tous les champs"));
+      dispatch(setMsg("Veuillez remplir tous les champs."));
       return;
     }
 
@@ -24,13 +25,13 @@ function Login() {
         username: user.username,
         password: user.password,
       }),
-      credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
+      credentials: "include",
     });
 
     const data = await response.json();
     if (response.status === 200) {
       dispatch(login(data));
-      dispatch(resetFields()); // Réinitialiser les champs après une connexion réussie
+      dispatch(resetFields());
       navigate("/");
     } else {
       dispatch(setMsg(data.msg));
@@ -48,8 +49,8 @@ function Login() {
 
   useEffect(() => {
     return () => {
-      dispatch(setMsg("")); // Nettoyer le message d'erreur
-      dispatch(resetFields()); // Nettoyer les champs lorsque le composant se démonte
+      dispatch(setMsg(""));
+      dispatch(resetFields());
     };
   }, [dispatch]);
 
@@ -58,27 +59,29 @@ function Login() {
       <form onSubmit={submitHandler}>
         {user.msg && <p className="error user-msg">{user.msg}</p>}
 
-        <label htmlFor="username">Username</label>
+        <label htmlFor="username">Nom d'utilisateur</label>
         <input
           type="text"
           name="username"
           id="username"
           value={user.username}
           onChange={handleChange}
+          placeholder="Entrez votre nom d'utilisateur"
           required
         />
 
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">Mot de passe</label>
         <input
           type="password"
           name="password"
           id="password"
           value={user.password}
           onChange={handleChange}
+          placeholder="Entrez votre mot de passe"
           required
         />
 
-        <button type="submit">Login</button>
+        <button type="submit">Connexion</button>
       </form>
     </main>
   );

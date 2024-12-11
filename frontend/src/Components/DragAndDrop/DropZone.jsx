@@ -10,7 +10,8 @@ const DropZone = ({
   onMoveElement,
 }) => {
   const updatePosition = (id, x, y) => {
-    // Math.min est utilisé pour s'assurer que les valeurs newX et newY ne dépassent pas la limite de la dropZone inférieure (0) ou la limite supérieure (100 - proportions des dimensions de l'élément).
+    // Math.min est utilisé pour s'assurer que les valeurs newX et newY ne dépassent pas la limite de la dropZone inférieure (0)
+    //  ou la limite supérieure (100 - proportions des dimensions de l'élément).
     if (dropZoneRef.current) {
       const dropZoneBounds = dropZoneRef.current.getBoundingClientRect();
       const updatedItems = droppedItems.map((item) => {

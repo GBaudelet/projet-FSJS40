@@ -39,11 +39,7 @@ body {
   width: 100%;
 }
 img {
-  display: block;
-  width: 300px;
-  height: 200px;
-  border-radius: 1rem;
-  margin: auto;
+  @include image;
 }
 a {
   color: var(--secondary-color);

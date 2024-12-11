@@ -10,7 +10,7 @@ const Drag = () => {
   const [droppedItems, setDroppedItems] = useState([]);
   const [selectedElement, setSelectedElement] = useState(null);
   const [dropZoneBackgroundColor, setDropZoneBackgroundColor] =
-    useState("#b6b6b6");
+    useState("#f5efed");
   const dropZoneRef = useRef(null);
   const userId = useSelector((state) => state.user.id);
   const [showPopup, setShowPopup] = useState(false);
