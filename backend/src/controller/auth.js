@@ -84,7 +84,6 @@ const login = async (req, res) => {
     }
 
     const match = await bcrypt.compare(password, user.password);
-    console.log(match);
     if (match) {
       await Auth.updateLastConnection(user.id);
 

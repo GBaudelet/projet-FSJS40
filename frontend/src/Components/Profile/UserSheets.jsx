@@ -90,7 +90,6 @@ const UserSheets = ({ userId }) => {
 
   const handleSaveChanges = async (sheetId) => {
     try {
-      // Requête pour mettre à jour la fiche
       const response = await fetch(
         `http://localhost:9000/api/v1/sheet/update/${formData.sheetId}`,
         {
@@ -107,7 +106,6 @@ const UserSheets = ({ userId }) => {
         throw new Error("Erreur lors de la mise à jour de la fiche");
       }
 
-      // Mettre à jour la fiche dans l'état local
       setSheets((prevSheets) =>
         prevSheets.map((sheet) =>
           sheet.id === formData.sheetId ? { ...sheet, ...formData } : sheet
@@ -125,7 +123,6 @@ const UserSheets = ({ userId }) => {
     );
     if (confirmDelete) {
       try {
-        // Requête pour supprimer la fiche
         const response = await fetch(
           `http://localhost:9000/api/v1/sheet/delete/${sheetId}`,
           {
@@ -164,7 +161,6 @@ const UserSheets = ({ userId }) => {
               {sheet.tags ? sheet.tags.split(",").join(", ") : "Aucun tag"}
             </p>
 
-            {/* Affichage de l'image si disponible */}
             {fullPath ? (
               <img src={fullPath} alt={`Image for ${sheet.title}`} />
             ) : (

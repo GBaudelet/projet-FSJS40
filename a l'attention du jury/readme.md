@@ -2,7 +2,7 @@ le site tourne uniquement en local avec le port 9000 pour le back et le port 517
 
 identifiant de connection
 username : admin
-mot de passe : FSJS40@gb
+mot de passe : FSJS40?gb
 
 username : user
 mot de passe : FSJS40@user

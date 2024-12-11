@@ -48,7 +48,7 @@ app.use("/img", express.static(path.join(process.cwd(), "public/img")));
 app.use("/sheet", express.static(path.join(process.cwd(), "public", "sheet")));
 
 app.use((req, res, next) => {
-  console.log("user session", req.session);
+  // console.log("user session", req.session);
 
   next();
 });

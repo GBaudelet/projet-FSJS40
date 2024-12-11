@@ -40,5 +40,8 @@
   }
   .image-item {
     margin: 10px;
+    img {
+      border: 1px solid var(--primary-color);
+    }
   }
 }

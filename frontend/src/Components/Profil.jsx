@@ -4,7 +4,14 @@ import { useSelector } from "react-redux";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
-  const userId = useSelector((state) => state.user.id); // Récupérer l'ID de l'utilisateur depuis l'état global
+  const [editingField, setEditingField] = useState(null);
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [passwordError, setPasswordError] = useState("");
+  const userId = useSelector((state) => state.user.id);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -16,7 +23,12 @@ const Profile = () => {
           throw new Error("Erreur lors de la récupération des données");
         }
         const data = await response.json();
-        setUser(data.user[0]); // Récupérer le premier utilisateur
+        setUser(data.user[0]);
+        setFormData({
+          username: data.user[0].username,
+          email: data.user[0].email,
+          password: "",
+        });
       } catch (error) {
         console.error("Erreur : ", error);
       }
@@ -25,6 +37,61 @@ const Profile = () => {
     fetchUserData();
   }, [userId]);
 
+  const handleEditClick = (field) => {
+    setEditingField(field);
+  };
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validatePassword = (password) => {
+    const passwordPattern =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;"'<>,.?/-]).{8,}$/;
+    return passwordPattern.test(password);
+  };
+
+  const handleSaveChanges = async () => {
+    if (editingField === "password" && !validatePassword(formData.password)) {
+      setPasswordError(
+        "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial."
+      );
+      return;
+    }
+
+    setPasswordError("");
+
+    try {
+      const updatedData = { ...formData };
+      if (editingField !== "password") delete updatedData.password;
+
+      console.log("Données envoyées:", updatedData);
+      const response = await fetch(
+        `http://localhost:9000/api/v1/user/update/${userId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedData),
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la mise à jour des informations");
+      }
+
+      const updatedUser = await response.json();
+      setUser(updatedUser);
+      setEditingField(null);
+      window.location.reload();
+    } catch (error) {
+      console.error("Erreur :", error);
+    }
+  };
+
   if (!user) return <div>Chargement...</div>;
 
   return (
@@ -32,17 +99,68 @@ const Profile = () => {
       <div className="profile-content">
         <div className="user-info">
           <h2>Informations personnelles</h2>
+
           <p>
-            Nom d'utilisateur : {user.username}
-            <button>Modifier</button>
-          </p>
-          <p>
-            Adresse email : {user.email}
-            <button>Modifier</button>
+            Nom d'utilisateur :
+            {editingField === "username" ? (
+              <input
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleFormChange}
+              />
+            ) : (
+              <span> {user.username}</span>
+            )}
+            <button onClick={() => handleEditClick("username")}>
+              Modifier
+            </button>
           </p>
 
-          <button>Modifier le mot de passe</button>
+          <p>
+            Adresse email :
+            {editingField === "email" ? (
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleFormChange}
+              />
+            ) : (
+              <span> {user.email}</span>
+            )}
+            <button onClick={() => handleEditClick("email")}>Modifier</button>
+          </p>
+
+          <p>
+            Mot de passe :
+            {editingField === "password" ? (
+              <div>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Nouveau mot de passe"
+                  value={formData.password}
+                  onChange={handleFormChange}
+                />
+                {passwordError && <div className="error">{passwordError}</div>}
+              </div>
+            ) : (
+              <span>********</span>
+            )}
+            <button onClick={() => handleEditClick("password")}>
+              Modifier le mot de passe
+            </button>
+          </p>
+
+          {editingField && (
+            <div>
+              <button onClick={handleSaveChanges}>Enregistrer</button>
+              <button onClick={() => setEditingField(null)}>Annuler</button>
+            </div>
+          )}
         </div>
+
         <UserSheets userId={userId} />
       </div>
     </div>

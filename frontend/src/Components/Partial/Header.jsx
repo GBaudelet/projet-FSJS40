@@ -15,10 +15,8 @@ const Header = () => {
         method: "POST",
         credentials: "include",
       });
-      console.log(response);
       if (response.status === 200) {
         const data = await response.json();
-        console.log(data);
         dispatch(logout());
         navigate("/");
       }

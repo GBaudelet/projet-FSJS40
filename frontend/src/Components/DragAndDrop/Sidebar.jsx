@@ -10,7 +10,7 @@ const SidebarItem = ({ item, onAddItem }) => (
   </div>
 );
 
-const Sidebar = ({ onAddItem, onSave, onLoad, onOpen }) => {
+const Sidebar = ({ onAddItem, onLoad, onOpen }) => {
   const items = [
     { id: 1, type: "rectangle", name: "Rectangle" },
     { id: 2, type: "circle", name: "Circle" },
@@ -26,14 +26,12 @@ const Sidebar = ({ onAddItem, onSave, onLoad, onOpen }) => {
       {items.map((item) => (
         <SidebarItem key={item.id} item={item} onAddItem={onAddItem} />
       ))}
-      <button onClick={onSave} className="save-button">
-        Save Drop Zone
-      </button>
+
       <button onClick={onLoad} className="load-button">
-        Load Drop Zone
+        Charger une fiche
       </button>
       <button onClick={onOpen} className="add-bdd-button">
-        Add BDD
+        Enregistrer la fiche
       </button>
     </div>
   );

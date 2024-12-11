@@ -144,6 +144,9 @@ main {
 #bible .image-item {
   margin: 10px;
 }
+#bible .image-item img {
+  border: 1px solid var(--primary-color);
+}
 
 #dashboard {
   display: flex;

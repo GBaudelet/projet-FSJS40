@@ -10,7 +10,7 @@ const Drag = () => {
   const [droppedItems, setDroppedItems] = useState([]);
   const [selectedElement, setSelectedElement] = useState(null);
   const [dropZoneBackgroundColor, setDropZoneBackgroundColor] =
-    useState("#f5efed");
+    useState("#d3d3d3");
   const dropZoneRef = useRef(null);
   const userId = useSelector((state) => state.user.id);
   const [showPopup, setShowPopup] = useState(false);
@@ -47,7 +47,6 @@ const Drag = () => {
       baseColor: item.baseColor || "#000000",
       baseSize: item.baseSize || 100,
     };
-    console.log(newItem);
     setDroppedItems([...droppedItems, newItem]);
   };
 
@@ -109,7 +108,6 @@ const Drag = () => {
       items: itemsToSave.map((item) => ({ ...item })),
     };
 
-    console.log("Drop zone saved:", saveData);
     localStorage.setItem("dropZoneData", JSON.stringify(saveData));
   };
 
@@ -181,7 +179,6 @@ const Drag = () => {
               })
                 .then((response) => response.json())
                 .then((data) => {
-                  console.log("Data saved successfully:", data);
                   setShowPopup(false);
                 })
                 .catch((error) => console.error("Error saving data:", error));
@@ -197,7 +194,6 @@ const Drag = () => {
     <div className="drag">
       <Sidebar
         onAddItem={addItemToDropZone}
-        onSave={handleSave}
         onLoad={handleLoad}
         onOpen={onOpen}
       />
