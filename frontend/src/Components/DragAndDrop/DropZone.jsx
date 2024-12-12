@@ -40,17 +40,19 @@ const DropZone = ({
   };
 
   return (
-    <div className="dropzone" ref={dropZoneRef} style={{ backgroundColor }}>
-      {droppedItems.map((item) => (
-        <DraggableElement
-          key={item.id}
-          item={item}
-          onSelect={(id, x, y) => {
-            updatePosition(id, x, y);
-            setSelectedElement(item);
-          }}
-        />
-      ))}
+    <div className="box-dropzone">
+      <div className="dropzone" ref={dropZoneRef} style={{ backgroundColor }}>
+        {droppedItems.map((item) => (
+          <DraggableElement
+            key={item.id}
+            item={item}
+            onSelect={(id, x, y) => {
+              updatePosition(id, x, y);
+              setSelectedElement(item);
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 };

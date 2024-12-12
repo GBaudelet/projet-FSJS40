@@ -1,5 +1,7 @@
 .drag {
   display: flex;
+  max-height: 90vh;
+  height: 3000px;
 }
 
 .sidebar {
@@ -17,14 +19,20 @@
   border: 1px solid var(--secondary-color);
   margin-bottom: 5px;
 }
+.box-dropzone {
+  width: 70vw;
+  height: 90vh;
+  overflow: auto;
+  position: relative;
+  border: 1px solid black;
+}
 
 .dropzone {
-  position: relative;
-  background-color: var(--secondary-color);
-  width: calc(100vw * (210 / 297));
-  height: calc(100vh * (297 / 210));
-  margin: 0px 0px;
-  overflow: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1400px;
+  height: 1980px;
 }
 
 .properties-panel {

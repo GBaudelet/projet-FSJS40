@@ -94,7 +94,7 @@ const create = async (req, res) => {
   try {
     // Vérifiez si le titre existe déjà pour cet utilisateur
 
-    await connection.beginTransaction(); // Commencez la transaction
+    await connection.beginTransaction();
 
     // Créer une nouvelle entrée dans la table sheet
     const sheetId = await Sheet.create(
@@ -103,12 +103,12 @@ const create = async (req, res) => {
         description,
         userId,
       },
-      connection // Passez la connexion à la méthode
+      connection
     );
 
     // Associer les tags à la nouvelle feuille dans la table intermédiaire
     if (selectedTags && selectedTags.length > 0) {
-      await SheetTag.addTagsToSheet(sheetId, selectedTags, connection); // Passez la connexion
+      await SheetTag.addTagsToSheet(sheetId, selectedTags, connection);
     }
 
     // Créer la dropzone associée à la feuille
@@ -118,7 +118,7 @@ const create = async (req, res) => {
         droppedItems,
         sheetId,
       },
-      connection // Passez la connexion
+      connection
     );
 
     // Sauvegarder la capture d'écran si un fichier est présent

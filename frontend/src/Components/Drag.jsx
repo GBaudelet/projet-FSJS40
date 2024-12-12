@@ -149,6 +149,8 @@ const Drag = () => {
       domtoimage
         .toPng(dropZoneRef.current, {
           style: { margin: 0, padding: 0, border: "none" },
+          width: 1400,
+          height: 1980,
         })
         .then((dataUrl) => {
           const img = new Image();

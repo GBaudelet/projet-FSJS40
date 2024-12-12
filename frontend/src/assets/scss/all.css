@@ -224,6 +224,8 @@ header .nav-open {
 
 .drag {
   display: flex;
+  max-height: 90vh;
+  height: 3000px;
 }
 
 .sidebar {
@@ -242,13 +244,20 @@ header .nav-open {
   margin-bottom: 5px;
 }
 
-.dropzone {
-  position: relative;
-  background-color: var(--secondary-color);
-  width: 70.7070707071vw;
-  height: 141.4285714286vh;
-  margin: 0px 0px;
+.box-dropzone {
+  width: 70vw;
+  height: 90vh;
   overflow: auto;
+  position: relative;
+  border: 1px solid black;
+}
+
+.dropzone {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1400px;
+  height: 1980px;
 }
 
 .properties-panel {
@@ -375,6 +384,7 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
+  overflow-x: hidden;
 }
 
 img {
