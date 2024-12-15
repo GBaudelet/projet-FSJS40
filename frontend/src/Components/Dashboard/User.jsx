@@ -49,17 +49,17 @@ const UsersPage = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await fetch(`http://localhost:9000/api/v1/user/delete/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      setUsers(users.filter((user) => user.id !== id));
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
+  // const handleDelete = async (id) => {
+  //   try {
+  //     await fetch(`http://localhost:9000/api/v1/user/delete/${id}`, {
+  //       method: "DELETE",
+  //       credentials: "include",
+  //     });
+  //     setUsers(users.filter((user) => user.id !== id));
+  //   } catch (error) {
+  //     console.error("Error deleting user:", error);
+  //   }
+  // };
 
   return (
     <section className="users-page">
@@ -86,7 +86,7 @@ const UsersPage = () => {
                 >
                   Edit
                 </button>
-                <button onClick={() => handleDelete(user.id)}>Delete</button>
+                {/* <button onClick={() => handleDelete(user.id)}>Delete</button> */}
               </div>
             </li>
           ))

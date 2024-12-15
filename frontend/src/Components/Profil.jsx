@@ -12,6 +12,7 @@ const Profile = () => {
   });
   const [passwordError, setPasswordError] = useState("");
   const userId = useSelector((state) => state.user.id);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -92,6 +93,35 @@ const Profile = () => {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:9000/api/v1/user/delete/${userId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la suppression du compte");
+      }
+
+      // Clear the session cookie
+      document.cookie =
+        "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+
+      // Redirect to the home page
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Erreur :", error);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirmation(false);
+  };
+
   if (!user) return <div>Chargement...</div>;
 
   return (
@@ -157,6 +187,22 @@ const Profile = () => {
             <div>
               <button onClick={handleSaveChanges}>Enregistrer</button>
               <button onClick={() => setEditingField(null)}>Annuler</button>
+            </div>
+          )}
+          <p>
+            <button onClick={() => setShowDeleteConfirmation(true)}>
+              Supprimer le compte
+            </button>
+          </p>
+
+          {showDeleteConfirmation && (
+            <div className="confirmation-dialog">
+              <p>
+                Cette action est définitive et supprimera toutes vos données.
+                Êtes-vous sûr de vouloir supprimer votre compte ?
+              </p>
+              <button onClick={handleDeleteAccount}>Oui, supprimer</button>
+              <button onClick={handleCancelDelete}>Annuler</button>
             </div>
           )}
         </div>

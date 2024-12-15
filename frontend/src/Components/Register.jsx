@@ -68,7 +68,9 @@ function Register() {
       body: JSON.stringify({
         username: user.username,
         email: user.email,
+        confirmEmail: user.confirmEmail,
         password: user.password,
+        confirmPassword: user.confirmPassword,
       }),
       credentials: "include",
     });
@@ -101,7 +103,9 @@ function Register() {
   return (
     <main className="register">
       <form onSubmit={submitHandler}>
-        {user.msg && <p className="error user-msg">{user.msg}</p>}
+        {typeof user.msg === "string" && (
+          <p className="error user-msg">{user.msg}</p>
+        )}
 
         <label htmlFor="username">Nom d'utilisateur</label>
         <input

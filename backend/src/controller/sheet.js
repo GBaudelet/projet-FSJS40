@@ -45,28 +45,28 @@ const getAllUser = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
-// // edit sheet
-// const getDropZoneDetails = async (req, res) => {
-//   try {
-//     const sheetId = req.params.id;
+// edit sheet
+const getDropZoneDetails = async (req, res) => {
+  try {
+    const sheetId = req.params.id;
+    // Vérifie si l'ID de la feuille est valide
+    if (!sheetId) {
+      return res.status(400).json({ msg: "ID de feuille invalide" });
+    }
 
-//     // Vérifie si l'ID de la feuille est valide
-//     if (!sheetId) {
-//       return res.status(400).json({ msg: "ID de feuille invalide" });
-//     }
-//     const dropZoneDetails = await Sheet.getDropZoneDetails(sheetId);
+    const dropZoneDetails = await Sheet.getDropZoneDetails(sheetId);
 
-//     if (dropZoneDetails.length === 0) {
-//       return res
-//         .status(404)
-//         .json({ msg: "Zone de dépôt non trouvée pour cette feuille" });
-//     }
+    if (dropZoneDetails.length === 0) {
+      return res
+        .status(404)
+        .json({ msg: "Zone de dépôt non trouvée pour cette feuille" });
+    }
 
-//     res.json(dropZoneDetails[0]);
-//   } catch (err) {
-//     res.status(500).json({ msg: err.message });
-//   }
-// };
+    res.json(dropZoneDetails[0]);
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
 
 // recherche par tag
 const searchByTag = async (req, res) => {
@@ -195,8 +195,8 @@ const create = async (req, res) => {
 
 const updateStatus = async (req, res) => {
   try {
-    const { id: sheetId } = req.params; // Récupère l'ID de la fiche depuis les paramètres de l'URL
-    const { statut } = req.body; // Récupère le nouveau statut depuis le corps de la requête
+    const { id: sheetId } = req.params;
+    const { statut } = req.body;
 
     if (statut !== "0" && statut !== "1") {
       return res.status(400).json({
@@ -235,7 +235,7 @@ const update = async (req, res) => {
       await SheetTag.updateTagsForSheet(sheetId, selectedTags, connection);
     }
 
-    let imgEmplacement = null; // Variable pour stocker le nouvel emplacement de l'image
+    let imgEmplacement = null;
     if (title !== oldTitle) {
       const userDir = path.join(
         process.cwd(),
@@ -342,5 +342,5 @@ export {
   searchByTitleAndUserId,
   update,
   updateStatus,
-  // getDropZoneDetails,
+  getDropZoneDetails,
 };

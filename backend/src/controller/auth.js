@@ -11,10 +11,11 @@ const isValidEmail = (email) => {
 
 const create = async (req, res) => {
   try {
-    const { username, password, email, confirmEmail } = req.body;
+    const { username, password, email, confirmEmail, confirmPassword } =
+      req.body;
 
     // Vérification que tous les champs requis sont remplis
-    if (!username || !password || !email || !confirmEmail) {
+    if (!username || !password || !confirmPassword || !email || !confirmEmail) {
       return res
         .status(400)
         .json({ msg: "Tous les champs doivent être remplis." });
@@ -61,7 +62,7 @@ const create = async (req, res) => {
 
     // Hachage du mot de passe
     const hash = await bcrypt.hash(password, SALT);
-    const [response] = await Auth.create({ username, hash, email }); // Ajout de l'email si l'utilisateur n'existe pas
+    const [response] = await Auth.create({ username, hash, email });
 
     if (response.affectedRows === 1) {
       res.status(201).json({ msg: "Utilisateur créé" });

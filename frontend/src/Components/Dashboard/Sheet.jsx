@@ -117,7 +117,7 @@ const SheetPage = ({ userId }) => {
               </select>
             </div>
 
-            <p>fait par l'utilisateur {sheet.user_id}</p>
+            <p>fait par l'utilisateur {sheet.username}</p>
             <button onClick={() => handleDeleteClick(sheet.id)}>
               Supprimer
             </button>

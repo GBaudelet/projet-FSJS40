@@ -145,9 +145,27 @@ const UserSheets = ({ userId }) => {
     }
   };
 
-  const handleEditOnDragPage = (sheet) => {
-    localStorage.setItem("sheetData", JSON.stringify(sheet));
-    navigate("/drag");
+  const handleEditOnDragPage = async (sheetId) => {
+    localStorage.setItem("sheetData", JSON.stringify(sheetId));
+    try {
+      const response = await fetch(
+        `http://localhost:9000/api/v1/sheet/edit/${sheetId.id}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to edit sheet");
+      }
+      const data = await response.json();
+      localStorage.setItem("dropZoneData", JSON.stringify(data));
+
+      navigate("/drag");
+    } catch (error) {
+      console.error("Error while editing the sheet:", error);
+    }
   };
 
   const openImageInNewWindow = (imgPath) => {
@@ -189,7 +207,6 @@ const UserSheets = ({ userId }) => {
               Supprimer
             </button>
 
-            {/* Formulaire de modification */}
             {editingSheetId === sheet.id && (
               <form
                 onSubmit={(e) => {

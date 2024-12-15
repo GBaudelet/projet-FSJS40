@@ -15,50 +15,17 @@ const Drag = () => {
   const userId = useSelector((state) => state.user.id);
   const [showPopup, setShowPopup] = useState(false);
 
-  // useEffect(() => {
-  //   // Vérifier si 'sheetData' existe dans le localStorage
-  //   const sheetData = JSON.parse(localStorage.getItem("sheetData"));
-  //   if (!sheetData || !sheetData.id) {
-  //     return;
-  //   }
-
-  //   if (sheetData && sheetData.id) {
-  //     // Si 'sheetData' existe, récupérer l'ID et charger les données correspondantes
-  //     const sheetId = sheetData.id;
-
-  //     // Charger les données de la dropzone depuis votre backend (exemple avec fetch)
-  //     fetch(`http://localhost:9000/api/v1/sheet/${sheetId}`, {
-  //       credentials: "include",
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         const { backgroundColor, items } = data;
-
-  //         // Mettre à jour l'état avec les données récupérées
-  //         setDropZoneBackgroundColor(backgroundColor);
-
-  //         if (dropZoneRef.current) {
-  //           const dropZoneBounds = dropZoneRef.current.getBoundingClientRect();
-
-  //           const updatedItems = items.map((item) => {
-  //             const xPos = (item.x / 100) * dropZoneBounds.width;
-  //             const yPos = (item.y / 100) * dropZoneBounds.height;
-
-  //             return {
-  //               ...item,
-  //               x: xPos > dropZoneBounds.width ? 0 : xPos,
-  //               y: yPos > dropZoneBounds.height ? 0 : yPos,
-  //             };
-  //           });
-
-  //           setDroppedItems(updatedItems);
-  //         }
-  //       })
-  //       .catch((error) =>
-  //         console.error("Erreur de chargement des données:", error)
-  //       );
-  //   }
-  // }, []);
+  useEffect(() => {
+    const savedData = localStorage.getItem("dropZoneData");
+    if (savedData) {
+      const loadExisting = window.confirm(
+        "Une fiche existante a été trouvée. Souhaitez-vous la charger ? Cliquez sur OK pour charger ou Annuler pour en créer une nouvelle."
+      );
+      if (loadExisting) {
+        handleLoad();
+      }
+    }
+  }, []);
 
   const addItemToDropZone = (item) => {
     const newItem = {

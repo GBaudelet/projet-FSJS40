@@ -10,9 +10,10 @@ class Sheet {
   }
   // admin
   static async findAllAdmin() {
-    const SELECT_ALL = `SELECT sheet.id, sheet.title, sheet.description, sheet.statut, sheet.user_id, sheet.created_at, sheet.updated_at, bible.img_emplacement
+    const SELECT_ALL = `SELECT sheet.id, sheet.title, sheet.description, sheet.statut, sheet.user_id, sheet.created_at, sheet.updated_at, bible.img_emplacement, user.username
     FROM sheet
-    LEFT JOIN bible ON sheet.id = bible.sheet_id;
+    LEFT JOIN bible ON sheet.id = bible.sheet_id
+     LEFT JOIN user ON sheet.user_id = user.id;
 `;
     return await pool.query(SELECT_ALL);
   }
@@ -100,15 +101,15 @@ class Sheet {
     const GETFILE = "SELECT img_emplacement FROM bible WHERE sheet_id = ?";
     return await pool.execute(GETFILE, [id]);
   }
-  // static async getDropZoneDetails(sheetId) {
-  //   const GET_DROPZONE_QUERY = `
-  //     SELECT id, backgroundColor, items
-  //     FROM dropzone
-  //     WHERE sheet_id = ?`;
+  static async getDropZoneDetails(sheetId) {
+    const GET_DROPZONE_QUERY = `
+      SELECT id, backgroundColor, items
+      FROM dropzone
+      WHERE sheet_id = ?`;
 
-  //   const [result] = await pool.execute(GET_DROPZONE_QUERY, [sheetId]);
-  //   return result;
-  // }
+    const [result] = await pool.execute(GET_DROPZONE_QUERY, [sheetId]);
+    return result;
+  }
 }
 
 export default Sheet;

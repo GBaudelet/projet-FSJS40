@@ -4,6 +4,7 @@ const initialState = {
   id: null,
   username: "",
   password: "",
+  confirmPassword: "",
   email: "",
   confirmEmail: "",
   isLogged: false,
@@ -30,6 +31,7 @@ const userSlice = createSlice({
     logout(state) {
       state.username = "";
       state.password = "";
+      state.confirmPassword = "";
       state.email = "";
       state.confirmEmail = "";
       state.isLogged = false;
@@ -48,6 +50,7 @@ const userSlice = createSlice({
     resetFields(state) {
       state.username = "";
       state.password = "";
+      state.confirmPassword = "";
       state.email = "";
       state.confirmEmail = "";
     },

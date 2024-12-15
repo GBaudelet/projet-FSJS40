@@ -52,6 +52,8 @@ const SavePopup = ({ onClick, onSubmitForm }) => {
 
     const formData = { title, description, selectedTags };
     onSubmitForm(formData);
+    // Si la sauvegarde réussit, supprimez les données locales
+    localStorage.removeItem("dropZoneData");
   };
 
   return (
