@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const UserSheets = ({ userId }) => {
   const [sheets, setSheets] = useState([]);
@@ -12,7 +13,7 @@ const UserSheets = ({ userId }) => {
     sheetId: null,
     img_emplacement: "",
   });
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchSheets = async () => {
       try {
@@ -144,6 +145,14 @@ const UserSheets = ({ userId }) => {
     }
   };
 
+  const handleEditOnDragPage = (sheet) => {
+    localStorage.setItem("sheetData", JSON.stringify(sheet));
+    navigate("/drag");
+  };
+
+  const openImageInNewWindow = (imgPath) => {
+    window.open(imgPath, "_blank", "width=800,height=600");
+  };
   return (
     <div className="user-sheets">
       <h2>Vos fiches</h2>
@@ -162,12 +171,20 @@ const UserSheets = ({ userId }) => {
             </p>
 
             {fullPath ? (
-              <img src={fullPath} alt={`Image for ${sheet.title}`} />
+              <img
+                src={fullPath}
+                alt={`Sheet image ${sheet.title}`}
+                onClick={() => openImageInNewWindow(fullPath)}
+              />
             ) : (
               <p>Pas d'image disponible</p>
             )}
-
-            <button onClick={() => handleEditClick(sheet)}>Modifier</button>
+            <button onClick={() => handleEditOnDragPage(sheet)}>
+              Editer la fiche
+            </button>
+            <button onClick={() => handleEditClick(sheet)}>
+              Modifier les propriétés
+            </button>
             <button onClick={() => handleDeleteClick(sheet.id)}>
               Supprimer
             </button>

@@ -225,11 +225,11 @@ header .nav-open {
 .drag {
   display: flex;
   max-height: 90vh;
-  height: 3000px;
 }
 
 .sidebar {
   width: 15vw;
+  height: 90vh;
   background-color: #333;
   padding: 10px;
   color: var(--secondary-color);
@@ -242,8 +242,49 @@ header .nav-open {
   color: var(--secondary-color);
   border: 1px solid var(--secondary-color);
   margin-bottom: 5px;
+  display: flex;
+  justify-content: center;
 }
 
+.sidebar-item .icon {
+  display: inline;
+  font-size: 20px;
+}
+
+.sidebar-item .name {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .sidebar-item .name {
+    display: inline;
+  }
+  .sidebar-item .icon {
+    display: none;
+  }
+}
+.button {
+  display: flex;
+  margin: 10px;
+  padding: 10px;
+  border: none;
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+}
+.button .icon {
+  font-size: 20px;
+  margin-right: 10px;
+}
+.button .name {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .button .name {
+    display: inline;
+  }
+}
 .box-dropzone {
   width: 70vw;
   height: 90vh;
@@ -262,6 +303,7 @@ header .nav-open {
 
 .properties-panel {
   width: 15vw;
+  height: 90vh;
   background-color: #222;
   padding: 10px;
   color: var(--secondary-color);

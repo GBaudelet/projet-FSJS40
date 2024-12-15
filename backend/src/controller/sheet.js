@@ -45,6 +45,28 @@ const getAllUser = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
+// // edit sheet
+// const getDropZoneDetails = async (req, res) => {
+//   try {
+//     const sheetId = req.params.id;
+
+//     // Vérifie si l'ID de la feuille est valide
+//     if (!sheetId) {
+//       return res.status(400).json({ msg: "ID de feuille invalide" });
+//     }
+//     const dropZoneDetails = await Sheet.getDropZoneDetails(sheetId);
+
+//     if (dropZoneDetails.length === 0) {
+//       return res
+//         .status(404)
+//         .json({ msg: "Zone de dépôt non trouvée pour cette feuille" });
+//     }
+
+//     res.json(dropZoneDetails[0]);
+//   } catch (err) {
+//     res.status(500).json({ msg: err.message });
+//   }
+// };
 
 // recherche par tag
 const searchByTag = async (req, res) => {
@@ -320,4 +342,5 @@ export {
   searchByTitleAndUserId,
   update,
   updateStatus,
+  // getDropZoneDetails,
 };

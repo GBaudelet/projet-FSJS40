@@ -5,8 +5,8 @@ const SavePopup = ({ onClick, onSubmitForm }) => {
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
-  const [existingTitles, setExistingTitles] = useState([]); // État pour stocker les titres existants
-  const [apiMessage, setApiMessage] = useState(""); // État pour stocker le message de l'API
+  const [existingTitles, setExistingTitles] = useState([]);
+  const [apiMessage, setApiMessage] = useState("");
 
   useEffect(() => {
     // Récupérer les tags
@@ -16,17 +16,16 @@ const SavePopup = ({ onClick, onSubmitForm }) => {
       .catch((error) => console.error("Error fetching tags:", error));
 
     // Récupérer les titres existants de l'utilisateur
+
     fetch("http://localhost:9000/api/v1/sheet/titleUser", {
       method: "GET",
       credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => {
-        // Vérifiez si 'data' est un tableau et mettez à jour 'existingTitles'
         if (Array.isArray(data)) {
           setExistingTitles(data.map((titleObj) => titleObj.title));
         } else if (data.msg) {
-          // Si 'data' contient un message, mettez à jour 'apiMessage'
           setApiMessage(data.msg);
         } else {
           setApiMessage("Erreur inconnue lors de la récupération des titres.");
@@ -46,13 +45,11 @@ const SavePopup = ({ onClick, onSubmitForm }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Vérification si le titre existe déjà
     if (existingTitles.includes(title)) {
-      setApiMessage("Ce titre existe déjà. Veuillez en choisir un autre."); // Message d'erreur
-      return; // Empêche la soumission si le titre existe
+      setApiMessage("Ce titre existe déjà. Veuillez en choisir un autre.");
+      return;
     }
 
-    // Si le titre est unique, soumettez le formulaire
     const formData = { title, description, selectedTags };
     onSubmitForm(formData);
   };

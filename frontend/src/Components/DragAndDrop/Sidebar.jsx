@@ -6,19 +6,18 @@ const SidebarItem = ({ item, onAddItem }) => (
     onClick={() => onAddItem(item)}
     style={{ cursor: "pointer" }}
   >
-    {item.name}
+    <span className="icon">{item.icon}</span>
+    <span className="name">{item.name}</span>{" "}
   </div>
 );
 
 const Sidebar = ({ onAddItem, onLoad, onOpen }) => {
   const items = [
-    { id: 1, type: "rectangle", name: "Rectangle" },
-    { id: 2, type: "circle", name: "Circle" },
-    { id: 3, type: "text", name: "Text" },
-    { id: 4, type: "triangle-up", name: "Triangle-up" },
-    { id: 6, type: "triangle-down", name: "Triangle-down" },
-    // { id: 5, type: "square", name: "Square" },
-    // { id: 7, type: "ellipse", name: "Ellipse" },
+    { id: 1, type: "rectangle", name: "Rectangle", icon: "▭" },
+    { id: 2, type: "circle", name: "Circle", icon: "●" },
+    { id: 3, type: "text", name: "Text", icon: "✎" },
+    { id: 4, type: "triangle-up", name: "Triangle-up", icon: "▲" },
+    { id: 6, type: "triangle-down", name: "Triangle-down", icon: "▼" },
   ];
 
   return (
@@ -27,11 +26,14 @@ const Sidebar = ({ onAddItem, onLoad, onOpen }) => {
         <SidebarItem key={item.id} item={item} onAddItem={onAddItem} />
       ))}
 
-      <button onClick={onLoad} className="load-button">
-        Charger une fiche
+      <button onClick={onLoad} className="button">
+        <span className="icon">⤵️</span>
+        <span className="name">Charger une fiche</span>
       </button>
-      <button onClick={onOpen} className="add-bdd-button">
-        Enregistrer la fiche
+
+      <button onClick={onOpen} className="button">
+        <span className="icon">💾</span>
+        <span className="name">Enregistrer la fiche</span>
       </button>
     </div>
   );

@@ -10,6 +10,7 @@ import {
   update,
   getAllAdmin,
   updateStatus,
+  // getDropZoneDetails,
 } from "../controller/sheet.js";
 
 // Configurer multer pour stocker les fichiers
@@ -21,6 +22,7 @@ router.get("/all", getAll);
 router.get("/allUser", getAllUser);
 router.get("/allAdmin", getAllAdmin);
 router.get("/search", searchByTag);
+// router.get("/:id", getDropZoneDetails);
 
 router.post("/create", upload.single("file"), create);
 router.get("/titleUser", searchByTitleAndUserId);

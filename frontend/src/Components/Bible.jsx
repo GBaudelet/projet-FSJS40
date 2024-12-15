@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 const Bible = () => {
-  const [sheets, setSheets] = useState([]); // État pour stocker toutes les sheets
-  const [filteredSheets, setFilteredSheets] = useState([]); // État pour stocker les sheets filtrées
+  const [sheets, setSheets] = useState([]);
+  const [filteredSheets, setFilteredSheets] = useState([]);
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [searchTitle, setSearchTitle] = useState("");
@@ -26,7 +26,7 @@ const Bible = () => {
 
         const data = await response.json();
         setSheets(data);
-        setFilteredSheets(data); // Par défaut, afficher toutes les sheets
+        setFilteredSheets(data);
       } catch (err) {
         setError(err.message);
       }
@@ -58,14 +58,13 @@ const Bible = () => {
   const handleSearchByTitle = async (e) => {
     e.preventDefault();
 
-    // Si le titre est vide, afficher toutes les sheets
     if (!searchTitle.trim()) {
       setFilteredSheets(sheets);
-      setError(""); // Réinitialiser l'erreur
+      setError("");
       return;
     }
 
-    setError(""); // Réinitialiser l'erreur
+    setError("");
     try {
       const response = await fetch(
         `http://localhost:9000/api/v1/bible/title?title=${searchTitle}`,
@@ -80,7 +79,7 @@ const Bible = () => {
       }
 
       const data = await response.json();
-      setFilteredSheets(data); // Mettre à jour les sheets filtrées
+      setFilteredSheets(data);
     } catch (err) {
       setError(err.message);
     }
@@ -90,14 +89,13 @@ const Bible = () => {
   const handleSearchByTags = async (e) => {
     e.preventDefault();
 
-    // Si aucun tag n'est sélectionné, afficher toutes les sheets
     if (selectedTags.length === 0) {
       setFilteredSheets(sheets);
-      setError(""); // Réinitialiser l'erreur
+      setError("");
       return;
     }
 
-    setError(""); // Réinitialiser l'erreur
+    setError("");
     try {
       const response = await fetch(
         `http://localhost:9000/api/v1/bible/tag?tag=${selectedTags.join(",")}`,
@@ -126,7 +124,9 @@ const Bible = () => {
         : [...prev, tagId]
     );
   };
-
+  const openImageInNewWindow = (imgPath) => {
+    window.open(imgPath, "_blank", "width=800,height=600");
+  };
   return (
     <div id="bible">
       <h1>Bibliothèque</h1>
@@ -169,7 +169,11 @@ const Bible = () => {
               <h2>{title}</h2>
               <p>{description}</p>
               {img_emplacement && (
-                <img src={fullPath} alt={`Sheet image ${index + 1}`} />
+                <img
+                  src={fullPath}
+                  alt={`Sheet image ${index + 1}`}
+                  onClick={() => openImageInNewWindow(fullPath)}
+                />
               )}
             </div>
           );

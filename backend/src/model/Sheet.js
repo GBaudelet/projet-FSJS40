@@ -46,7 +46,7 @@ class Sheet {
       "SELECT title FROM sheet WHERE user_id = ?",
       [userId]
     );
-    return rows; // Retourne les titres de l'utilisateur
+    return rows;
   }
 
   //
@@ -59,7 +59,7 @@ class Sheet {
 
     try {
       const [result] = await pool.execute(query, values);
-      return result.insertId; // Retourne l'ID de la nouvelle feuille créée
+      return result.insertId;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -100,6 +100,15 @@ class Sheet {
     const GETFILE = "SELECT img_emplacement FROM bible WHERE sheet_id = ?";
     return await pool.execute(GETFILE, [id]);
   }
+  // static async getDropZoneDetails(sheetId) {
+  //   const GET_DROPZONE_QUERY = `
+  //     SELECT id, backgroundColor, items
+  //     FROM dropzone
+  //     WHERE sheet_id = ?`;
+
+  //   const [result] = await pool.execute(GET_DROPZONE_QUERY, [sheetId]);
+  //   return result;
+  // }
 }
 
 export default Sheet;
