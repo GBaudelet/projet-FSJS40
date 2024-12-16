@@ -38,6 +38,7 @@ body {
   flex-direction: column;
   width: 100%;
   overflow-x: hidden;
+  max-width: 1400px;
 }
 img {
   @include image;

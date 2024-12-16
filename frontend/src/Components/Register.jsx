@@ -11,7 +11,6 @@ function Register() {
   async function submitHandler(e) {
     e.preventDefault();
 
-    // Vérification des champs vides
     if (
       !user.username ||
       !user.email ||
@@ -23,32 +22,27 @@ function Register() {
       return;
     }
 
-    // Vérification de l'email valide
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(user.email)) {
       dispatch(setMsg("L'adresse email n'est pas valide"));
       return;
     }
 
-    // Vérification des adresses email correspondantes
     if (user.email !== user.confirmEmail) {
       dispatch(setMsg("Les adresses email ne correspondent pas"));
       return;
     }
 
-    // Vérification des mots de passe
     if (user.password !== user.confirmPassword) {
       dispatch(setMsg("Les mots de passe ne correspondent pas"));
       return;
     }
 
-    // Vérification de la longueur minimale du mot de passe
     if (user.password.length < 8) {
       dispatch(setMsg("Le mot de passe doit contenir au moins 8 caractères"));
       return;
     }
 
-    // Vérification de la complexité du mot de passe
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(user.password)) {

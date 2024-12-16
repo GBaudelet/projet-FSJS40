@@ -79,11 +79,9 @@ class Bible {
   }
   // update du chemin
   static async updateImagePath(imgEmplacement, sheetId, connection) {
-    // Vérifiez si la connexion est fournie, sinon obtenez une nouvelle connexion
     const conn = connection || (await pool.getConnection());
 
     try {
-      // Exécutez la requête de mise à jour
       const result = await conn.query(
         "UPDATE bible SET img_emplacement = ? WHERE sheet_id = ?",
         [imgEmplacement, sheetId]

@@ -9,7 +9,6 @@ router.post("/login", login);
 
 router.post("/logout", logout);
 
-// route pour vérifier si l'user est connecté
 router.get("/check-auth", check_auth);
 
 export default router;

@@ -5,10 +5,10 @@ const ProtectedRoute = ({ element, allowedRoles }) => {
   const { isLogged, role_id } = useSelector((state) => state.user);
 
   if (!isLogged || !allowedRoles.includes(role_id)) {
-    return <h1>404 - Not Found</h1>; // Affiche le message NOT FOUND
+    return <h1>404 - Not Found</h1>;
   }
 
-  return element; // Retourne l'élément protégé si autorisé
+  return element;
 };
 
 export default ProtectedRoute;

@@ -1,7 +1,6 @@
 import pool from "../config/db.js";
 
 class SheetTag {
-  // associer des tags à une feuille
   static async addTagsToSheet(sheetId, selectedTags) {
     const query = "INSERT INTO sheet_tag (sheet_id, tag_id) VALUES (?, ?)";
 
@@ -15,18 +14,16 @@ class SheetTag {
   }
 
   static async updateTagsForSheet(sheetId, selectedTags, connection) {
-    // Créez un tableau pour les IDs des tags correspondants
     const tagIds = await Promise.all(
       selectedTags.map(async (tagName) => {
         const [result] = await connection.query(
           "SELECT id FROM tag WHERE name = ?",
           [tagName]
         );
-        return result[0]?.id; // Obtenez l'ID du tag ou undefined
+        return result[0]?.id; //
       })
     );
 
-    // Filtrer les IDs nuls
     const validTagIds = tagIds.filter((id) => id !== undefined);
 
     // Vérifier si tous les tags ont des IDs valides

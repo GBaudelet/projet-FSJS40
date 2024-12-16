@@ -107,11 +107,9 @@ const Profile = () => {
         throw new Error("Erreur lors de la suppression du compte");
       }
 
-      // Clear the session cookie
       document.cookie =
         "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
 
-      // Redirect to the home page
       window.location.href = "/";
     } catch (error) {
       console.error("Erreur :", error);
@@ -126,89 +124,85 @@ const Profile = () => {
 
   return (
     <div id="profil">
-      <div className="profile-content">
-        <div className="user-info">
-          <h2>Informations personnelles</h2>
+      <div className="user-info">
+        <h2>Informations personnelles</h2>
 
-          <p>
-            Nom d'utilisateur :
-            {editingField === "username" ? (
-              <input
-                type="text"
-                name="username"
-                value={formData.username}
-                onChange={handleFormChange}
-              />
-            ) : (
-              <span> {user.username}</span>
-            )}
-            <button onClick={() => handleEditClick("username")}>
-              Modifier
-            </button>
-          </p>
+        <p>
+          Nom d'utilisateur :
+          {editingField === "username" ? (
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleFormChange}
+            />
+          ) : (
+            <span> {user.username}</span>
+          )}
+          <button onClick={() => handleEditClick("username")}>Modifier</button>
+        </p>
 
-          <p>
-            Adresse email :
-            {editingField === "email" ? (
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleFormChange}
-              />
-            ) : (
-              <span> {user.email}</span>
-            )}
-            <button onClick={() => handleEditClick("email")}>Modifier</button>
-          </p>
+        <p>
+          Adresse email :
+          {editingField === "email" ? (
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleFormChange}
+            />
+          ) : (
+            <span> {user.email}</span>
+          )}
+          <button onClick={() => handleEditClick("email")}>Modifier</button>
+        </p>
 
-          <p>
-            Mot de passe :
-            {editingField === "password" ? (
-              <div>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Nouveau mot de passe"
-                  value={formData.password}
-                  onChange={handleFormChange}
-                />
-                {passwordError && <div className="error">{passwordError}</div>}
-              </div>
-            ) : (
-              <span>********</span>
-            )}
-            <button onClick={() => handleEditClick("password")}>
-              Modifier le mot de passe
-            </button>
-          </p>
-
-          {editingField && (
+        <p>
+          Mot de passe :
+          {editingField === "password" ? (
             <div>
-              <button onClick={handleSaveChanges}>Enregistrer</button>
-              <button onClick={() => setEditingField(null)}>Annuler</button>
+              <input
+                type="password"
+                name="password"
+                placeholder="Nouveau mot de passe"
+                value={formData.password}
+                onChange={handleFormChange}
+              />
+              {passwordError && <div className="error">{passwordError}</div>}
             </div>
+          ) : (
+            <span>********</span>
           )}
-          <p>
-            <button onClick={() => setShowDeleteConfirmation(true)}>
-              Supprimer le compte
-            </button>
-          </p>
+          <button onClick={() => handleEditClick("password")}>
+            Modifier le mot de passe
+          </button>
+        </p>
 
-          {showDeleteConfirmation && (
-            <div className="confirmation-dialog">
-              <p>
-                Cette action est définitive et supprimera toutes vos données.
-                Êtes-vous sûr de vouloir supprimer votre compte ?
-              </p>
-              <button onClick={handleDeleteAccount}>Oui, supprimer</button>
-              <button onClick={handleCancelDelete}>Annuler</button>
-            </div>
-          )}
-        </div>
+        {editingField && (
+          <div>
+            <button onClick={handleSaveChanges}>Enregistrer</button>
+            <button onClick={() => setEditingField(null)}>Annuler</button>
+          </div>
+        )}
+        <p>
+          <button onClick={() => setShowDeleteConfirmation(true)}>
+            Supprimer le compte
+          </button>
+        </p>
 
-        <UserSheets userId={userId} />
+        {showDeleteConfirmation && (
+          <div className="confirmation-dialog">
+            <p>
+              Cette action est définitive et supprimera toutes vos données.
+              Êtes-vous sûr de vouloir supprimer votre compte ?
+            </p>
+            <button onClick={handleDeleteAccount}>Oui, supprimer</button>
+            <button onClick={handleCancelDelete}>Annuler</button>
+          </div>
+        )}
       </div>
+
+      <UserSheets userId={userId} />
     </div>
   );
 };

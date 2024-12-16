@@ -11,10 +11,9 @@ app.use(express.json());
 const getAll = async (req, res) => {
   try {
     const response = await User.findAll();
-    // Assurez-vous que response est un tableau
     res.json(response);
   } catch (err) {
-    console.error("Error in getAll:", err); // Log des erreurs ici
+    console.error("Error in getAll:", err);
     res.status(500).json({ msg: err.message });
   }
 };
@@ -38,15 +37,15 @@ const getProfil = async (req, res) => {
 // update user
 const update = async (req, res) => {
   try {
-    const { username, password, email, statut } = req.body; // Ajoutez le statut ici
+    const { username, password, email, statut } = req.body;
     const { id } = req.params;
 
-    console.log("Données reçues pour mise à jour:", {
-      username,
-      password,
-      email,
-      statut, // Incluez le statut dans le log
-    });
+    // console.log("Données reçues pour mise à jour:", {
+    //   username,
+    //   password,
+    //   email,
+    //   statut,
+    // });
 
     if (!id) {
       return res.status(400).json({ msg: "ID utilisateur requis" });
@@ -55,7 +54,7 @@ const update = async (req, res) => {
     let updateData = {
       username: username || null,
       email: email || null,
-      statut: statut || null, // Ajoutez le statut ici
+      statut: statut || null,
     };
 
     if (password) {
@@ -68,7 +67,7 @@ const update = async (req, res) => {
       updateData.username,
       updateData.password,
       updateData.email,
-      updateData.statut, // Ajoutez le statut ici
+      updateData.statut,
       id
     );
 

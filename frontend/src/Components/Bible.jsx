@@ -8,7 +8,6 @@ const Bible = () => {
   const [searchTitle, setSearchTitle] = useState("");
   const [error, setError] = useState("");
 
-  // Récupérer les sheets et les tags au démarrage
   useEffect(() => {
     const fetchSheets = async () => {
       try {

@@ -49,7 +49,6 @@ const getAllUser = async (req, res) => {
 const getDropZoneDetails = async (req, res) => {
   try {
     const sheetId = req.params.id;
-    // Vérifie si l'ID de la feuille est valide
     if (!sheetId) {
       return res.status(400).json({ msg: "ID de feuille invalide" });
     }

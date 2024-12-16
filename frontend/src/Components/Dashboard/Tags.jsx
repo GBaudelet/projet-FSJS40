@@ -33,7 +33,7 @@ const TagPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(newTag),
-        credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
+        credentials: "include",
       });
       const data = await response.json();
       setTags([...tags, data]);
@@ -53,7 +53,7 @@ const TagPage = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(editingTag),
-          credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
+          credentials: "include",
         }
       );
       const data = await response.json();
@@ -69,7 +69,7 @@ const TagPage = () => {
     try {
       await fetch(`http://localhost:9000/api/v1/tag/delete/${id}`, {
         method: "DELETE",
-        credentials: "include", // Assurez-vous que les cookies sont inclus dans la requête
+        credentials: "include",
       });
       setTags(tags.filter((tag) => tag.id !== id));
     } catch (error) {

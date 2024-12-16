@@ -12,6 +12,7 @@ header {
   background-color: var(--primary-color);
   color: var(--secondary-color);
   padding: 1rem;
+  padding-right: 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -47,6 +48,14 @@ header .nav-open {
   header .burger-icon {
     display: none;
   }
+}
+
+#home {
+  max-width: 1400px;
+  margin: 0 20px 0 20px;
+}
+#home li {
+  margin-left: 10px;
 }
 
 #bible {
@@ -100,6 +109,11 @@ header .nav-open {
 }
 #bible .image-item img {
   border: 1px solid var(--primary-color);
+}
+
+#profil {
+  max-width: 1400px;
+  margin: 0 20px 0 20px;
 }
 
 #dashboard {
@@ -427,6 +441,7 @@ body {
   flex-direction: column;
   width: 100%;
   overflow-x: hidden;
+  max-width: 1400px;
 }
 
 img {
