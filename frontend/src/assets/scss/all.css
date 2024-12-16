@@ -7,6 +7,89 @@
   --secondary-font: "Times New Roman", serif;
 }
 
+/* RESET */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+body,
+p,
+a,
+li,
+span {
+  font-family: var(--primary-font);
+}
+
+/* Global */
+body {
+  font-family: var(--secondary-font);
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  font-size: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+  max-width: 1400px;
+}
+
+img {
+  width: 210px;
+  height: 297px;
+  border-radius: 0;
+}
+
+a {
+  color: var(--secondary-color);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--tertiary-color);
+}
+
+p {
+  margin-bottom: 0.8rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem auto;
+  width: auto;
+  align-items: center;
+}
+
+footer {
+  width: 100vw;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  padding: 1rem;
+  text-align: center;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+}
+
 header {
   width: 100vw;
   background-color: var(--primary-color);
@@ -399,86 +482,4 @@ header .nav-open {
   align-items: center;
   border: 1px solid black;
   padding: 0 5px;
-}
-
-/* RESET */
-*,
-::before,
-::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  font-size: 62.5%;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-body,
-p,
-a,
-li,
-span {
-  font-family: var(--primary-font);
-}
-
-/* Global */
-body {
-  font-family: var(--secondary-font);
-  background-color: var(--secondary-color);
-  color: var(--primary-color);
-  line-height: 1.6;
-  margin: 0;
-  padding: 0;
-  font-size: 1.6rem;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  overflow-x: hidden;
-  max-width: 1400px;
-}
-
-img {
-  width: 210px;
-  height: 297px;
-  border-radius: 0;
-}
-
-a {
-  color: var(--secondary-color);
-  text-decoration: none;
-}
-
-a:hover {
-  color: var(--tertiary-color);
-}
-
-p {
-  margin-bottom: 0.8rem;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  margin: 1rem auto;
-  width: auto;
-  align-items: center;
-}
-
-footer {
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
-  padding: 1rem;
-  text-align: center;
-}
-
-main {
-  display: flex;
-  flex-direction: column;
 }
