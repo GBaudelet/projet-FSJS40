@@ -1,10 +1,22 @@
 import { Router } from "express";
 
 import { create, login, logout, check_auth } from "../controller/auth.js";
-
+import { validationResult } from "express-validator";
+import validateRegister from "../middlewares/validateRegister.js";
 const router = Router();
 
-router.post("/register", create);
+router.post(
+  "/register",
+  validateRegister,
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+  create
+);
 router.post("/login", login);
 
 router.post("/logout", logout);

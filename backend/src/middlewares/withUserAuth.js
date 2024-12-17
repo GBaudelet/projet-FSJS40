@@ -9,7 +9,7 @@ export default (allowedRoles) => (req, res, next) => {
 
   // Vérifiez si le rôle de l'utilisateur est dans la liste des rôles autorisés
   if (!allowedRoles.includes(role_id)) {
-    return res.status(403).json({ message: "Accès refusé" });
+    return res.status(404).json({ message: "Accès refusé" });
   }
 
   return next(); // L'utilisateur a accès, passez au middleware suivant

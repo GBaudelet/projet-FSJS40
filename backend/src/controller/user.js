@@ -85,12 +85,12 @@ const update = async (req, res) => {
 // delete user
 const remove = async (req, res) => {
   try {
-    const [response] = await User.remove(req.params.id);
+    const [response] = await User.remove(userIdToDelete);
     if (!response.affectedRows) {
-      res.status(404).json({ msg: "User not deleted" });
-      return;
+      return res.status(404).json({ msg: "Utilisateur non supprimé" });
     }
-    res.json({ msg: "User deleted" });
+
+    res.json({ msg: "Utilisateur supprimé avec succès." });
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }

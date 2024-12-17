@@ -12,6 +12,7 @@ import {
   updateStatus,
   getDropZoneDetails,
 } from "../controller/sheet.js";
+import checkUserPermission from "../middlewares/checkId.js";
 
 // Configurer multer pour stocker les fichiers
 const storage = multer.memoryStorage();
@@ -23,11 +24,12 @@ router.get("/allUser", getAllUser);
 router.get("/allAdmin", getAllAdmin);
 router.get("/search", searchByTag);
 router.get("/edit/:id", getDropZoneDetails);
+router.get("/titleUser", searchByTitleAndUserId);
 
 router.post("/create", upload.single("file"), create);
-router.get("/titleUser", searchByTitleAndUserId);
-router.patch("/update/:id", update);
-router.patch("/update/statut/:id", updateStatus);
-router.delete("/delete/:id", remove);
+
+router.patch("/update/:id", checkUserPermission("id"), update);
+router.patch("/update/statut/:id", checkUserPermission("id"), updateStatus);
+router.delete("/delete/:id", checkUserPermission("id"), remove);
 
 export default router;

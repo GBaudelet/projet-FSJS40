@@ -1,52 +1,18 @@
 import Auth from "../model/Auth.js";
 import bcrypt from "bcrypt";
-
 const SALT = 10;
 
-// Fonction pour valider les emails
-const isValidEmail = (email) => {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(String(email).toLowerCase());
-};
+import { validationResult } from "express-validator";
 
 const create = async (req, res) => {
+  // Vérifier les erreurs de validation
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
-    const { username, password, email, confirmEmail, confirmPassword } =
-      req.body;
-
-    // Vérification que tous les champs requis sont remplis
-    if (!username || !password || !confirmPassword || !email || !confirmEmail) {
-      return res
-        .status(400)
-        .json({ msg: "Tous les champs doivent être remplis." });
-    }
-
-    // Vérification du type de champ
-    if (
-      typeof username !== "string" ||
-      typeof password !== "string" ||
-      typeof email !== "string" ||
-      typeof confirmEmail !== "string"
-    ) {
-      return res.status(400).json({ msg: "Type de champ invalide." });
-    }
-
-    // Vérification que l'email a un format valide
-    if (!isValidEmail(email)) {
-      return res.status(400).json({ msg: "Format d'email invalide." });
-    }
-
-    // Vérification que les mots de passe respectent une longueur minimale
-    if (password.length < 8) {
-      return res
-        .status(400)
-        .json({ msg: "Le mot de passe doit comporter au moins 8 caractères." });
-    }
-
-    // Vérification que l'email et la confirmation correspondent
-    if (email !== confirmEmail) {
-      return res.status(400).json({ msg: "Les emails ne correspondent pas" });
-    }
+    const { username, password, email } = req.body;
 
     // Vérification si l'utilisateur existe déjà par username ou email
     const [[existingUser]] = await Auth.findOneByUsername(username);
@@ -70,7 +36,7 @@ const create = async (req, res) => {
       res.status(500).json({ msg: "Utilisateur non créé" });
     }
   } catch (error) {
-    res.status(500).json({ msg: error });
+    res.status(500).json({ msg: error.message });
   }
 };
 

@@ -67,7 +67,6 @@ const Profile = () => {
       const updatedData = { ...formData };
       if (editingField !== "password") delete updatedData.password;
 
-      console.log("Données envoyées:", updatedData);
       const response = await fetch(
         `http://localhost:9000/api/v1/user/update/${userId}`,
         {
