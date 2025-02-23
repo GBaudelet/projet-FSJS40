@@ -56,7 +56,7 @@ Démarrer le frontend :
 cd ../frontend
 npm run dev
 
-Le frontend sera accessible sur http://localhost:5173 et le backend sur http://localhost:5000.
+Le frontend sera accessible sur http://localhost:5173 et le backend sur http://localhost:9000.
 
 - Contribution
 
