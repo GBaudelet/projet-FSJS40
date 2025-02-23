@@ -1,4 +1,4 @@
-import Tag from "../model/Tag.js";
+import Tag from "../Model/Tag.js";
 import express from "express";
 const app = express();
 

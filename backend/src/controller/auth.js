@@ -1,4 +1,4 @@
-import Auth from "../model/Auth.js";
+import Auth from "../Model/Auth.js";
 import bcrypt from "bcrypt";
 const SALT = 10;
 

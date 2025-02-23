@@ -1,5 +1,5 @@
-import useCheckAuth from "./Hook/useCheckAuth";
-import "./assets/scss/all.css";
+import useCheckAuth from "./Hook/UseCheckAuth";
+import "./Assets/scss/all.css";
 import Header from "./Components/Partial/Header";
 import { Route, Routes } from "react-router-dom";
 import Home from "./Components/Home";
@@ -7,7 +7,7 @@ import Bible from "./Components/Bible";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Footer from "./Components/Partial/Footer";
-import UserRouter from "./router/UserRouter";
+import UserRouter from "./Router/UserRouter";
 
 function App() {
   const [user] = useCheckAuth();

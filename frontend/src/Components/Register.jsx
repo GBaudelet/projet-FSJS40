@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { setMsg, updateField, resetFields } from "../store/Slices/user";
+import { setMsg, updateField, resetFields } from "../Store/Slices/User";
 
 function Register() {
   const user = useSelector((state) => state.user);

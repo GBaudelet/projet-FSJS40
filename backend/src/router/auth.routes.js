@@ -1,8 +1,8 @@
 import { Router } from "express";
 
-import { create, login, logout, check_auth } from "../controller/auth.js";
+import { create, login, logout, check_auth } from "../Controller/auth.js";
 import { validationResult } from "express-validator";
-import validateRegister from "../middlewares/validateRegister.js";
+import validateRegister from "../Middlewares/ValidateRegister.js";
 const router = Router();
 
 router.post(

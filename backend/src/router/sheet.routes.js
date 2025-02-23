@@ -11,8 +11,8 @@ import {
   getAllAdmin,
   updateStatus,
   getDropZoneDetails,
-} from "../controller/sheet.js";
-import checkUserPermission from "../middlewares/checkId.js";
+} from "../Controller/sheet.js";
+import checkUserPermission from "../Middlewares/CheckId.js";
 
 // Configurer multer pour stocker les fichiers
 const storage = multer.memoryStorage();

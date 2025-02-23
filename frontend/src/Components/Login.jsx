@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { login, updateField, setMsg, resetFields } from "../store/Slices/user";
+import { login, updateField, setMsg, resetFields } from "../Store/Slices/User";
 
 function Login() {
   const user = useSelector((state) => state.user);

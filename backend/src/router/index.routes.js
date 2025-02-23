@@ -4,7 +4,7 @@ import tag_routes from "./tag.routes.js";
 import auth_routes from "./auth.routes.js";
 import sheet_routes from "./sheet.routes.js";
 import bible_routes from "./bible.routes.js";
-import authMiddleware from "../middlewares/withUserAuth.js";
+import authMiddleware from "../Middlewares/WithUserAuth.js";
 
 // router.get("/api/v1", (req, res) => {
 //   const msg = "hello from API";

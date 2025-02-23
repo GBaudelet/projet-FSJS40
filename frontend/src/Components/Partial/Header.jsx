@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../../store/Slices/user";
+import { logout } from "../../Store/Slices/User";
 import { FaBars, FaTimes } from "react-icons/fa";
 
 const Header = () => {

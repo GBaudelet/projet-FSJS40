@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../store/Slices/user";
+import { login } from "../Store/Slices/User";
 
 function useCheckAuth() {
   const user = useSelector((state) => state.user);

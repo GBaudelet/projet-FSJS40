@@ -1,4 +1,4 @@
-import Bible from "../model/Bible.js";
+import Bible from "../Model/Bible.js";
 
 const all = async (req, res) => {
   try {

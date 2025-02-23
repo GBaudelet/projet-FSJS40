@@ -1,8 +1,8 @@
 import Router from "express";
-import authMiddleware from "../middlewares/withUserAuth.js";
+import authMiddleware from "../Middlewares/WithUserAuth.js";
 
-import { getAll, create, update, remove } from "../controller/tag.js";
-import checkUserPermission from "../middlewares/checkId.js";
+import { getAll, create, update, remove } from "../Controller/tag.js";
+import checkUserPermission from "../Middlewares/CheckId.js";
 
 const router = Router();
 

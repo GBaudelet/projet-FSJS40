@@ -1,7 +1,7 @@
-import User from "../model/User.js";
-import Sheet from "../model/Sheet.js";
+import Sheet from "../Model/Sheet.js";
 import express from "express";
 import bcrypt from "bcrypt";
+import User from "../model/User.js";
 
 const app = express();
 const SALT = 10;
