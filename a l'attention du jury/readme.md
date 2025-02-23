@@ -42,7 +42,7 @@ DB_USER=root
 DB_PASS=KaWZSh-f(iDVb\*[u
 DB_NAME=nom_de_ta_base
 
-Note : Remplacez nom_de_ta_base par le nom de votre base MongoDB.
+Note : Remplacez nom_de_ta_base par le nom de votre base phpmyadmin.
 
 Lancer le projet en local
 
