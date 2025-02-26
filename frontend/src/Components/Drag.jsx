@@ -3,7 +3,7 @@ import Sidebar from "./DragAndDrop/Sidebar";
 import DropZone from "./DragAndDrop/DropZone";
 import PropertiesPanel from "./DragAndDrop/PropertiesPanel";
 import { useSelector } from "react-redux";
-import SavePopup from "./Partial/savePop";
+import SavePopup from "./Partial/SavePop";
 import domtoimage from "dom-to-image";
 
 const Drag = () => {
