@@ -28,7 +28,7 @@ npm install
 
 Frontend :
 
-cd ../frontend
+cd frontend
 npm install
 
 - Configuration
@@ -39,7 +39,7 @@ LOCAL_PORT=9000
 SECRET_KEY_SESSION="your secret key"
 DB_HOST=localhost
 DB_USER=root
-DB_PASS=KaWZSh-f(iDVb\*[u
+DB_PASS="your password"
 DB_NAME=nom_de_ta_base
 
 Note : Remplacez nom_de_ta_base par le nom de votre base phpmyadmin.
