@@ -71,9 +71,3 @@ Commitez vos modifications (git commit -m "Ajout d'une nouvelle fonctionnalité"
 Poussez la branche (git push origin feature/nouvelle-fonction)
 
 Ouvrez une pull request
-
-identifiant de connection pour tester
-username : admin
-mot de passe : FSJS40?gb
-username : user
-mot de passe : FSJS40@user
