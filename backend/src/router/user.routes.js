@@ -6,7 +6,7 @@ import checkUserPermission from "../Middlewares/CheckId.js";
 
 const router = Router();
 
-router.get("/all", getAll);
+router.get("/all", authMiddleware([1]), getAll);
 router.get("/all/:id", getProfil);
 
 router.patch(
